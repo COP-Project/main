@@ -23,7 +23,7 @@ Your vision statement should contain the following information and be formatted 
   
 ## Sprint 1
 
-* [Product Backlog] (https://docs.google.com/document/d/1VFSIlqZukhByQgMkAwGfYF8Tm1edTEkMPQ76-6nf-cw/edit?usp=sharing)
+* [Product Backlog](https://docs.google.com/document/d/1VFSIlqZukhByQgMkAwGfYF8Tm1edTEkMPQ76-6nf-cw/edit?usp=sharing)
 * Sprint Backlog
   * Burndown Chart
 * Requirements
