@@ -1,7 +1,10 @@
 # Program Name
 
 ## Team Members
-
+* Jesse Jamieson Abando
+* Brian Catrett
+* Alexander Hillegass
+* James Upchurch
 ## Vision Statement
 Your vision statement should contain the following information and be formatted as one or more paragraphs.
 
