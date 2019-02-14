@@ -26,7 +26,7 @@ Your vision statement should contain the following information and be formatted 
 * [Product Backlog](https://docs.google.com/document/d/1VFSIlqZukhByQgMkAwGfYF8Tm1edTEkMPQ76-6nf-cw/edit?usp=sharing)
 * Sprint Backlog
   * Burndown Chart
-* Requirements
+* [Requirements](https://docs.google.com/document/d/146rgft-78nVKI0P4Wdcj7a0kT8OkKUM96-g3gY-bAlk/edit)
 * Design Documents
   * System Architecture
   * Class Diagrams
