@@ -32,26 +32,28 @@ def readPic():
         
 homeWindow = Tk()
 homeWindow.geometry("300x200")
+homeWindow.winfo_toplevel().title("License Plate Recognition Program")
 
 takePicBtn = ttk.Button(homeWindow, text="Take Picure")
 takePicBtn.pack()
 takePicBtn.config(command=takePic)
+takePic = Label(homeWindow, text="Type picture name here")
+takePic.pack()
 takePicBox = Entry(homeWindow)
 takePicBox.pack()
 
 readPicBtn = ttk.Button(homeWindow, text="Read Picure")
 readPicBtn.pack()
 readPicBtn.config(command=readPic)
+takePic = Label(homeWindow, text="Type picture name here")
+takePic.pack()
 readPicBox = Entry(homeWindow)
 readPicBox.pack()
 
 homeWindow.mainloop()
 
 def main():
-    #takes text from specified image
-    im = Image.open('book.JPG')
-    strimg = pytesseract.image_to_string(im)
-    print(strimg)
+    print ("Goodbye")
     
   
 
