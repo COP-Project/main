@@ -15,7 +15,7 @@ def main():
     #cv2.imwrite(filename='img0.jpg', img=frame)
   
     #takes text from specified image
-    im = Image.open('text.png')
+    im = Image.open('book.JPG')
     strimg = pytesseract.image_to_string(im)
     print(strimg)
   
