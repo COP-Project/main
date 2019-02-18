@@ -9,19 +9,21 @@ try:
 except ImportError:
     import Image
 
-def takePic():
-    #takes picture and saves it
+
+def take_pic():
+    # takes picture and saves it
     cam = cv2.VideoCapture(0)
     frame = cam.read()[1]
     name = takePicBox.get()
-    if(name == ""):
+    if name == "":
         name = 'default'
     name = name + '.jpg'
     cv2.imwrite(filename=name, img=frame)
 
-def readPic():
+
+def read_pic():
     name = readPicBox.get()
-    if(name == ""):
+    if name == "":
         textPicL.config(text="Invalid Picture")
         return
     try:
@@ -30,14 +32,15 @@ def readPic():
         textPicL.config(text=strimg)
     except FileNotFoundError:
         print("Could not find that picture, try another name")
-        
+
+
 homeWindow = Tk()
 homeWindow.geometry("300x200")
 homeWindow.winfo_toplevel().title("License Plate Recognition Program")
 
 takePicBtn = ttk.Button(homeWindow, text="Take Picure")
 takePicBtn.pack()
-takePicBtn.config(command=takePic)
+takePicBtn.config(command=take_pic)
 takePic = Label(homeWindow, text="Type the new picture's name here")
 takePic.pack()
 takePicBox = Entry(homeWindow)
@@ -45,7 +48,7 @@ takePicBox.pack()
 
 readPicBtn = ttk.Button(homeWindow, text="Read Picure")
 readPicBtn.pack()
-readPicBtn.config(command=readPic)
+readPicBtn.config(command=read_pic)
 readPic = Label(homeWindow, text="Type a picture name here to be read")
 readPic.pack()
 readPicBox = Entry(homeWindow)
@@ -55,9 +58,9 @@ textPicL.pack()
 
 homeWindow.mainloop()
 
+
 def main():
-    print ("Goodbye")
-    
+    print("Goodbye")
   
 
 if __name__ == '__main__':
