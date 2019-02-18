@@ -25,8 +25,9 @@ def readPic():
         print("Invalid Picture")
     try:
         im = Image.open(name)
-        strimg = pytesseract.image_to_string(im)
-        print("Image's text is: " + strimg)
+        strimg = "Image's text is: " + pytesseract.image_to_string(im)
+        print(strimg)
+        textPicL.config(text=strimg)
     except FileNotFoundError:
         print("Could not find that picture, try another name")
         
@@ -45,10 +46,12 @@ takePicBox.pack()
 readPicBtn = ttk.Button(homeWindow, text="Read Picure")
 readPicBtn.pack()
 readPicBtn.config(command=readPic)
-takePic = Label(homeWindow, text="Type picture name here")
-takePic.pack()
+readPic = Label(homeWindow, text="Type picture name here")
+readPic.pack()
 readPicBox = Entry(homeWindow)
 readPicBox.pack()
+textPicL = Label(homeWindow, text="-text-")
+textPicL.pack()
 
 homeWindow.mainloop()
 
