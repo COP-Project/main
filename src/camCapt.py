@@ -22,11 +22,11 @@ def takePic():
 def readPic():
     name = readPicBox.get()
     if(name == ""):
-        print("Invalid Picture")
+        textPicL.config(text="Invalid Picture")
+        return
     try:
         im = Image.open(name)
         strimg = "Image's text is: " + pytesseract.image_to_string(im)
-        print(strimg)
         textPicL.config(text=strimg)
     except FileNotFoundError:
         print("Could not find that picture, try another name")
@@ -38,7 +38,7 @@ homeWindow.winfo_toplevel().title("License Plate Recognition Program")
 takePicBtn = ttk.Button(homeWindow, text="Take Picure")
 takePicBtn.pack()
 takePicBtn.config(command=takePic)
-takePic = Label(homeWindow, text="Type picture name here")
+takePic = Label(homeWindow, text="Type the new picture's name here")
 takePic.pack()
 takePicBox = Entry(homeWindow)
 takePicBox.pack()
@@ -46,7 +46,7 @@ takePicBox.pack()
 readPicBtn = ttk.Button(homeWindow, text="Read Picure")
 readPicBtn.pack()
 readPicBtn.config(command=readPic)
-readPic = Label(homeWindow, text="Type picture name here")
+readPic = Label(homeWindow, text="Type a picture name here to be read")
 readPic.pack()
 readPicBox = Entry(homeWindow)
 readPicBox.pack()
