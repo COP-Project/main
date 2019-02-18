@@ -40,4 +40,4 @@ Your vision statement should contain the following information and be formatted 
   * etc.
 * Source Code
 * Test Cases
-* Product Demonstration
+* [Product Demonstration](https://www.youtube.com/watch?v=TdoFvpXtwX8)
