@@ -39,5 +39,5 @@ Your vision statement should contain the following information and be formatted 
   * Sequence Diagrams
   * etc.
 * Source Code
-* Test Cases
+* Test Cases: please see the demo below for the manual test
 * [Product Demonstration](https://www.youtube.com/watch?v=TdoFvpXtwX8)
