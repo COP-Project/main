@@ -1,4 +1,4 @@
-ls# Program Name
+# License Plate Recognition Program
 
 ## Team Members
 * Jesse Jamieson Abando
