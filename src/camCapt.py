@@ -9,20 +9,21 @@ try:
 except ImportError:
     import Image
 
+def read_textbox(tbox):
+    return tbox.get() 
 
-def take_pic():
+def take_pic_and_store():
     # takes picture and saves it
     cam = cv2.VideoCapture(0)
     frame = cam.read()[1]
-    name = takePicBox.get()
+    name = read_textbox(takePicBox)
     if name == "":
-        name = 'default'
-    name = name + '.jpg'
+        name = "default"
+    name = name + ".jpg"
     cv2.imwrite(filename=name, img=frame)
 
-
 def read_pic():
-    name = readPicBox.get()
+    name = read_textbox(readPicBox)
     if name == "":
         textPicL.config(text="Invalid Picture")
         return
@@ -40,7 +41,7 @@ homeWindow.winfo_toplevel().title("License Plate Recognition Program")
 
 takePicBtn = ttk.Button(homeWindow, text="Take Picure")
 takePicBtn.pack()
-takePicBtn.config(command=take_pic)
+takePicBtn.config(command=take_pic_and_store)
 takePic = Label(homeWindow, text="Type the new picture's name here, no extension please")
 takePic.config(font=("TkDefaultFont", 12))
 takePic.pack()
