@@ -41,3 +41,17 @@ Your vision statement should contain the following information and be formatted 
 * Source Code
 * Test Cases: please see the demo below for the manual test
 * [Product Demonstration](https://www.youtube.com/watch?v=TdoFvpXtwX8)
+
+## Sprint 2
+
+* Product Backlog
+* Sprint Backlog
+  * Burndown Chart
+* Requirements
+* Design Documents
+  * System Architecture
+  * Sequence Diagrams
+  * etc.
+* Source Code
+* Test Cases
+* Product Demonstration
