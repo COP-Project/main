@@ -8,7 +8,7 @@ import tkinter as tk
 #platenum VARCHAR(12), carmake VARCHAR(20), color VARCHAR(20), model VARCHAR(20), priority VARCHAR(3));
 #or the AWS server
 try:
-    conn=pymysql.connect(host='127.0.0.1',port=3312,user='root',passwd='0485',db='poopproject')
+    conn=pymysql.connect(host='copproject.cveza4dgo3d2.us-east-2.rds.amazonaws.com',port=3306,user='admin',passwd='Hollander#6',db='poopproject')
     cursor = conn.cursor()
 except:
     print("Could Not connect to Database")
@@ -118,11 +118,11 @@ def addDriver (firstNameTextBox, lastNameTextBox, streetAddressTextBox,
     
     color=read_textbox(colorTextBox).upper()
     if len(color)>colorChars:
-        errorWindow("Car Make must be less than or equal to " + str(colorChars))
+        errorWindow("Color must be less than or equal to " + str(colorChars))
         return
     model=read_textbox(modelTextBox).upper()
     if len(model)>modelChars:
-        errorWindow("Car Make must be less than or equal to " + str(modelChars))
+        errorWindow("Model must be less than or equal to " + str(modelChars))
         return
                     
     priority=read_textbox(priorityTextBox).upper()
