@@ -54,4 +54,4 @@ Your vision statement should contain the following information and be formatted 
   * etc.
 * Source Code
 * Test Cases : [GUI DB Functionality Tests](https://docs.google.com/document/d/1TgKMqyY3Vg__-QeM3nbDgczyFEK-wBO_RmyLHEpXcDQ/edit)
-* Product Demonstration
+* Product Demonstration[GUI BD Functionality Demo](https://www.youtube.com/watch?v=df6LavuaJU8&feature=youtu.be)
