@@ -55,7 +55,7 @@ def searchLastNameIntScreen():
 
 ####sets up window for driver inputs calls addDrivers() 
 def callAddDrivers():
-      
+      #creates window
     addDriverWindow = Toplevel()
     addDriverWindow.configure(background="white")
     addDriverWindow.geometry("400x400")
@@ -117,7 +117,7 @@ def callAddDrivers():
     saveUserBtn.grid(row=11,column=0,pady=30,padx=30)
     #save button action, runs addUser and then calls closeHomeWindow to close the top lvl window
     #NOTE: Removed closeWindowHome() from button. This was causing the window to close even if a blank text box was passed.
-    #Passing the addDRiverWindow in addUser() instead for a fix.
+    #Passing the addDRiverWindow in addUser() instead for a fix.<<<<REFACTOR
     
     saveUserBtn.config(command=lambda: addDriver(firstNameTextBox,lastNameTextBox,
                                                     streetAddressTextBox,zipCodeTextBox,stateTextBox,plateNumberTextBox,carMakeTextBox,
@@ -125,22 +125,27 @@ def callAddDrivers():
     
 #pop up screen to delete a driver
 def delDriverScreen():
-    
+
+    #creates window 
     delDriverScrn = Toplevel()
     delDriverScrn.configure(background="white")
     delDriverScrn.geometry("550x100")
     delDriverScrn.winfo_toplevel().title("Delete Driver")
 
+    #label and text box
     submitLabel=Label(delDriverScrn,bg="white", text="Please Enter the Driver's plate number you wish to delete.")
     submitLabel.grid(row=1,column=0)
     submitTextBox=Entry(delDriverScrn)
     submitTextBox.grid(row=1,column=1,padx=20)
 
+    #delete button
     delSubmitBtn = Button(delDriverScrn,bg="black",fg="white", text="Submit")
     delSubmitBtn.grid(row=1,column=3,padx=15)
 
+    #delete button functionality
     delSubmitBtn.config(command=lambda: [deleteDriver(submitTextBox),delDriverScrn.destroy()])    
 
+#function to add a label to a window
 def addLabel(stringIn,rowIn,colIn,window):
     plateNumberLabel=Label(window, bg="white", text=stringIn)
     plateNumberLabel.grid(row=rowIn,column=colIn)
@@ -151,17 +156,20 @@ def displaySearch(rows):
     y=0
     if rows == "":
         return
-    
+    #set up window
     displayZipPlatescreen = tk.Tk()
     displayZipPlatescreen.configure(background="white")
     displayZipPlatescreen.winfo_toplevel().title("Search Results")
     displayZipPlatescreen.geometry("700x400")
 
+    #loop to print the header to the window
     header=("First Name","Last Name","Street","Zip Code","State","Plate","Make","Color","Model","Priority")
     for top in header:
         headerRow=Label(displayZipPlatescreen, text=header[y],bg="white")
         headerRow.grid(row=0, column=y,padx=3)
         y=y+1
+
+    #loop to print the data pulled from the database
     for row in rows:
                 i=0
                 #newString= row[0] +'\t'+ row[1] +'\t'+ row[2]+'\t'+ row[3] + '\t' + row[4] + '\t' + row[5] + '\t' + row[6] + '\t' + row[7]+ '\t' + row[8] + '\t' + row[9]
@@ -173,7 +181,7 @@ def displaySearch(rows):
                 n=n+1
 
 
-   
+   #addes the delete button to the bottom of the search window
     deleteBtn = Button(displayZipPlatescreen,bg="black",fg="white", text="Delete Driver",command= lambda:  [delDriverScreen()])
     editBtn = Button(displayZipPlatescreen,bg="black",fg="white", text="Edit Driver",command= lambda:[print("implement")])#implement
     deleteBtn.grid(row=n+3,column=3)
