@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import imutils
 
-image = cv2.imread('plate.jpg')
+image = cv2.imread('car.jpg')
 orig = image.copy()
 image = imutils.resize(image, width=500)
 
@@ -20,16 +20,21 @@ cv2.waitKey(0)
 cnts = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)[1]
 cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:30]
 screenCnt = None
+roi = None
 
 # loop over detected contours
 for c in cnts:
     # approximate the contour
     peri = cv2.arcLength(c, True)
-    approx = cv2.approxPolyDP(c, 0.025 * peri, True)
+    approx = cv2.approxPolyDP(c, 0.02 * peri, True)
     if len(approx) == 4:    # found the contour with 4 points
         screenCnt = approx
+        cv2.drawContours(image, [screenCnt], -1, (0, 255, 0), 3)
+        x, y, w, h = cv2.boundingRect(c)
+        roi = image[y:y + h, x:x + w]
         break
 
-cv2.drawContours(image, [screenCnt], -1, (0, 255, 0), 3)
-cv2.imshow("Plate", image)
+cv2.imshow("Plate Highligted", image)
+cv2.waitKey(0)
+cv2.imshow("Cropped Plate", roi)
 cv2.waitKey(0)
