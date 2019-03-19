@@ -51,7 +51,7 @@ Your vision statement should contain the following information and be formatted 
 * Design Documents
   * System Architecture
   * Sequence Diagrams
-  * etc.
+  * [Class Diagram]:(https://docs.google.com/drawings/d/1OuwSf7QMN0vdC2wvWqQbCiYai3YU6PSl9W0EutPnB5E/edit)[Class Description](https://docs.google.com/document/d/19hM4XHOuAUfJTQXVzCPlpUlnj5RoBN39K19r_ryp1Ng/edit)
 * Source Code
 * Test Cases : [GUI DB Functionality Tests](https://docs.google.com/document/d/1TgKMqyY3Vg__-QeM3nbDgczyFEK-wBO_RmyLHEpXcDQ/edit)
 * Product Demonstration[GUI BD Functionality Demo](https://www.youtube.com/watch?v=df6LavuaJU8&feature=youtu.be)
