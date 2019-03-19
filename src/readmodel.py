@@ -4,7 +4,7 @@ from tensorflow.contrib.learn.python.learn.datasets.mnist import extract_images,
 import tensorflow as tf
 from tensorflow.python.keras.models import Sequential, load_model
 
-
+# test model with mnist/digit data
 mnist = tf.keras.datasets.mnist
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 x_train = tf.keras.utils.normalize(x_train, axis=1)
@@ -21,6 +21,7 @@ x_test.resize(10000, 28, 28)
 plt.imshow(x_test[1000], cmap=plt.cm.binary)
 plt.show()
 
+# test model with alphabet/emnist data
 with open('data//emnist-letters-train-images-idx3-ubyte.gz', 'rb') as f:
     train_img = extract_images(f)
 with open('data//emnist-letters-train-labels-idx1-ubyte.gz', 'rb') as f:
