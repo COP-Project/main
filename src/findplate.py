@@ -20,7 +20,7 @@ cv2.waitKey(0)
 cnts = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)[1]
 cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:30]
 screenCnt = None
-roi = None
+cropped = None
 
 # loop over detected contours
 for c in cnts:
@@ -31,10 +31,10 @@ for c in cnts:
         screenCnt = approx
         cv2.drawContours(image, [screenCnt], -1, (0, 255, 0), 3)
         x, y, w, h = cv2.boundingRect(c)
-        roi = image[y:y + h, x:x + w]
+        cropped = image[y:y + h, x:x + w]
         break
 
 cv2.imshow("Plate Highligted", image)
 cv2.waitKey(0)
-cv2.imshow("Cropped Plate", roi)
+cv2.imshow("Cropped Plate", cropped)
 cv2.waitKey(0)
