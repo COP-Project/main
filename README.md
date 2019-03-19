@@ -7,19 +7,6 @@
 * James Upchurch
 
 ## Vision Statement
-Your vision statement should contain the following information and be formatted as one or more paragraphs.
-
-1. For ... (the product’s target market) :
-
-2. Who/That ... (describe what need your product solves) : 
-
-3. The product ... (product name,or product category) :
-  
-4. That leads to ... (main advantage, appealing reason for purchase) : 
-  
-5. Unlike the ... (principal competing alternatives)  : 
-  
-6. Our product offers ... (describe main differentiation) : 
   
   Since 2006, 2,323 AMBER alerts have occured across the United States. About 200 alerts are generated per year, meaning over 200 children are abducted each year. These alerts almosts always include vital information for motorists to alert authorities if a given vehicle is spotted. This effort could be consolidated and improved using artificial intelligence to analyze traffic camera feed to search for vehicles of interest.
   
@@ -46,7 +33,7 @@ Your vision statement should contain the following information and be formatted 
 
 * [Product Backlog](https://docs.google.com/spreadsheets/d/1lSt2IkeWZkcXEEomajb0V5m8mf8IrMCRReRq9BhTCic/edit#gid=402146333)
 * [Sprint Backlog](https://docs.google.com/spreadsheets/d/1lSt2IkeWZkcXEEomajb0V5m8mf8IrMCRReRq9BhTCic/edit#gid=296008547)
-  * Burndown Chart
+  * [Burndown Chart](https://docs.google.com/spreadsheets/d/1lSt2IkeWZkcXEEomajb0V5m8mf8IrMCRReRq9BhTCic/edit#gid=2069162242)
 * [Requirements](https://docs.google.com/document/d/146rgft-78nVKI0P4Wdcj7a0kT8OkKUM96-g3gY-bAlk/edit)
 * Design Documents
   * System Architecture [Architecture Diagram](https://docs.google.com/drawings/d/1XAnm92Z1MRIXftqTqmJtPI9S8-kcRq_8Xsm7Hkfhr3U/edit) - 
@@ -54,4 +41,5 @@ Your vision statement should contain the following information and be formatted 
   * [Class Diagram](https://docs.google.com/drawings/d/1OuwSf7QMN0vdC2wvWqQbCiYai3YU6PSl9W0EutPnB5E/edit) - [Class Description](https://docs.google.com/document/d/19hM4XHOuAUfJTQXVzCPlpUlnj5RoBN39K19r_ryp1Ng/edit)
 * Source Code
 * Test Cases : [GUI DB Functionality Tests](https://docs.google.com/document/d/1TgKMqyY3Vg__-QeM3nbDgczyFEK-wBO_RmyLHEpXcDQ/edit)
+             ; [Plate Reading Functionality Test](https://docs.google.com/document/d/1Cb24DZv_-YiFCy3ZAx7_2g_3tJZw0N5j6uxCfE3QB-8/edit?usp=sharing)
 * Product Demonstration[GUI BD Functionality Demo](https://www.youtube.com/watch?v=df6LavuaJU8&feature=youtu.be)
