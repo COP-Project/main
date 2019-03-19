@@ -17,7 +17,7 @@ from PIL import ImageTk, Image
 mainWindow = Tk()
 mainWindow.configure(background="white")
 
-#SET FRAMES
+#SET GUI FRAMES
 top=Frame(mainWindow)
 bottom=Frame(mainWindow)
 bottom.configure(background="black")

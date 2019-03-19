@@ -4,11 +4,15 @@ from tkinter import ttk
 import tkinter as tk
 
 #data bas info, it needs to match either your local mysql server
-#---command to CREATE TABLE >>>>>>>> poopproject.drivers(fname VARCHAR(20), lname VARCHAR(20), address VARCHAR(20),zipcod VARCHAR(5),state VARCHAR(2),
+#---command to CREATE TABLE poopproject.drivers(fname VARCHAR(20), lname VARCHAR(20), address VARCHAR(20),zipcod VARCHAR(5),state VARCHAR(2),
 #platenum VARCHAR(12), carmake VARCHAR(20), color VARCHAR(20), model VARCHAR(20), priority VARCHAR(3));
 #or the AWS server
 try:
-    conn=pymysql.connect(host='copproject.cveza4dgo3d2.us-east-2.rds.amazonaws.com',port=3306,user='admin',passwd='Hollander#6',db='poopproject')
+    #####connection to AWS database
+    #####OFF####conn=pymysql.connect(host='copproject.cveza4dgo3d2.us-east-2.rds.amazonaws.com',port=3306,user='admin',passwd='Hollander#6',db='poopproject')
+
+    #####connection to local db database
+    conn=pymysql.connect(host='127.0.0.1',port=3312,user='root',passwd='0485',db='poopproject')
     cursor = conn.cursor()
 except:
     print("Could Not connect to Database")
@@ -28,21 +32,21 @@ modelChars=20
 ########################Searches by Zip or Plate Depeding on paramater from searchZipPlateInpScreen()
 def searchZipPlate(string,textfield):
     zipOrPlate=read_textbox(textfield)
-
+    #check for empty string. 
     if zipOrPlate=="":
         errorWindow("Please Enter a " + string)
         return ""
-
+    #check if we are searching by zip
     if string =="zip":
         label="Zip Code"
         cursor.execute("SELECT * FROM drivers WHERE (zipcod = %s)",(zipOrPlate,))
         rows = cursor.fetchall()
-        
+     #checks if we are searching by plate number   
     if string =="plate":
         label="Plate Number"
         cursor.execute("SELECT * FROM drivers WHERE (platenum = %s)",(zipOrPlate,))
         rows = cursor.fetchall()
-    #Calls display search to display results
+    #return rows which is passed to displaySearch
     return rows
     #displaySearch(rows)
     
@@ -54,7 +58,7 @@ def searchDriverFirstLastName(fname,lname):
         firstName=read_textbox(fname)
         lastName=read_textbox(lname)
         
-        newList=[]
+       
         if firstName == "" or lastName=="":
             errorWindow("Please Enter a first and last name. ")
             return ""
@@ -74,7 +78,7 @@ def close_window():
     mainWindow.destroy()
 
 #the logic to to read in all the text boxes from callAddDrivers() probably way to many paramaters
-#Refactor in the future to group boxes into a object and pass object
+#REFACTOR in the future to group boxes into a object and pass object
 def addDriver (firstNameTextBox, lastNameTextBox, streetAddressTextBox,
              zipCodeTextBox, stateTextBox, plateNumberTextBox,
              carMakeTextBox, colorTextBox, modelTextBox,
