@@ -49,7 +49,7 @@ Your vision statement should contain the following information and be formatted 
   * Burndown Chart
 * [Requirements](https://docs.google.com/document/d/146rgft-78nVKI0P4Wdcj7a0kT8OkKUM96-g3gY-bAlk/edit)
 * Design Documents
-  * System Architecture
+  * System Architecture [Architecture Diagram](https://docs.google.com/drawings/d/1XAnm92Z1MRIXftqTqmJtPI9S8-kcRq_8Xsm7Hkfhr3U/edit) - [GUI](https://docs.google.com/drawings/d/1q2VkqsfDRKpq601CHK0Ne6fn4U42gQo-iotT8xGuoLw/edit)
   * Sequence Diagrams
   * [Class Diagram](https://docs.google.com/drawings/d/1OuwSf7QMN0vdC2wvWqQbCiYai3YU6PSl9W0EutPnB5E/edit)  [Class Description](https://docs.google.com/document/d/19hM4XHOuAUfJTQXVzCPlpUlnj5RoBN39K19r_ryp1Ng/edit)
 * Source Code
