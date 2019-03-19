@@ -1,5 +1,5 @@
 import numpy as np
-import cv2
+import cv2              # this must be OpenCV version 3.x to work
 import pytesseract
 import matplotlib.pyplot as plt
 from PIL import Image
