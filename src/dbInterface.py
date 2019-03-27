@@ -4,6 +4,7 @@ from tkinter import ttk
 import tkinter as tk
 from dbCommands import *
 
+
 #################search by zip or plate or display all high priority
 def searchZipPlateInpScreen(string):
 
@@ -186,3 +187,6 @@ def displaySearch(rows):
     editBtn = Button(displayZipPlatescreen,bg="black",fg="white", text="Edit Driver",command= lambda:[print("implement")])#implement
     deleteBtn.grid(row=n+3,column=3)
     editBtn.grid(row=n+4,column=3)
+
+
+    

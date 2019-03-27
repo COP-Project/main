@@ -2,22 +2,19 @@ import pymysql.cursors
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
+import dbUsers
+
+
 
 #data bas info, it needs to match either your local mysql server
 #---command to CREATE TABLE poopproject.drivers(fname VARCHAR(20), lname VARCHAR(20), address VARCHAR(20),zipcod VARCHAR(5),state VARCHAR(2),
 #platenum VARCHAR(12), carmake VARCHAR(20), color VARCHAR(20), model VARCHAR(20), priority VARCHAR(3));
 #or the AWS server
-try:
-    #####connection to AWS database
-    #####OFF####conn=pymysql.connect(host='copproject.cveza4dgo3d2.us-east-2.rds.amazonaws.com',port=3306,user='admin',passwd='Hollander#6',db='poopproject')
 
-    #####connection to local db database
-    conn=pymysql.connect(host='127.0.0.1',port=3312,user='root',passwd='0485',db='poopproject')
-    cursor = conn.cursor()
-except:
-    print("Could Not connect to Database")
 
-    
+
+
+
 #Database constants
 #This must be set to the values in the data base fields to prevent errors
 firstNameChars=20
@@ -28,10 +25,17 @@ plateNumChars=7
 colorChars=20
 modelChars=20
 
+def login(usernameTB,passwordTB):
+    global username
+    global password
+    username=read_textbox(usernameTB)
+    password=read_textbox(passwordTB)
+    
 
 ########################Searches by Zip or Plate Depeding on paramater from searchZipPlateInpScreen()
 def searchZipPlate(string,textfield):
     zipOrPlate=read_textbox(textfield)
+    
     #check for empty string. 
     if zipOrPlate=="":
         errorWindow("Please Enter a " + string)
@@ -47,6 +51,7 @@ def searchZipPlate(string,textfield):
         cursor.execute("SELECT * FROM drivers WHERE (platenum = %s)",(zipOrPlate,))
         rows = cursor.fetchall()
     #return rows which is passed to displaySearch
+    
     return rows
     #displaySearch(rows)
     
@@ -212,6 +217,75 @@ def editDriver():
     cursor.execute(query,input)
     conn.commit()
 
+#searches the user table in the database for the user login that has connected.
+#this fucntion is used to determine user permissions ADMIN or NON-ADMIN
+def findUser(loginName):
+             
+        try:
+            cursor.execute("SELECT * FROM users WHERE (loginname = %s)",(loginName,))
+            rows = cursor.fetchall()
+            return rows
+        except:
+            errorWindow("Not a valid user.")
+            sys.exit()
 
-    
+##returns the user info from dbUser.py object >>thisUser
+def getUserInfo():
+    return thisUser.getUserInfo()
+def logOut():
+    conn.close()
+##########################database connection and login screen########################
+#gloval variables
+global username
+username=""
+global password
+password=""
+
+#set login screen
+root = tk.Tk()
+root.withdraw() # won't need this
+loginScrn = Toplevel()
+loginScrn.configure(background="white")
+loginScrn.geometry("550x100")
+loginScrn.winfo_toplevel().title("User Login")
+
+#seet username and pw text boxes and labels
+usernameLabel=Label(loginScrn,bg="white", text="User Name")
+usernameLabel.grid(row=1,column=0)
+usernameTextBox=Entry(loginScrn)
+usernameTextBox.grid(row=1,column=1,padx=20)
+
+pwLabel=Label(loginScrn,bg="white", text="Password")
+pwLabel.grid(row=2,column=0)
+pwTextBox=Entry(loginScrn)
+pwTextBox.grid(row=2,column=1,padx=20)
+
+var=tk.IntVar()#variable use to pause until the submitbutton is pressed
+submitBtn = Button(loginScrn,bg="black",fg="white", text="Submit",command= lambda:  [var.set(1),login(usernameTextBox,pwTextBox),loginScrn.destroy()])
+
+submitBtn.grid(row=1,column=3,padx=15)
+submitBtn.wait_variable(var)#wait
+
+#uses the inputs from the user to log in
+try:
+    #####connection to AWS database
+    conn=pymysql.connect(host='copproject.cveza4dgo3d2.us-east-2.rds.amazonaws.com',port=3306,user=username,passwd=password,db='poopproject')
+   
+    #####connection to local db database
+    #OFF###conn=pymysql.connect(host='127.0.0.1',port=3312,user=username,passwd=password,db='poopproject')
+    cursor = conn.cursor()
+except:
+    errorWindow("Could Not connect to Database")
+    sys.exit()
+
+#look up user to access their information for permissions
+userInfo=findUser(username)
+#creates the object in the dbUsers
+thisUser=dbUsers.Users()
+#set the users info, this is used to grant permissions
+thisUser.setUser(userInfo)
+
+
+
+
 
