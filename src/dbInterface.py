@@ -3,6 +3,7 @@ import tkinter as tk
 from dbCommands import *
 from StandardValues import Error
 
+
 # EDIT DRIVER IS IN PROGRESS
 def editDriverScreen():
     # creates window
@@ -147,22 +148,18 @@ def callAddDrivers():
     # This was causing the window to close even if a blank text box was passed.
     # Passing the add_driver_window in addUser() instead for a fix.<<<<REFACTOR
 
-    var = IntVar()  # variable use to pause until the submit button is pressed
-
-    save_user_btn.config(command=lambda: addDriver(first_name_tb.get().upper(),
-                                                   last_name_tb.get().upper(),
-                                                   address_tb.get().upper(),
-                                                   zipcode_tb.get(),
-                                                   state_tb.get().upper(),
-                                                   platenum_tb.get().upper(),
-                                                   car_make_tb.get().upper(),
-                                                   model_tb.get().upper(),
-                                                   color_tb.get().upper(),
-                                                   priority_tb.get().upper(),
-                                                   add_driver_window))
-
-    save_user_btn.wait_variable(var)  # wait
-    add_driver_window.destroy()
+    save_user_btn.config(command=lambda: [addDriver(first_name_tb.get().upper(),
+                                                    last_name_tb.get().upper(),
+                                                    address_tb.get().upper(),
+                                                    zipcode_tb.get(),
+                                                    state_tb.get().upper(),
+                                                    platenum_tb.get().upper(),
+                                                    car_make_tb.get().upper(),
+                                                    model_tb.get().upper(),
+                                                    color_tb.get().upper(),
+                                                    priority_tb.get().upper(),
+                                                    add_driver_window),
+                                          add_driver_window.destroy()])
 
 
 # pop up screen to delete a driver
@@ -184,7 +181,7 @@ def delDriverScreen():
     del_submit_btn.grid(row=1, column=3, padx=15)
 
     # delete button functionality
-    del_submit_btn.config(command=lambda: [deleteDriver(submit_tb), del_driver_scrn.destroy()])
+    del_submit_btn.config(command=lambda: [deleteDriver(submit_tb.get()), del_driver_scrn.destroy()])
 
 
 # function to add a label to a window
@@ -226,8 +223,8 @@ def displaySearch(rows):
 
     # adds the delete button to the bottom of the search window
     delete_btn = Button(display_zip_plate_screen, bg="black", fg="white", text="Delete Driver",
-                       command=lambda: [delDriverScreen()])
+                        command=lambda: [delDriverScreen()])
     edit_btn = Button(display_zip_plate_screen, bg="black", fg="white", text="Edit Driver",
-                     command=lambda: [print("implement")])  # implement
+                      command=lambda: [print("implement")])  # implement
     delete_btn.grid(row=n + 3, column=3)
     edit_btn.grid(row=n + 4, column=3)
