@@ -1,9 +1,4 @@
-import pymysql.cursors
 from tkinter import *
-from tkinter import ttk
-import tkinter as tk
-import dbUsers
-import dbCommands
 
 
 class Login:
@@ -17,7 +12,7 @@ class Login:
 
     def create_window(self):
         # set login screen
-        root = tk.Tk()
+        root = Tk()
         root.withdraw()  # won't need this
         login_scrn = Toplevel()
         login_scrn.configure(background="white")
@@ -27,7 +22,7 @@ class Login:
         # set username and pw text boxes and labels
         username_label = Label(login_scrn, bg="white", text="User Name")
         username_label.grid(row=1, column=0)
-        
+
         username_textbox = Entry(login_scrn)
         username_textbox.grid(row=1, column=1, padx=20)
 
@@ -36,11 +31,10 @@ class Login:
         pw_textbox = Entry(login_scrn)
         pw_textbox.grid(row=2, column=1, padx=20)
 
-        var = tk.IntVar()  # variable use to pause until the submit button is pressed
-        submit_btn = Button(login_scrn, bg="black", fg="white", text="Submit", command=lambda:
-           [var.set(1), self.login(username_textbox,pw_textbox),login_scrn.destroy()])
+        var = IntVar()  # variable use to pause until the submit button is pressed
+        submit_btn = Button(login_scrn, bg="black", fg="white", text="Submit",
+                            command=lambda: [var.set(1), self.login(username_textbox, pw_textbox),
+                                             login_scrn.destroy()])
 
-        submit_btn.grid(row=1,column=3,padx=15)
+        submit_btn.grid(row=1, column=3, padx=15)
         submit_btn.wait_variable(var)  # wait
-
-
