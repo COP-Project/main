@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 import dbUsers
+from login import Login
 
 # data bas info, it needs to match either your local mysql server
 # ---command to CREATE TABLE poopproject.drivers(fname VARCHAR(20), lname VARCHAR(20), address VARCHAR(20),zipcod VARCHAR(5),state VARCHAR(2),
@@ -216,30 +217,11 @@ username=""
 global password
 password=""
 
-# set login screen
-root = tk.Tk()
-root.withdraw() # won't need this
-loginScrn = Toplevel()
-loginScrn.configure(background="white")
-loginScrn.geometry("550x100")
-loginScrn.winfo_toplevel().title("User Login")
+login_scrn = Login()
+login_scrn.create_window()
 
-# seet username and pw text boxes and labels
-usernameLabel=Label(loginScrn,bg="white", text="User Name")
-usernameLabel.grid(row=1,column=0)
-usernameTextBox=Entry(loginScrn)
-usernameTextBox.grid(row=1,column=1,padx=20)
-
-pwLabel=Label(loginScrn,bg="white", text="Password")
-pwLabel.grid(row=2,column=0)
-pwTextBox=Entry(loginScrn)
-pwTextBox.grid(row=2,column=1,padx=20)
-
-var=tk.IntVar()  # variable use to pause until the submitbutton is pressed
-submitBtn = Button(loginScrn,bg="black",fg="white", text="Submit",command= lambda:  [var.set(1),login(usernameTextBox,pwTextBox),loginScrn.destroy()])
-
-submitBtn.grid(row=1,column=3,padx=15)
-submitBtn.wait_variable(var)#wait
+username = login_scrn.username
+password = login_scrn.password
 
 # uses the inputs from the user to log in
 try:
