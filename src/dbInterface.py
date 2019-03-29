@@ -5,6 +5,29 @@ import tkinter as tk
 from dbCommands import *
 
 
+# EDIT DRIVER IS IN PROGRESS
+def editDriverScreen():
+    # creates window
+    editDriverScrn = Toplevel()
+    editDriverScrn.configure(background="white")
+    editDriverScrn.geometry("550x750")
+    editDriverScrn.winfo_toplevel().title("Edit Driver")
+
+    # label and text box
+    submitLabel = Label(editDriverScrn, bg="white", text="Please Enter the Driver's plate number you wish to edit.")
+    submitLabel.grid(row=1, column=0)
+    submitTextBox = Entry(editDriverScrn)
+    submitTextBox.grid(row=1, column=1, padx=20)
+
+    # edit button
+    editSubmitBtn = Button(editDriverScrn, bg="black", fg="white", text="Submit")
+    editSubmitBtn.grid(row=1, column=3, padx=15)
+
+    # edit button functionality
+    editSubmitBtn.config(
+        command=lambda: [editDriver(submitTextBox), editDriverScrn.destroy(), editDriverRequest(submitTextBox)])
+
+
 #################search by zip or plate or display all high priority
 def searchZipPlateInpScreen(string):
 
