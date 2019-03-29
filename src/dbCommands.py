@@ -17,7 +17,7 @@ def searchZipPlate(string, textfield):
 
     # check for empty string. 
     if zipOrPlate == "":
-        Error.errorWindow("Please Enter a " + string)
+        Error.error_window("Please Enter a " + string)
         return ""
     # check if we are searching by zip
     if string == "zip":
@@ -41,7 +41,7 @@ def searchDriverFirstLastName(fname, lname):
     lastName = read_textbox(lname)
 
     if firstName == "" or lastName == "":
-        Error.errorWindow("Please Enter a first and last name. ")
+        Error.error_window("Please Enter a first and last name. ")
         return ""
 
     try:
@@ -67,50 +67,50 @@ def addDriver(fname, lname, address, zipcode, state, platenum, make, color, mode
     # and check if all fields fall within the valid Database character length TRY TO REFACTOR
 
     if len(fname) > stdvalues.firstNameChars:
-        Error.errorWindow("First Name must be less than or equal to " + str(stdvalues.firstNameChars))
+        Error.error_window("First Name must be less than or equal to " + str(stdvalues.firstNameChars))
         return
 
     if len(lname) > stdvalues.lastNameChars:
-        Error.errorWindow("Last Name must be less than or equal to " + str(stdvalues.lastNameChars))
+        Error.error_window("Last Name must be less than or equal to " + str(stdvalues.lastNameChars))
         return
 
     if len(address) > stdvalues.addressChars:
-        Error.errorWindow("Address must be less than or equal to " + str(stdvalues.addressChars))
+        Error.error_window("Address must be less than or equal to " + str(stdvalues.addressChars))
         return
 
     # check length of zip
     if len(zipcode) != 5:
-        Error.errorWindow("Zip code should be 5 numbers")
+        Error.error_window("Zip code should be 5 numbers")
         return
 
     # no error check, this will be implemented as a drop down
 
     if len(platenum) != stdvalues.plateNumChars:
-        Error.errorWindow("Plate number must be " + str(stdvalues.plateNumChars) + " characters.")
+        Error.error_window("Plate number must be " + str(stdvalues.plateNumChars) + " characters.")
         return
 
     if len(make) > stdvalues.addressChars:
-        Error.errorWindow("Car Make must be less than or equal to " + str(stdvalues.carmakeChars))
+        Error.error_window("Car Make must be less than or equal to " + str(stdvalues.carmakeChars))
         return
 
     if len(color) > stdvalues.colorChars:
-        Error.errorWindow("Color must be less than or equal to " + str(stdvalues.colorChars))
+        Error.error_window("Color must be less than or equal to " + str(stdvalues.colorChars))
         return
 
     if len(model) > stdvalues.modelChars:
-        Error.errorWindow("Model must be less than or equal to " + str(stdvalues.modelChars))
+        Error.error_window("Model must be less than or equal to " + str(stdvalues.modelChars))
         return
 
     # no error, this will be impletmented as a drop down
 
     # plate number duplication
     if plateCheck(platenum) == 1:
-        Error.errorWindow("Duplicate License Plate Number")
+        Error.error_window("Duplicate License Plate Number")
         return
 
     # checks if any fields are empty
     if fname == "" or lname == "" or address == "" or platenum == "" or make == "" or color == "" or model == "" or priority == "" or zipcode == "" or state == "":
-        Error.errorWindow("All fields must be completed.")
+        Error.error_window("All fields must be completed.")
         return
     # End of field check#################################################
 
@@ -133,9 +133,8 @@ def read_textbox(tbox):
 
 # deletes a driver
 def deleteDriver(plate):
-    plateNum = read_textbox(plate)
     rows = ("DELETE FROM drivers WHERE platenum = %s")
-    cursor.execute(rows, (plateNum), )
+    cursor.execute(rows, plate)
     conn.commit()
 
 
@@ -163,7 +162,7 @@ def findUser(loginName):
         rows = cursor.fetchall()
         return rows
     except:
-        Error.errorWindow("Not a valid user.")
+        Error.error_window("Not a valid user.")
         sys.exit()
 
 
@@ -188,7 +187,7 @@ def conn():
         # OFF###conn=pymysql.connect(host='127.0.0.1',port=3312,user=username,passwd=password,db='poopproject')
         return new_conn
     except:
-        Error.errorWindow("Could not connect to database")
+        Error.error_window("Could not connect to database")
         sys.exit()
 
 
