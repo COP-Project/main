@@ -1,5 +1,5 @@
 from tkinter import *
-
+from StandardValues import *
 
 class Login:
     def __init__(self):
@@ -15,8 +15,8 @@ class Login:
         root = Tk()
         root.withdraw()  # won't need this
         login_scrn = Toplevel()
-        login_scrn.configure(background="white")
-        login_scrn.geometry("550x100")
+        login_scrn.configure(background=StandardValues.background)
+        login_scrn.geometry(StandardValues.win_size)
         login_scrn.winfo_toplevel().title("User Login")
 
         # set username and pw text boxes and labels
@@ -24,15 +24,20 @@ class Login:
         username_label.grid(row=1, column=0)
 
         username_textbox = Entry(login_scrn)
+        username_textbox.insert(END, "admin")
         username_textbox.grid(row=1, column=1, padx=20)
 
         pw_label = Label(login_scrn, bg="white", text="Password")
         pw_label.grid(row=2, column=0)
         pw_textbox = Entry(login_scrn)
+        pw_textbox.insert(END, "Hollander#6")
         pw_textbox.grid(row=2, column=1, padx=20)
 
         var = IntVar()  # variable use to pause until the submit button is pressed
-        submit_btn = Button(login_scrn, bg="black", fg="white", text="Submit",
+        submit_btn = Button(login_scrn,
+                            bg=StandardValues.btn_bk_clr,
+                            fg=StandardValues.btn_text_clr,
+                            text="Submit",
                             command=lambda: [var.set(1), self.login(username_textbox, pw_textbox),
                                              login_scrn.destroy()])
 

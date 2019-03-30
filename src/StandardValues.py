@@ -2,16 +2,21 @@ from tkinter import *
 
 
 class StandardValues:
-    def __init__(self):
-        # Database Field restrictions
-        self.firstNameChars = 20
-        self.lastNameChars = 20
-        self.addressChars = 20
-        self.carmakeChars = 20
-        self.plateNumChars = 7
-        self.colorChars = 20
-        self.modelChars = 20
+    # Database Field Values
+    firstNameChars = 20
+    lastNameChars = 20
+    addressChars = 20
+    carmakeChars = 20
+    plateNumChars = 7
+    colorChars = 20
+    modelChars = 20
 
+    # Tkinter Values
+    background = "white"
+    win_size = "700x500"
+    btn_text_clr = "black"
+    btn_bk_clr = "white"
+    padding = 20
 
 class Error:
     # error window and prints it in a pop up window

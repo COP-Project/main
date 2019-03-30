@@ -31,24 +31,23 @@ class DataAccess:
             return new_conn
         except:
             Error.error_window("Could not connect to database")
-            sys.exit()
 
     # Searches by Zip or Plate Depeding on paramater from searchZipPlateInpScreen()
-    def searchZipPlate(self, string, textfield):
+    def searchZipPlate(self, string, value):
         # check for empty string.
-        if textfield == "":
+        if value == "":
             Error.error_window("Please Enter a " + string)
             return ""
         # check if we are searching by zip
         if string == "zip":
             label = "Zip Code"
-            self.cursor.execute("SELECT * FROM drivers WHERE (zipcod = %s)", (textfield))
+            self.cursor.execute("SELECT * FROM drivers WHERE (zipcod = %s)", value)
             rows = self.cursor.fetchall()
         # checks if we are searching by plate number
         if string == "plate":
             label = "Plate Number"
-            self.cursor.execute("SELECT * FROM drivers WHERE (platenum = %s)", (textfield))
-            rows = self.cursor.fetchall()
+            self.cursor.execute("SELECT * FROM drivers WHERE (platenum = %s)", value)
+            rows = self.cursor.fetchone()
         # return rows which is passed to displaySearch
 
         return rows
@@ -158,8 +157,17 @@ class DataAccess:
                 return 1
 
     # EDIT DRIVER IS IN PROGRESS
-    def editDriverRequest(self, plate):
-        print("Hello")
+    def editDriverRequest(self, platenum_old, fname, lname, address, zipcode, state, platenum_new, make, color, model, priority):
+        edit_driver = ("UPDATE drivers "
+                       "SET fname = %s, lname = %s, address = %s, zipcod = %s, state = %s, "
+                       "platenum = %s, carmake = %s, color = %s, model = %s, priority = %s "
+                       "WHERE platenum = %s ")
+        print(edit_driver)
+
+        data_driver = (fname, lname, address, zipcode, state, platenum_new, make, color, model, priority, platenum_old)
+        self.cursor.execute(edit_driver, data_driver)
+
+        self.conn.commit()
 
     # searches the user table in the database for the user login that has self.connected.
     # this fucntion is used to determine user permissions ADMIN or NON-ADMIN
