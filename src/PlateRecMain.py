@@ -1,9 +1,10 @@
-from tkinter import *
 import tkinter as tk
+from tkinter import *
+
+import PIL.Image
+import PIL.ImageTk
+from StandardValues import *
 from dbInterface import *
-import dbUsers
-from PIL import ImageTk, Image
-import login
 
 # mySql connection, currently set to my local pc
 # add login --OFF THIS IS IN AN IMPORT
@@ -28,7 +29,7 @@ passport = user.passport
 
 # set main window
 mainWindow = Toplevel()
-mainWindow.configure(background="white")
+mainWindow.configure(background=StandardValues.background)
 
 # SET GUI FRAMES
 top = Frame(mainWindow)
@@ -45,7 +46,7 @@ welcomLabel.pack()
 
 # ADD bANNER PICTURE
 path = "img/carpic.png"
-img = ImageTk.PhotoImage(Image.open(path))
+img = PIL.ImageTk.PhotoImage(PIL.Image.open(path))
 panel = tk.Label(mainWindow, image=img)
 panel.pack(in_=top, expand="no")
 
@@ -60,28 +61,54 @@ mainWindow.winfo_toplevel().title("License Recognition Program")
 # displayLogin()
 # create all buttons
 
-addDriverBtn = Button(mainWindow, bg="black", fg="white", text="Add New Driver",
+addDriverBtn = Button(mainWindow,
+                      bg=StandardValues.btn_bk_clr,
+                      fg=StandardValues.btn_text_clr,
+                      text="Add New Driver",
                       command=lambda: db_interface.callAddDrivers())
 
-searchDriverBtn = Button(mainWindow, bg="white", text="Search By Full Name",
+searchDriverBtn = Button(mainWindow,
+                         bg=StandardValues.btn_bk_clr,
+                         fg=StandardValues.btn_text_clr,
+                         text="Search By Full Name",
                          command=lambda: db_interface.searchLastNameIntScreen())
 
-searchZipBtn = Button(mainWindow, bg="white", text="Search By Zip",
+searchZipBtn = Button(mainWindow,
+                      bg=StandardValues.btn_bk_clr,
+                      fg=StandardValues.btn_text_clr,
+                      text="Search By Zip",
                       command=lambda: db_interface.searchZipPlateInpScreen("zip"))
 
-searchPlateBtn = Button(mainWindow, bg="white", text="Search By Plate Number",
+searchPlateBtn = Button(mainWindow,
+                        bg=StandardValues.btn_bk_clr,
+                        fg=StandardValues.btn_text_clr,
+                        text="Search By Plate Number",
                         command=lambda: db_interface.searchZipPlateInpScreen("plate"))
 
-deleteBtn = Button(mainWindow, bg="white", state=userType, text="Delete Driver",
+deleteBtn = Button(mainWindow,
+                   bg=StandardValues.btn_bk_clr,
+                   fg=StandardValues.btn_text_clr,
+                   state=userType,
+                   text="Delete Driver",
                    command=lambda: [db_interface.delDriverScreen()])
 
-editBtn = Button(mainWindow, bg="white", text="Edit Driver",
-                 command=lambda: [db_interface.editDriverScreen()])  # implement
+editBtn = Button(mainWindow,
+                 bg=StandardValues.btn_bk_clr,
+                 fg=StandardValues.btn_text_clr,
+                 text="Edit Driver",
+                 command=lambda: [db_interface.editDriverSearch()])  # implement
 
-scanPlateBtn = Button(mainWindow, bg="white", text="Scan Plate",
+scanPlateBtn = Button(mainWindow,
+                      bg=StandardValues.btn_bk_clr,
+                      fg=StandardValues.btn_text_clr,
+                      text="Scan Plate",
                       command=lambda: [print("implement")])  # implement
 
-logOutBtn = Button(mainWindow, bg="white", text="Log Out", command=lambda: [db_interface.logOutScreen()])
+logOutBtn = Button(mainWindow,
+                   bg=StandardValues.btn_bk_clr,
+                   fg=StandardValues.btn_text_clr,
+                   text="Log Out",
+                   command=lambda: [db_interface.logOutScreen()])
 
 # set padding x
 padx = 15
