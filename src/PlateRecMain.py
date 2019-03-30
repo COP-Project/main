@@ -1,7 +1,9 @@
 from tkinter import *
 import tkinter as tk
 from dbInterface import *
+import dbUsers
 from PIL import ImageTk, Image
+import login
 
 # mySql connection, currently set to my local pc
 # add login --OFF THIS IS IN AN IMPORT
@@ -11,10 +13,18 @@ from PIL import ImageTk, Image
 root = tk.Tk()
 root.withdraw()  # won't need this
 
+# Prompt user to login
+login_scrn = Login()
+login_scrn.create_window()
+
+# Create interface to interact with database, handles connection
+db_interface = DbInterface(login_scrn.username, login_scrn.password)
+
 # this sets our current log info
 # calls from out dbCommands which has access to our dbUsers information
 # consists of a list of 4 fields 0 fname, 1 lname, 2 login name, 3 ADMIN or NON ADMIN
-userInfoList = getUserInfo()
+user = db_interface.getUser()
+passport = user.passport
 
 # set main window
 mainWindow = Toplevel()
@@ -29,19 +39,19 @@ bottom.pack(side=BOTTOM, fill=BOTH, expand=True)
 
 # Welcome label
 welcomLabel = Label(mainWindow, bg="white",
-                    text="Welcome " + userInfoList[0] + " you are logged in under " + userInfoList[2] + " as " +
-                         userInfoList[3])
+                    text="Welcome " + passport.firstName + " you are logged in under " + passport.loginName + " as " +
+                         passport.access)
 welcomLabel.pack()
 
 # ADD bANNER PICTURE
-path = "carpic.png"
+path = "img/carpic.png"
 img = ImageTk.PhotoImage(Image.open(path))
 panel = tk.Label(mainWindow, image=img)
 panel.pack(in_=top, expand="no")
 
 # set user type
 userType = DISABLED
-if userInfoList[3] == "ADMIN":
+if passport.access == "ADMIN":
     userType = NORMAL
 
 # set main window properties
@@ -50,15 +60,28 @@ mainWindow.winfo_toplevel().title("License Recognition Program")
 # displayLogin()
 # create all buttons
 
-addDriverBtn = Button(mainWindow, bg="black", fg="white", text="Add New Driver", command=lambda: callAddDrivers())
-searchDriverBtn = Button(mainWindow, bg="white", text="Search By Full Name", command=lambda: searchLastNameIntScreen())
-searchZipBtn = Button(mainWindow, bg="white", text="Search By Zip", command=lambda: searchZipPlateInpScreen("zip"))
+addDriverBtn = Button(mainWindow, bg="black", fg="white", text="Add New Driver",
+                      command=lambda: db_interface.callAddDrivers())
+
+searchDriverBtn = Button(mainWindow, bg="white", text="Search By Full Name",
+                         command=lambda: db_interface.searchLastNameIntScreen())
+
+searchZipBtn = Button(mainWindow, bg="white", text="Search By Zip",
+                      command=lambda: db_interface.searchZipPlateInpScreen("zip"))
+
 searchPlateBtn = Button(mainWindow, bg="white", text="Search By Plate Number",
-                        command=lambda: searchZipPlateInpScreen("plate"))
-deleteBtn = Button(mainWindow, bg="white", state=userType, text="Delete Driver", command=lambda: [delDriverScreen()])
-editBtn = Button(mainWindow, bg="white", text="Edit Driver", command=lambda: [editDriverScreen()])  # implement
-scanPlateBtn = Button(mainWindow, bg="white", text="Scan Plate", command=lambda: [print("implement")])  # implement
-logOutBtn = Button(mainWindow, bg="white", text="Log Out", command=lambda: [logOutScreen()])
+                        command=lambda: db_interface.searchZipPlateInpScreen("plate"))
+
+deleteBtn = Button(mainWindow, bg="white", state=userType, text="Delete Driver",
+                   command=lambda: [db_interface.delDriverScreen()])
+
+editBtn = Button(mainWindow, bg="white", text="Edit Driver",
+                 command=lambda: [db_interface.editDriverScreen()])  # implement
+
+scanPlateBtn = Button(mainWindow, bg="white", text="Scan Plate",
+                      command=lambda: [print("implement")])  # implement
+
+logOutBtn = Button(mainWindow, bg="white", text="Log Out", command=lambda: [db_interface.logOutScreen()])
 
 # set padding x
 padx = 15
