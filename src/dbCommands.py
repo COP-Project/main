@@ -47,7 +47,7 @@ class DataAccess:
         if string == "plate":
             label = "Plate Number"
             self.cursor.execute("SELECT * FROM drivers WHERE (platenum = %s)", value)
-            rows = self.cursor.fetchone()
+            rows = self.cursor.fetchall()
         # return rows which is passed to displaySearch
 
         return rows
