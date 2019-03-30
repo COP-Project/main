@@ -30,7 +30,7 @@ class DataAccess:
             # OFF###conn=pymysql.connect(host='127.0.0.1',port=3312,user=username,passwd=password,db='poopproject')
             return new_conn
         except:
-            Error.error_window("Could not self.connect to database")
+            Error.error_window("Could not connect to database")
             sys.exit()
 
     # Searches by Zip or Plate Depeding on paramater from searchZipPlateInpScreen()
