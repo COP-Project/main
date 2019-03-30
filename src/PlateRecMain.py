@@ -1,9 +1,6 @@
-import pymysql.cursors
 from tkinter import *
-from tkinter import ttk
 import tkinter as tk
 from dbInterface import *
-from dbCommands import *
 from PIL import ImageTk, Image
 
 # mySql connection, currently set to my local pc
@@ -19,7 +16,7 @@ root.withdraw()  # won't need this
 # consists of a list of 4 fields 0 fname, 1 lname, 2 login name, 3 ADMIN or NON ADMIN
 userInfoList = getUserInfo()
 
-###set main window
+# set main window
 mainWindow = Toplevel()
 mainWindow.configure(background="white")
 
@@ -36,7 +33,7 @@ welcomLabel = Label(mainWindow, bg="white",
                          userInfoList[3])
 welcomLabel.pack()
 
-####ADD bANNER PICTURE
+# ADD bANNER PICTURE
 path = "carpic.png"
 img = ImageTk.PhotoImage(Image.open(path))
 panel = tk.Label(mainWindow, image=img)
@@ -61,7 +58,7 @@ searchPlateBtn = Button(mainWindow, bg="white", text="Search By Plate Number",
 deleteBtn = Button(mainWindow, bg="white", state=userType, text="Delete Driver", command=lambda: [delDriverScreen()])
 editBtn = Button(mainWindow, bg="white", text="Edit Driver", command=lambda: [editDriverScreen()])  # implement
 scanPlateBtn = Button(mainWindow, bg="white", text="Scan Plate", command=lambda: [print("implement")])  # implement
-logOutBtn = Button(mainWindow, bg="white", text="Log Out", command=lambda: [logOut(), mainWindow.destroy()])
+logOutBtn = Button(mainWindow, bg="white", text="Log Out", command=lambda: [logOutScreen()])
 
 # set padding x
 padx = 15

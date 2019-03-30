@@ -15,7 +15,7 @@ class StandardValues:
 
 class Error:
     # error window and prints it in a pop up window
-    def error_window(self, string_in):
+    def error_window(string_in):
         error_window = Toplevel()
         error_window.geometry("500x200")
         error_window.winfo_toplevel().title("Error!!")

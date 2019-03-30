@@ -1,5 +1,6 @@
-from tkinter import *
 import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
 from dbCommands import *
 from StandardValues import Error
 
@@ -51,7 +52,7 @@ def searchZipPlateInpScreen(string):
 
     # button displaysSearch() from string returned by searchZipPlate()
     search_zip_plate_btn = Button(search_zip_plate_screen, bg="black", fg="white", text="Search", command=lambda:
-    [displaySearch(searchZipPlate(string, zip_plate_lbl_tb))])
+    [displaySearch(searchZipPlate(string, zip_plate_lbl_tb.get()))])
 
     search_zip_plate_btn.grid(row=0, column=3, padx=20)
 
@@ -74,7 +75,7 @@ def searchLastNameIntScreen():
     search_lname_tb.grid(row=1, column=1, padx=20)
 
     search_name_driver_btn = Button(search_lname_screen, text="Search", bg="black", fg="white", command=lambda:
-    [displaySearch(searchDriverFirstLastName(search_fname_tb, search_lname_tb))])
+    [displaySearch(searchDriverFirstLastName(search_fname_tb.get(), search_lname_tb.get()))])
 
     search_name_driver_btn.grid(row=2, column=0, padx=20)
 
@@ -225,6 +226,15 @@ def displaySearch(rows):
     delete_btn = Button(display_zip_plate_screen, bg="black", fg="white", text="Delete Driver",
                         command=lambda: [delDriverScreen()])
     edit_btn = Button(display_zip_plate_screen, bg="black", fg="white", text="Edit Driver",
-                      command=lambda: [print("implement")])  # implement
+                      command=lambda: [editDriverScreen()])  # implement
     delete_btn.grid(row=n + 3, column=3)
     edit_btn.grid(row=n + 4, column=3)
+
+
+def logOutScreen():
+    will_logout = messagebox.askyesno("Log Out", "Are you sure you want to log out?")
+
+    if will_logout:
+        logOut()
+    else:
+        return

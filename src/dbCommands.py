@@ -1,33 +1,31 @@
 import pymysql.cursors
-from tkinter import *
-from tkinter import ttk
-import tkinter as tk
+import sys
 import dbUsers
 from login import Login
 from StandardValues import StandardValues, Error
 
+
 # data bas info, it needs to match either your local mysql server
-# ---command to CREATE TABLE poopproject.drivers(fname VARCHAR(20), lname VARCHAR(20), address VARCHAR(20),zipcod VARCHAR(5),state VARCHAR(2),
+# ---command to CREATE TABLE poopproject.drivers(fname VARCHAR(20),
+# lname VARCHAR(20), address VARCHAR(20),zipcod VARCHAR(5),state VARCHAR(2),
 # platenum VARCHAR(12), carmake VARCHAR(20), color VARCHAR(20), model VARCHAR(20), priority VARCHAR(3));
 # or the AWS server
 
 # Searches by Zip or Plate Depeding on paramater from searchZipPlateInpScreen()
 def searchZipPlate(string, textfield):
-    zipOrPlate = read_textbox(textfield)
-
     # check for empty string. 
-    if zipOrPlate == "":
+    if textfield == "":
         Error.error_window("Please Enter a " + string)
         return ""
     # check if we are searching by zip
     if string == "zip":
         label = "Zip Code"
-        cursor.execute("SELECT * FROM drivers WHERE (zipcod = %s)", (zipOrPlate,))
+        cursor.execute("SELECT * FROM drivers WHERE (zipcod = %s)", (textfield))
         rows = cursor.fetchall()
     # checks if we are searching by plate number
     if string == "plate":
         label = "Plate Number"
-        cursor.execute("SELECT * FROM drivers WHERE (platenum = %s)", (zipOrPlate,))
+        cursor.execute("SELECT * FROM drivers WHERE (platenum = %s)", (textfield))
         rows = cursor.fetchall()
     # return rows which is passed to displaySearch
 
@@ -37,25 +35,19 @@ def searchZipPlate(string, textfield):
 
 # functionality to search and display all drivers in the data base by first and last name   
 def searchDriverFirstLastName(fname, lname):
-    firstName = read_textbox(fname)
-    lastName = read_textbox(lname)
 
-    if firstName == "" or lastName == "":
+    if fname == "" or lname == "":
         Error.error_window("Please Enter a first and last name. ")
         return ""
 
     try:
-        cursor.execute("SELECT * FROM drivers WHERE (fname = %s and lname = %s)", (firstName, lastName,))
+        cursor.execute("SELECT * FROM drivers WHERE (fname = %s and lname = %s)", (fname, lname))
         rows = cursor.fetchall()
 
         # displaySearch(rows)
         return rows
     except Error as e:
         print(e)
-
-
-def close_window():
-    mainWindow.destroy()
 
 
 # the logic to to read in all the text boxes from callAddDrivers() probably way to many paramaters
@@ -101,7 +93,7 @@ def addDriver(fname, lname, address, zipcode, state, platenum, make, color, mode
         Error.error_window("Model must be less than or equal to " + str(stdvalues.modelChars))
         return
 
-    # no error, this will be impletmented as a drop down
+    # no error, this will be implemented as a drop down
 
     # plate number duplication
     if plateCheck(platenum) == 1:
