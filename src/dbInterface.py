@@ -376,6 +376,29 @@ class DbInterface:
         else:
             return
 
+    def scan_license_plate_screen(self):
+        scan_screen = Toplevel()
+        scan_screen.configure(background=StandardValues.background)
+        scan_screen.winfo_toplevel().title("Scan License Plate")
+
+        img_label = Label(scan_screen, text="Please enter an image location: ", bg="white")
+        img_label.grid(row=0, column=0, padx = StandardValues.padding)
+
+        img_tb = Entry(scan_screen)
+        img_tb.grid(row=0, column=1, padx=StandardValues.padding)
+
+        # delete button
+        img_submit_btn = Button(scan_screen,
+                                bg=StandardValues.btn_bk_clr,
+                                fg=StandardValues.btn_text_clr,
+                                text="Submit",
+                                command=lambda: self.scan_license_plate(img_tb.get()))
+
+        img_submit_btn.grid(row=0, column=2)
+
+    def scan_license_plate(self, img):
+        self.data_access.scan_license_plate(img)
+
     def getUser(self):
         return self.data_access.getUser()
 

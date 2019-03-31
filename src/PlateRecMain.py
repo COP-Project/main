@@ -102,7 +102,7 @@ scanPlateBtn = Button(mainWindow,
                       bg=StandardValues.btn_bk_clr,
                       fg=StandardValues.btn_text_clr,
                       text="Scan Plate",
-                      command=lambda: [print("implement")])  # implement
+                      command=lambda: [db_interface.scan_license_plate_screen()])  # implement
 
 logOutBtn = Button(mainWindow,
                    bg=StandardValues.btn_bk_clr,

@@ -173,6 +173,9 @@ class DataAccess:
 
         self.conn.commit()
 
+    def scan_license_plate(self, img):
+        print("Hello")
+
     # searches the user table in the database for the user login that has self.connected.
     # this fucntion is used to determine user permissions ADMIN or NON-ADMIN
     def findUser(self, login_name):
