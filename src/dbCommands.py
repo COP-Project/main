@@ -69,61 +69,62 @@ class DataAccess:
         except Error as e:
             print(e)
 
-    # the logic to to read in all the text boxes from callAddDrivers() probably way to many paramaters
-    # REFACTOR in the future to group boxes into a object and pass object
-    def addDriver(self, fname, lname, address, zipcode, state, platenum, make, color, model, priority, addDriverWindow):
-        stdvalues = StandardValues()
-
+    def check_input(self, fname, lname, address, zipcode, state, platenum, make, color, model, priority):
         # REads in each value from the text box and checks if the value is valid for the DB#################
         # and check if all fields fall within the valid Database character length TRY TO REFACTOR
 
-        if len(fname) > stdvalues.firstNameChars:
-            Error.error_window("First Name must be less than or equal to " + str(stdvalues.firstNameChars))
-            return
+        if len(fname) > StandardValues.firstNameChars:
+            Error.error_window("First Name must be less than or equal to " + str(StandardValues.firstNameChars))
+            return -1
 
-        if len(lname) > stdvalues.lastNameChars:
-            Error.error_window("Last Name must be less than or equal to " + str(stdvalues.lastNameChars))
-            return
+        if len(lname) > StandardValues.lastNameChars:
+            Error.error_window("Last Name must be less than or equal to " + str(StandardValues.lastNameChars))
+            return -1
 
-        if len(address) > stdvalues.addressChars:
-            Error.error_window("Address must be less than or equal to " + str(stdvalues.addressChars))
-            return
+        if len(address) > StandardValues.addressChars:
+            Error.error_window("Address must be less than or equal to " + str(StandardValues.addressChars))
+            return -1
 
         # check length of zip
         if len(zipcode) != 5:
             Error.error_window("Zip code should be 5 numbers")
-            return
+            return -1
 
-        # no error check, this will be implemented as a drop down
+        if len(platenum) != StandardValues.plateNumChars:
+            Error.error_window("Plate number must be " + str(StandardValues.plateNumChars) + " characters.")
+            return -1
 
-        if len(platenum) != stdvalues.plateNumChars:
-            Error.error_window("Plate number must be " + str(stdvalues.plateNumChars) + " characters.")
-            return
+        if len(make) > StandardValues.addressChars:
+            Error.error_window("Car Make must be less than or equal to " + str(StandardValues.carmakeChars))
+            return -1
 
-        if len(make) > stdvalues.addressChars:
-            Error.error_window("Car Make must be less than or equal to " + str(stdvalues.carmakeChars))
-            return
+        if len(color) > StandardValues.colorChars:
+            Error.error_window("Color must be less than or equal to " + str(StandardValues.colorChars))
+            return -1
 
-        if len(color) > stdvalues.colorChars:
-            Error.error_window("Color must be less than or equal to " + str(stdvalues.colorChars))
-            return
-
-        if len(model) > stdvalues.modelChars:
-            Error.error_window("Model must be less than or equal to " + str(stdvalues.modelChars))
-            return
-
-        # no error, this will be implemented as a drop down
-
-        # plate number duplication
-        if self.plateCheck(platenum) == 1:
-            Error.error_window("Duplicate License Plate Number")
-            return
+        if len(model) > StandardValues.modelChars:
+            Error.error_window("Model must be less than or equal to " + str(StandardValues.modelChars))
+            return -1
 
         # checks if any fields are empty
         if fname == "" or lname == "" or address == "" or platenum == "" or make == "" or color == "" or model == "" or priority == "" or zipcode == "" or state == "":
             Error.error_window("All fields must be completed.")
+            return -1
+
+        return 0
+        
+    # the logic to to read in all the text boxes from callAddDrivers() probably way to many paramaters
+    # REFACTOR in the future to group boxes into a object and pass object
+    def addDriver(self, fname, lname, address, zipcode, state, platenum, make, color, model, priority):
+        error = self.check_input(fname, lname, address, zipcode, state, platenum, make, color, model, priority)
+
+        if error == -1:
             return
-        # End of field check#################################################
+
+        # plate number duplication
+        if self.plateCheck(platenum) == 1:
+            Error.error_window("Duplicate License Plate Number")
+            return -1
 
         # runs query against database
         addDriver = ("INSERT INTO drivers"
@@ -156,13 +157,16 @@ class DataAccess:
             if stringIn == row[5]:
                 return 1
 
-    # EDIT DRIVER IS IN PROGRESS
     def editDriverRequest(self, platenum_old, fname, lname, address, zipcode, state, platenum_new, make, color, model, priority):
+        error = self.check_input(fname, lname, address, zipcode, state, platenum_new, make, color, model, priority)
+
+        if error == -1:
+            return
+
         edit_driver = ("UPDATE drivers "
                        "SET fname = %s, lname = %s, address = %s, zipcod = %s, state = %s, "
                        "platenum = %s, carmake = %s, color = %s, model = %s, priority = %s "
                        "WHERE platenum = %s ")
-        print(edit_driver)
 
         data_driver = (fname, lname, address, zipcode, state, platenum_new, make, color, model, priority, platenum_old)
         self.cursor.execute(edit_driver, data_driver)

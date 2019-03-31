@@ -16,7 +16,7 @@ class DbInterface:
         # creates window
         edit_driver_sch = Toplevel()
         edit_driver_sch.configure(background=StandardValues.background)
-        edit_driver_sch.geometry(StandardValues.win_size)
+        # edit_driver_sch.geometry(StandardValues.win_size)
         edit_driver_sch.winfo_toplevel().title("Edit Driver")
 
         # label and text box
@@ -49,68 +49,68 @@ class DbInterface:
         # creates window
         edit_driver_scrn = Toplevel()
         edit_driver_scrn.configure(background="white")
-        edit_driver_scrn.geometry(StandardValues.win_size)
+        # edit_driver_scrn.geometry(StandardValues.win_size)
         edit_driver_scrn.winfo_toplevel().title("Edit Driver")
 
         # text boxes and buttons
         # FIRST NAME LABEL AND BOX
         self.addLabel("First Name", 0, 0, edit_driver_scrn)
         first_name_tb = Entry(edit_driver_scrn)  # textvariable=v
-        first_name_tb.insert(END, row[0])
+        first_name_tb.insert(END, row[0][0])
         first_name_tb.grid(row=0, column=1, padx=StandardValues.padding)
 
         # LAST NAME LABEL AND BOX
         self.addLabel("Last Name", 1, 0, edit_driver_scrn)
         last_name_tb = Entry(edit_driver_scrn)
-        last_name_tb.insert(END, row[1])
+        last_name_tb.insert(END, row[0][1])
         last_name_tb.grid(row=1, column=1, padx=StandardValues.padding)
 
         # Streetname/ address
         self.addLabel("Address", 2, 0, edit_driver_scrn)
         address_tb = Entry(edit_driver_scrn)
-        address_tb.insert(END, row[2])
+        address_tb.insert(END, row[0][2])
         address_tb.grid(row=2, column=1, padx=StandardValues.padding)
 
         # Zip Code
         self.addLabel("Zip Code", 3, 0, edit_driver_scrn)
         zipcode_tb = Entry(edit_driver_scrn)
-        zipcode_tb.insert(END, row[3])
+        zipcode_tb.insert(END, row[0][3])
         zipcode_tb.grid(row=3, column=1, padx=StandardValues.padding)
 
         # State
         self.addLabel("State", 4, 0, edit_driver_scrn)
         state_tb = Entry(edit_driver_scrn)
-        state_tb.insert(END, row[4])
+        state_tb.insert(END, row[0][4])
         state_tb.grid(row=4, column=1, padx=StandardValues.padding)
 
         # platenumber
         self.addLabel("Plate #", 5, 0, edit_driver_scrn)
         platenum_tb = Entry(edit_driver_scrn, state=NORMAL)
-        platenum_tb.insert(END, row[5])
+        platenum_tb.insert(END, row[0][5])
         platenum_tb.grid(row=5, column=1, padx=StandardValues.padding)
 
         # car make
         self.addLabel("Car Make", 6, 0, edit_driver_scrn)
         car_make_tb = Entry(edit_driver_scrn)
-        car_make_tb.insert(END, row[6])
+        car_make_tb.insert(END, row[0][6])
         car_make_tb.grid(row=6, column=1, padx=StandardValues.padding)
 
         # model
         self.addLabel("Model", 7, 0, edit_driver_scrn)
         model_tb = Entry(edit_driver_scrn)
-        model_tb.insert(END, row[7])
+        model_tb.insert(END, row[0][7])
         model_tb.grid(row=7, column=1, padx=StandardValues.padding)
 
         # Color
         self.addLabel("Color", 8, 0, edit_driver_scrn)
         color_tb = Entry(edit_driver_scrn)
-        color_tb.insert(END, row[7])
+        color_tb.insert(END, row[0][8])
         color_tb.grid(row=8, column=1, padx=StandardValues.padding)
 
         # priority
         self.addLabel("High Priority?", 9, 0, edit_driver_scrn)
         priority_tb = Entry(edit_driver_scrn)
-        priority_tb.insert(END, row[9])
+        priority_tb.insert(END, row[0][9])
         priority_tb.grid(row=9, column=1, padx=StandardValues.padding)
 
         # save button
@@ -149,7 +149,7 @@ class DbInterface:
         search_zip_plate_screen = tk.Tk()
         search_zip_plate_screen.configure(background=StandardValues.background)
         search_zip_plate_screen.winfo_toplevel().title("Search Driver By" + label)
-        search_zip_plate_screen.geometry(StandardValues.win_size)
+        # search_zip_plate_screen.geometry(StandardValues.win_size)
 
         # variable text box AND LABEL
         self.addLabel(label, 0, 0, search_zip_plate_screen)
@@ -174,7 +174,7 @@ class DbInterface:
         search_lname_screen = tk.Tk()
         search_lname_screen.configure(background=StandardValues.background)
         search_lname_screen.winfo_toplevel().title("Search Driver By Name")
-        search_lname_screen.geometry(StandardValues.win_size)
+        # search_lname_screen.geometry(StandardValues.win_size)
 
         # text boxes and buttons
         # FIRST NAME LABEL AND BOX
@@ -204,7 +204,7 @@ class DbInterface:
         # creates window
         add_driver_window = Toplevel()
         add_driver_window.configure(background=StandardValues.background)
-        add_driver_window.geometry(StandardValues.win_size)
+        # add_driver_window.geometry(StandardValues.win_size)
         add_driver_window.winfo_toplevel().title("New Driver Entry")
 
         # text boxes and buttons
@@ -279,8 +279,7 @@ class DbInterface:
                                                                          car_make_tb.get().upper(),
                                                                          model_tb.get().upper(),
                                                                          color_tb.get().upper(),
-                                                                         priority_tb.get().upper(),
-                                                                         add_driver_window),
+                                                                         priority_tb.get().upper()),
                                               add_driver_window.destroy()])
 
     # pop up screen to delete a driver
@@ -288,7 +287,7 @@ class DbInterface:
         # creates window
         del_driver_scrn = Toplevel()
         del_driver_scrn.configure(background=StandardValues.background)
-        del_driver_scrn.geometry(StandardValues.win_size)
+        # del_driver_scrn.geometry(StandardValues.win_size)
         del_driver_scrn.winfo_toplevel().title("Delete Driver")
 
         # label and text box
@@ -326,7 +325,7 @@ class DbInterface:
         display_zip_plate_screen = tk.Tk()
         display_zip_plate_screen.configure(background=StandardValues.background)
         display_zip_plate_screen.winfo_toplevel().title("Search Results")
-        display_zip_plate_screen.geometry(StandardValues.win_size)
+        # display_zip_plate_screen.geometry(StandardValues.win_size)
 
         # loop to print the header to the window
         header = (
@@ -353,13 +352,13 @@ class DbInterface:
                             bg=StandardValues.btn_bk_clr,
                             fg=StandardValues.btn_text_clr,
                             text="Delete Driver",
-                            command=lambda: [self.data_access.delDriverScreen()])
+                            command=lambda: [self.delDriverScreen()])
 
         edit_btn = Button(display_zip_plate_screen,
                           bg=StandardValues.btn_bk_clr,
                           fg=StandardValues.btn_text_clr,
                           text="Edit Driver",
-                          command=lambda: [self.data_access.editDriverScreen()])  # implement
+                          command=lambda: [self.editDriverSearch()])  # implement
 
         delete_btn.grid(row=n + 3, column=3)
         edit_btn.grid(row=n + 4, column=3)
