@@ -23,13 +23,11 @@ class Login:
         username_label.grid(row=1, column=0)
 
         username_textbox = Entry(login_scrn)
-        username_textbox.insert(END, "admin")
         username_textbox.grid(row=1, column=1, padx=20)
 
         pw_label = Label(login_scrn, bg="white", text="Password")
         pw_label.grid(row=2, column=0)
         pw_textbox = Entry(login_scrn)
-        pw_textbox.insert(END, "Hollander#6")
         pw_textbox.grid(row=2, column=1, padx=20)
 
         var = IntVar()  # variable use to pause until the submit button is pressed

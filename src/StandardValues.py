@@ -2,6 +2,11 @@ from tkinter import *
 
 
 class StandardValues:
+    # Database access
+    username = 'admin'
+    password = 'Hollander#6'
+    aes_key = 'eIEtvO@OK^lW1rFokTZ%tF#fGErKJTr$'
+
     # Database Field Values
     firstNameChars = 20
     lastNameChars = 20

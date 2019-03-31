@@ -12,21 +12,25 @@ class DataAccess:
     # or the AWS server
 
     def __init__(self, username, password):
-        self.conn = self.conn(username, password)
-        self.cursor = self.conn.cursor()
-        self.user = dbUsers.Users(self.findUser(username), self)
+        self.cursor = None
+        self.conn = self.conn()
+        self.user = dbUsers.Users(username, self)
+
+        if not self.is_right_password(password):
+            Error.error_window("Invalid password")
 
     # database self.connection and login screen########################
-    def conn(self, username, password):
+    def conn(self):
         # uses the inputs from the user to log in
         try:
             # self.connection to AWS database
-            new_conn = pymysql.connect(host='copproject.cveza4dgo3d2.us-east-2.rds.amazonaws.com', port=3306,
-                                       user=username,
-                                       passwd=password, db='poopproject')
+            new_conn = pymysql.connect(host='copproject.cveza4dgo3d2.us-east-2.rds.amazonaws.com',
+                                       port=3306,
+                                       user=StandardValues.username,
+                                       passwd=StandardValues.password,
+                                       db='poopproject')
 
-            # self.connection to local db database
-            # OFF###conn=pymysql.connect(host='127.0.0.1',port=3312,user=username,passwd=password,db='poopproject')
+            self.cursor = new_conn.cursor()
             return new_conn
         except:
             Error.error_window("Could not connect to database")
@@ -177,17 +181,20 @@ class DataAccess:
     def scan_license_plate(self, img):
         print("Hello")
 
-    # searches the user table in the database for the user login that has self.connected.
-    # this fucntion is used to determine user permissions ADMIN or NON-ADMIN
-    def findUser(self, login_name):
-        try:
-            self.cursor.execute("SELECT * FROM users WHERE (loginname = %s)", login_name)
-            rows = self.cursor.fetchall()
-            return rows
-        except Error as e:
-            print(e)
-            Error.error_window("Not a valid user.")
-            sys.exit()
+    def is_right_password(self, password):
+        check_password = ("SELECT 1 "
+                          "FROM users "
+                          "WHERE passwords = AES_ENCRYPT(%s, %s) ")
+
+        data_password = (password, StandardValues.aes_key)
+        self.cursor.execute(check_password, data_password)
+
+        rows = self.cursor.fetchall()
+
+        if self.cursor.rowcount > 0 and rows[0][0] == 1:
+            return 1
+
+        return 0
 
     # returns the user info from dbUser.py object >>thisUser
     def getUser(self):
