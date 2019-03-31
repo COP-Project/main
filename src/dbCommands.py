@@ -192,13 +192,3 @@ class DataAccess:
     def logOut(self):
         self.conn.close()
 
-# login_scrn = Login()
-# login_scrn.create_window()
-#
-# self.conn = self.conn(login_scrn.username, login_scrn.password)
-# cursor = self.cursor()
-#
-# # look up user to access their information for permissions
-# userInfo = findUser(login_scrn.username)
-# # creates the object in the dbUsers
-# thisUser = dbUsers.Users(userInfo)

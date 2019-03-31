@@ -79,9 +79,11 @@ class DbInterface:
 
         # State
         self.addLabel("State", 4, 0, edit_driver_scrn)
-        state_tb = Entry(edit_driver_scrn)
-        state_tb.insert(END, row[0][4])
-        state_tb.grid(row=4, column=1, padx=StandardValues.padding)
+        state_om = StringVar()
+        state_om.set(row[0][4])
+
+        state_om_field = OptionMenu(edit_driver_scrn, state_om, *StandardValues.options)
+        state_om_field.grid(row=4, column=1, padx=StandardValues.padding)
 
         # platenumber
         self.addLabel("Plate #", 5, 0, edit_driver_scrn)
@@ -126,7 +128,7 @@ class DbInterface:
                                                                                  last_name_tb.get().upper(),
                                                                                  address_tb.get().upper(),
                                                                                  zipcode_tb.get(),
-                                                                                 state_tb.get().upper(),
+                                                                                 state_om.get(),
                                                                                  platenum_tb.get().upper(),
                                                                                  car_make_tb.get().upper(),
                                                                                  model_tb.get().upper(),
@@ -230,8 +232,11 @@ class DbInterface:
 
         # State
         self.addLabel("State", 4, 0, add_driver_window)
-        state_tb = Entry(add_driver_window)
-        state_tb.grid(row=4, column=1, padx=StandardValues.padding)
+        state_om = StringVar()
+        state_om.set(StandardValues.options[0])
+
+        state_om_field = OptionMenu(add_driver_window, state_om, *StandardValues.options)
+        state_om_field.grid(row=4, column=1, padx=StandardValues.padding)
 
         # platenumber
         self.addLabel("Plate #", 5, 0, add_driver_window)
@@ -274,7 +279,7 @@ class DbInterface:
                                                                          last_name_tb.get().upper(),
                                                                          address_tb.get().upper(),
                                                                          zipcode_tb.get(),
-                                                                         state_tb.get().upper(),
+                                                                         state_om.get(),
                                                                          platenum_tb.get().upper(),
                                                                          car_make_tb.get().upper(),
                                                                          model_tb.get().upper(),
