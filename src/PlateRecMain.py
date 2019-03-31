@@ -129,6 +129,7 @@ editBtn.pack(in_=bottom, side=LEFT, padx=padx)
 scanPlateBtn.pack(in_=bottom, side=LEFT, padx=padx)
 logOutBtn.pack(in_=bottom, side=LEFT, padx=padx)
 
+mainWindow.mainloop()
 
 def main():
     print("Hello")
