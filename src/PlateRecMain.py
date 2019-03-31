@@ -6,133 +6,153 @@ import PIL.ImageTk
 from StandardValues import *
 from dbInterface import *
 
-# mySql connection, currently set to my local pc
-# add login --OFF THIS IS IN AN IMPORT
-# conn=pymysql.connect(host='127.0.0.1',port=3312,user='root',passwd='0485',db='poopproject')
-# cursor = conn.cursor()
+from login import Login
 
-root = tk.Tk()
-root.withdraw()  # won't need this
 
-# Prompt user to login
-login_scrn = Login()
-login_scrn.create_window()
+class App:
+    def __init__(self):
+        self.main_window = None
 
-# Create interface to interact with database, handles connection
-db_interface = DbInterface(login_scrn.username, login_scrn.password)
+        self.user = None
+        self.passport = None
 
-# this sets our current log info
-# calls from out dbCommands which has access to our dbUsers information
-# consists of a list of 4 fields 0 fname, 1 lname, 2 login name, 3 ADMIN or NON ADMIN
-user = db_interface.getUser()
-passport = user.passport
+        self.db_interface = None
+        self.login = None
 
-# set main window
-mainWindow = Toplevel()
-mainWindow.configure(background=StandardValues.background)
+        # Request login credentials from user
+        self.login_user()
 
-# SET GUI FRAMES
-top = Frame(mainWindow)
-bottom = Frame(mainWindow)
-bottom.configure(background="black")
-top.pack(side=TOP)
-bottom.pack(side=BOTTOM, fill=BOTH, expand=True)
+        # if login credentials accepted, create main application
+        self.create_main()
 
-# Welcome label
-welcomLabel = Label(mainWindow, bg="white",
-                    text="Welcome " + passport.firstName + " you are logged in under " + passport.loginName + " as " +
-                         passport.access)
-welcomLabel.pack()
+    def login_user(self):
+        self.login = Login()
+        self.login.create_window()
 
-# ADD bANNER PICTURE
-path = "img/carpic.png"
-img = PIL.ImageTk.PhotoImage(PIL.Image.open(path))
-panel = tk.Label(mainWindow, image=img)
-panel.pack(in_=top, expand="no")
+        self.db_interface = DbInterface(self.login.username, self.login.password)
 
-# set user type
-userType = DISABLED
-if passport.access == "ADMIN":
-    userType = NORMAL
+        self.user = self.db_interface.getUser()
+        self.passport = self.user.passport
 
-# set main window properties
-mainWindow.geometry("830x350")
-mainWindow.winfo_toplevel().title("License Recognition Program")
-# displayLogin()
-# create all buttons
+    def create_main(self):
+        root = tk.Tk()
+        root.withdraw()
 
-addDriverBtn = Button(mainWindow,
-                      bg=StandardValues.btn_bk_clr,
-                      fg=StandardValues.btn_text_clr,
-                      text="Add New Driver",
-                      command=lambda: db_interface.callAddDrivers())
+        self.main_window = Toplevel()
+        self.main_window.configure(background=StandardValues.background)
 
-searchDriverBtn = Button(mainWindow,
-                         bg=StandardValues.btn_bk_clr,
-                         fg=StandardValues.btn_text_clr,
-                         text="Search By Full Name",
-                         command=lambda: db_interface.searchLastNameIntScreen())
+        # SET GUI FRAMES
+        top_frame = Frame(self.main_window)
+        bottom_frame = Frame(self.main_window)
+        bottom_frame.configure(background="black")
+        top_frame.pack(side=TOP)
+        bottom_frame.pack(side=BOTTOM, fill=BOTH, expand=True)
 
-searchZipBtn = Button(mainWindow,
-                      bg=StandardValues.btn_bk_clr,
-                      fg=StandardValues.btn_text_clr,
-                      text="Search By Zip",
-                      command=lambda: db_interface.searchZipPlateInpScreen("zip"))
+        bottom_frame_left = Frame(bottom_frame)
+        bottom_frame_right = Frame(bottom_frame)
 
-searchPlateBtn = Button(mainWindow,
-                        bg=StandardValues.btn_bk_clr,
-                        fg=StandardValues.btn_text_clr,
-                        text="Search By Plate Number",
-                        command=lambda: db_interface.searchZipPlateInpScreen("plate"))
+        bottom_frame_left.configure(background="black")
+        bottom_frame_right.configure(background="black")
 
-deleteBtn = Button(mainWindow,
-                   bg=StandardValues.btn_bk_clr,
-                   fg=StandardValues.btn_text_clr,
-                   state=userType,
-                   text="Delete Driver",
-                   command=lambda: [db_interface.delDriverScreen()])
+        bottom_frame_left.pack(side=LEFT, fill=BOTH, expand=True)
+        bottom_frame_right.pack(side=RIGHT, fill=BOTH, expand=True)
 
-editBtn = Button(mainWindow,
-                 bg=StandardValues.btn_bk_clr,
-                 fg=StandardValues.btn_text_clr,
-                 text="Edit Driver",
-                 command=lambda: [db_interface.editDriverSearch()])  # implement
+        # Welcome label
+        welcome_lbl = Label(top_frame, bg="white",
+                            text="Welcome " + self.passport.firstName + "\nYou are logged in under " + self.passport.loginName + " as " +
+                                 self.passport.access)
+        welcome_lbl.pack(side=BOTTOM, padx=10, pady=10)
 
-scanPlateBtn = Button(mainWindow,
-                      bg=StandardValues.btn_bk_clr,
-                      fg=StandardValues.btn_text_clr,
-                      text="Scan Plate",
-                      command=lambda: [db_interface.scan_license_plate_screen()])  # implement
+        # ADD bANNER PICTURE
+        path = "img/carpic.png"
+        img = PIL.ImageTk.PhotoImage(PIL.Image.open(path))
+        panel = tk.Label(self.main_window, image=img)
+        panel.pack(in_=top_frame, side=TOP, expand="no")
 
-logOutBtn = Button(mainWindow,
-                   bg=StandardValues.btn_bk_clr,
-                   fg=StandardValues.btn_text_clr,
-                   text="Log Out",
-                   command=lambda: [db_interface.logOutScreen()])
+        # set user type
+        userType = DISABLED
+        if self.passport.access == "ADMIN":
+            userType = NORMAL
 
-# set padding x
-padx = 15
+        # set main window properties
+        self.main_window.winfo_toplevel().title("License Recognition Program")
+        # create all buttons
 
-# Set driver
-addDriverBtn.pack()
+        add_driver_btn = Button(bottom_frame_left,
+                                bg=StandardValues.btn_bk_clr,
+                                fg=StandardValues.btn_text_clr,
+                                text="Add New Driver",
+                                command=lambda: self.db_interface.callAddDrivers())
 
-# Adds line seperator
-seperator = Frame(height=2, bd=1, relief=SUNKEN)
-seperator.pack(fill=X, padx=50, pady=50)
+        search_driver_btn = Button(bottom_frame_left,
+                                   bg=StandardValues.btn_bk_clr,
+                                   fg=StandardValues.btn_text_clr,
+                                   text="Search By Full Name",
+                                   command=lambda: self.db_interface.searchLastNameIntScreen())
 
-# set bottom part buttons
-searchDriverBtn.pack(in_=bottom, side=LEFT, padx=padx)
-searchZipBtn.pack(in_=bottom, side=LEFT, padx=padx)
-searchPlateBtn.pack(in_=bottom, side=LEFT, padx=padx)
-deleteBtn.pack(in_=bottom, side=LEFT, padx=padx)
-editBtn.pack(in_=bottom, side=LEFT, padx=padx)
-scanPlateBtn.pack(in_=bottom, side=LEFT, padx=padx)
-logOutBtn.pack(in_=bottom, side=LEFT, padx=padx)
+        search_zip_btn = Button(bottom_frame_left,
+                                bg=StandardValues.btn_bk_clr,
+                                fg=StandardValues.btn_text_clr,
+                                text="Search By Zip",
+                                command=lambda: self.db_interface.searchZipPlateInpScreen("zip"))
 
-mainWindow.mainloop()
+        search_plate_btn = Button(bottom_frame_left,
+                                  bg=StandardValues.btn_bk_clr,
+                                  fg=StandardValues.btn_text_clr,
+                                  text="Search By Plate Number",
+                                  command=lambda: self.db_interface.searchZipPlateInpScreen("plate"))
+
+        delete_btn = Button(bottom_frame_right,
+                            bg=StandardValues.btn_bk_clr,
+                            fg=StandardValues.btn_text_clr,
+                            state=userType,
+                            text="Delete Driver",
+                            command=lambda: [self.db_interface.delDriverScreen()])
+
+        edit_btn = Button(bottom_frame_right,
+                          bg=StandardValues.btn_bk_clr,
+                          fg=StandardValues.btn_text_clr,
+                          text="Edit Driver",
+                          command=lambda: [self.db_interface.editDriverSearch()])  # implement
+
+        scan_plate_btn = Button(bottom_frame_right,
+                                bg=StandardValues.btn_bk_clr,
+                                fg=StandardValues.btn_text_clr,
+                                text="Scan Plate",
+                                command=lambda: [self.db_interface.scan_license_plate_screen()])  # implement
+
+        logout_btn = Button(bottom_frame_right,
+                            bg=StandardValues.btn_bk_clr,
+                            fg=StandardValues.btn_text_clr,
+                            text="Log Out",
+                            command=lambda: [self.db_interface.logOutScreen()])
+
+        # set padding x
+        padx = 15
+        pady = 15
+
+        # Set driver
+        add_driver_btn.pack()
+
+        # Adds line seperator
+        seperator = Frame(height=2, bd=1, relief=SUNKEN)
+        seperator.pack(fill=X, padx=50, pady=50)
+
+        # set bottom part buttons
+        add_driver_btn.pack(side=TOP, padx=padx, pady=pady)
+        search_driver_btn.pack(side=TOP, padx=padx, pady=pady)
+        search_zip_btn.pack(side=TOP, padx=padx, pady=pady)
+        search_plate_btn.pack(side=TOP, padx=padx, pady=pady)
+        delete_btn.pack(side=TOP, padx=padx, pady=pady)
+        edit_btn.pack(side=TOP, padx=padx, pady=pady)
+        scan_plate_btn.pack(side=TOP, padx=padx, pady=pady)
+        logout_btn.pack(side=TOP, padx=padx, pady=pady)
+
+        self.main_window.mainloop()
+
 
 def main():
-    print("Hello")
+    app = App()
 
 
 if __name__ == '__main__':

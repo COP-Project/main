@@ -72,13 +72,19 @@ class StandardValues:
         "WY"
     ]
 
+
 class Error:
     # error window and prints it in a pop up window
     def error_window(string_in):
-        error_window = Toplevel()
-        error_window.geometry("500x200")
+        error_window = Tk()
+        error_window.configure(background=StandardValues.background)
         error_window.winfo_toplevel().title("Error!!")
-        error_label = Label(error_window, text="Error " + string_in)
-        error_label.pack()
-        ok_btn = Button(error_window, text="OK", command=error_window.destroy)
-        ok_btn.pack()
+        error_label = Label(error_window, text="Error : " + str(string_in))
+        error_label.pack(side=TOP)
+
+        var = IntVar()
+
+        ok_btn = Button(error_window, text="OK", command=lambda: error_window.destroy())
+        ok_btn.pack(side=BOTTOM)
+
+        error_window.wait_variable(var)

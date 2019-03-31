@@ -1,7 +1,6 @@
 import pymysql.cursors
 import sys
 import dbUsers
-from login import Login
 from StandardValues import StandardValues, Error
 
 
@@ -31,6 +30,7 @@ class DataAccess:
             return new_conn
         except:
             Error.error_window("Could not connect to database")
+            sys.exit()
 
     # Searches by Zip or Plate Depeding on paramater from searchZipPlateInpScreen()
     def searchZipPlate(self, string, value):
@@ -112,7 +112,7 @@ class DataAccess:
             return -1
 
         return 0
-        
+
     # the logic to to read in all the text boxes from callAddDrivers() probably way to many paramaters
     # REFACTOR in the future to group boxes into a object and pass object
     def addDriver(self, fname, lname, address, zipcode, state, platenum, make, color, model, priority):
@@ -148,16 +148,17 @@ class DataAccess:
         self.conn.commit()
 
     # checks for duplicate plates upon  data entry into the DB
-    def plateCheck(self, stringIn):
+    def plateCheck(self, string_in):
         self.cursor.execute("SELECT * FROM drivers")
         rows = self.cursor.fetchall()
 
         for row in rows:
 
-            if stringIn == row[5]:
+            if string_in == row[5]:
                 return 1
 
-    def editDriverRequest(self, platenum_old, fname, lname, address, zipcode, state, platenum_new, make, color, model, priority):
+    def editDriverRequest(self, platenum_old, fname, lname, address, zipcode, state, platenum_new,
+                          make, color, model, priority):
         error = self.check_input(fname, lname, address, zipcode, state, platenum_new, make, color, model, priority)
 
         if error == -1:
@@ -194,4 +195,3 @@ class DataAccess:
 
     def logOut(self):
         self.conn.close()
-

@@ -16,7 +16,6 @@ class Login:
         root.withdraw()  # won't need this
         login_scrn = Toplevel()
         login_scrn.configure(background=StandardValues.background)
-        login_scrn.geometry(StandardValues.win_size)
         login_scrn.winfo_toplevel().title("User Login")
 
         # set username and pw text boxes and labels
