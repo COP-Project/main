@@ -13,7 +13,16 @@
   Using the License Plate Recognition Program, a passive, yet more efficient approach can be taken to finding missing children. Instead of relying on the occupied memories of drivers across the country, an automated system can maintain a scalable search for important vehicles, notifying authorities when an involved vehicle is found.
   
 
-  
+## To install openALPR (Windows/Powershell, Python 3.X)
+1.  Navigate to your github clone directory in your file system using 'cd' on powershell: C:\YOUR_PATH\main\OpenALPR\openalpr-2.3.0\openalpr-2.3.0\src\bindings\python
+
+2. Type: "python setup.py install --record files.txt"
+
+3. Test it! Navigate to this directory with 'cd': C:\YOUR_PATH\main\OpenALPR\openalpr-2.3.0-win-64bit\openalpr_64
+
+4. Type: "./python_test.bat"
+
+5. You can use my personal test with a file I uploaded (ferrari.jpg) into the "\python" subdirectory in this directory: type "./python_test2.bat"
 ## Sprint 1
 
 * [Product Backlog](https://docs.google.com/spreadsheets/d/1lSt2IkeWZkcXEEomajb0V5m8mf8IrMCRReRq9BhTCic/edit#gid=402146333)
