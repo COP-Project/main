@@ -178,8 +178,8 @@ class DataAccess:
 
         self.conn.commit()
 
-    def scan_license_plate(self, img):
-        print("Hello")
+    def scan_license_plate(self, img, country, region):
+        print("Hello " + img + " " + country + " " + region)
 
     def is_right_password(self, password):
         check_password = ("SELECT 1 "
