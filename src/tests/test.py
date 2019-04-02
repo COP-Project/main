@@ -7,10 +7,6 @@ import pymysql
 import app
 
 
-# conn
-# search_zip_plate
-# search_driver_fname_lname
-# add_driver read_textbox
 # delete_driver
 # plate_check
 # edit_driver_request
@@ -32,6 +28,17 @@ class TestDBCommands(unittest.TestCase):
     def setUp(self):
         self.test_data_access_user = app.dbCommands.DataAccess("TESTUSER", "TESTUSER")
 
+        self.data_driver = ("TEST",
+                            "TEST",
+                            "123 Car Dr",
+                            "12345",
+                            "FL",
+                            "1234567",
+                            "TOYOTA",
+                            "BLACK",
+                            "CAMRY",
+                            "YES")
+
     def testInitDBAccess(self):
         """
         Test that DataAccess() creates new data access instance with correct user
@@ -42,7 +49,7 @@ class TestDBCommands(unittest.TestCase):
         self.assertIsNotNone(self.test_data_access_user.cursor)
         self.assertIsNotNone(self.test_data_access_user.user)
 
-# conn
+    # conn
     def testConn(self):
         """
         Test that DataAccess.conn() creates connection to database and populates cursor correctly given authorization
@@ -61,9 +68,10 @@ class TestDBCommands(unittest.TestCase):
         :return:
         """
         self.assertIsInstance(app.dbCommands.DataAccess("TESTUSER", "TESTUSER"), pymysql.OperationalError)
-# conn end
 
-# search_zip_plate
+    # conn end
+
+    # search_zip_plate
     def testSearchZipPlateZipRight(self):
         """
         Test that verifies search_zip_plate() will return data given a zip code
@@ -141,9 +149,10 @@ class TestDBCommands(unittest.TestCase):
         :return:
         """
         self.assertIsInstance(AssertionError, self.test_data_access_user.search_zip_plate("nope", "1234567").__class__)
-# search_zip_plate end
 
-# search_driver_fname_lname
+    # search_zip_plate end
+
+    # search_driver_fname_lname
     def testSearchDriverFnameLnameRight(self):
         """
         Test that verifies search_driver_fname_lname() will return data given full name
@@ -198,9 +207,10 @@ class TestDBCommands(unittest.TestCase):
         :return:
         """
         self.assertIsInstance(AssertionError, self.test_data_access_user.search_driver_fname_lname("", "").__class__)
-# search_driver_fname_lname end
 
-# add_driver
+    # search_driver_fname_lname end
+
+    # add_driver
     def testAddDriverRight(self):
         """
         Test that validates add_driver() successfully adds new driver given correct parameters
@@ -931,7 +941,143 @@ class TestDBCommands(unittest.TestCase):
         results = self.test_data_access_user.cursor.fetchone()
 
         self.assertIsNone(results)
-# add_driver end
+
+    def testAddDriverDuplicatePlate(self):
+        """
+        Test that validates add_driver() does not add duplicate plate
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertEqual(results[0], "TEST")
+        self.assertEqual(results[1], "TEST")
+        self.assertEqual(results[2], "123 Car Dr")
+        self.assertEqual(results[3], "12345")
+        self.assertEqual(results[4], "FL")
+        self.assertEqual(results[5], "1234567")
+        self.assertEqual(results[6], "TOYOTA")
+        self.assertEqual(results[7], "BLACK")
+        self.assertEqual(results[8], "CAMRY")
+        self.assertEqual(results[9], "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+
+        self.test_data_access_user.cursor.execute(get_driver)
+        self.assertGreater(2, self.test_data_access_user.cursor.rowcount)
+
+    # add_driver end
+
+    # delete_driver
+    def testDeleteDriverRight(self):
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = %s ; "
+        self.test_data_access_user.cursor.execute(drop, self.data_driver[5])
+
+        self.test_data_access_user.add_driver(self.data_driver[0],
+                                              self.data_driver[1],
+                                              self.data_driver[2],
+                                              self.data_driver[3],
+                                              self.data_driver[4],
+                                              self.data_driver[5],
+                                              self.data_driver[6],
+                                              self.data_driver[7],
+                                              self.data_driver[8],
+                                              self.data_driver[9])
+
+        self.test_data_access_user.delete_driver(self.data_driver[5])
+
+        search = "SELECT 1 FROM drivers WHERE platenum = %s "
+
+        self.test_data_access_user.cursor.execute(search, self.data_driver[5])
+        self.assertEqual(self.test_data_access_user.cursor.rowcount, 0)
+
+    def testDeleteDriverEmptyPlate(self):
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = %s ; "
+        self.test_data_access_user.cursor.execute(drop, self.data_driver[5])
+
+        self.test_data_access_user.add_driver(self.data_driver[0],
+                                              self.data_driver[1],
+                                              self.data_driver[2],
+                                              self.data_driver[3],
+                                              self.data_driver[4],
+                                              self.data_driver[5],
+                                              self.data_driver[6],
+                                              self.data_driver[7],
+                                              self.data_driver[8],
+                                              self.data_driver[9])
+
+        self.test_data_access_user.delete_driver("")
+
+        search = "SELECT 1 FROM drivers WHERE platenum = %s "
+
+        self.test_data_access_user.cursor.execute(search, self.data_driver[5])
+        self.assertEqual(self.test_data_access_user.cursor.rowcount, 1)
+
+    def testDeleteDriverTooLongPlate(self):
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = %s ; "
+        self.test_data_access_user.cursor.execute(drop, self.data_driver[5])
+
+        self.test_data_access_user.add_driver(self.data_driver[0],
+                                              self.data_driver[1],
+                                              self.data_driver[2],
+                                              self.data_driver[3],
+                                              self.data_driver[4],
+                                              self.data_driver[5],
+                                              self.data_driver[6],
+                                              self.data_driver[7],
+                                              self.data_driver[8],
+                                              self.data_driver[9])
+
+        self.test_data_access_user.delete_driver("12345678")
+
+        search = "SELECT 1 FROM drivers WHERE platenum = %s "
+
+        self.test_data_access_user.cursor.execute(search, self.data_driver[5])
+        self.assertEqual(self.test_data_access_user.cursor.rowcount, 0)
+
+# delete_driver end
 
 
 class TestUsers(unittest.TestCase):
@@ -945,8 +1091,8 @@ class TestUsers(unittest.TestCase):
         self.test_username_admin = "TESTADMIN"
         self.test_password_admin = "TESTADMIN"
         self.test_user_admin = app.dbUsers.Users(self.test_username_admin,
-                                             app.dbCommands.DataAccess(self.test_username_admin,
-                                                                       self.test_password_admin))
+                                                 app.dbCommands.DataAccess(self.test_username_admin,
+                                                                           self.test_password_admin))
 
     def testInitUserUser(self):
         """
