@@ -1,8 +1,11 @@
 import socket
-import unittest
 import tkinter
-import app
+import unittest
+
 import pymysql
+
+import app
+
 
 # conn
 # search_zip_plate
@@ -39,7 +42,7 @@ class TestDBCommands(unittest.TestCase):
         self.assertIsNotNone(self.test_data_access_user.cursor)
         self.assertIsNotNone(self.test_data_access_user.user)
 
-    # conn
+# conn
     def testConn(self):
         """
         Test that DataAccess.conn() creates connection to database and populates cursor correctly given authorization
@@ -58,8 +61,9 @@ class TestDBCommands(unittest.TestCase):
         :return:
         """
         self.assertIsInstance(app.dbCommands.DataAccess("TESTUSER", "TESTUSER"), pymysql.OperationalError)
+# conn end
 
-    # search_zip_plate
+# search_zip_plate
     def testSearchZipPlateZipRight(self):
         """
         Test that verifies search_zip_plate() will return data given a zip code
@@ -137,8 +141,9 @@ class TestDBCommands(unittest.TestCase):
         :return:
         """
         self.assertIsInstance(AssertionError, self.test_data_access_user.search_zip_plate("nope", "1234567").__class__)
+# search_zip_plate end
 
-    # search_driver_fname_lname
+# search_driver_fname_lname
     def testSearchDriverFnameLnameRight(self):
         """
         Test that verifies search_driver_fname_lname() will return data given full name
@@ -193,9 +198,10 @@ class TestDBCommands(unittest.TestCase):
         :return:
         """
         self.assertIsInstance(AssertionError, self.test_data_access_user.search_driver_fname_lname("", "").__class__)
+# search_driver_fname_lname end
 
-    # add_driver
-    def testAddDriver(self):
+# add_driver
+    def testAddDriverRight(self):
         """
         Test that validates add_driver() successfully adds new driver given correct parameters
         :return:
@@ -241,6 +247,691 @@ class TestDBCommands(unittest.TestCase):
         self.assertEqual(results[7], "BLACK")
         self.assertEqual(results[8], "CAMRY")
         self.assertEqual(results[9], "YES")
+
+    def testAddDriverEmptyFname(self):
+        """
+        Test that validates add_driver() doesn't add driver given empty input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("",
+                       "TEST",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverEmptyLname(self):
+        """
+        Test that validates add_driver() doesn't add driver given empty input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverEmptyAddress(self):
+        """
+        Test that validates add_driver() doesn't add driver given empty input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverEmptyZip(self):
+        """
+        Test that validates add_driver() doesn't add driver given empty input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverEmptyPlate(self):
+        """
+        Test that validates add_driver() doesn't add driver given empty input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverEmptyMake(self):
+        """
+        Test that validates add_driver() doesn't add driver given empty input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverEmptyColor(self):
+        """
+        Test that validates add_driver() doesn't add driver given empty input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverEmptyModel(self):
+        """
+        Test that validates add_driver() doesn't add driver given empty input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverTooLongFname(self):
+        """
+        Test that validates add_driver() doesn't add driver given TooLong input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TESTTTTTTTTTTTTTTTTT",
+                       "TEST",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverTooLongLname(self):
+        """
+        Test that validates add_driver() doesn't add driver given TooLong input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TESTTTTTTTTTTTTTTTTT",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverTooLongAddress(self):
+        """
+        Test that validates add_driver() doesn't add driver given TooLong input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "TESTTTTTTTTTTTTTTTTT",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverTooLongZip(self):
+        """
+        Test that validates add_driver() doesn't add driver given TooLong input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "123456",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverTooLongPlate(self):
+        """
+        Test that validates add_driver() doesn't add driver given TooLong input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "12345678",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverTooLongMake(self):
+        """
+        Test that validates add_driver() doesn't add driver given TooLong input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "TESTTTTTTTTTTTTTTTTT",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverTooLongColor(self):
+        """
+        Test that validates add_driver() doesn't add driver given TooLong input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "TESTTTTTTTTTTTTTTTTT",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverTooLongModel(self):
+        """
+        Test that validates add_driver() doesn't add driver given TooLong input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "12345",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "TESTTTTTTTTTTTTTTTTT",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverTooShortZip(self):
+        """
+        Test that validates add_driver() doesn't add driver given empty input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "1234",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+
+    def testAddDriverHasLettersZip(self):
+        """
+        Test that validates add_driver() doesn't add driver given empty input
+        :return:
+        """
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(drop)
+
+        data_driver = ("TEST",
+                       "TEST",
+                       "123 Car Dr",
+                       "A1245",
+                       "FL",
+                       "1234567",
+                       "TOYOTA",
+                       "BLACK",
+                       "CAMRY",
+                       "YES")
+
+        self.test_data_access_user.add_driver(data_driver[0],
+                                              data_driver[1],
+                                              data_driver[2],
+                                              data_driver[3],
+                                              data_driver[4],
+                                              data_driver[5],
+                                              data_driver[6],
+                                              data_driver[7],
+                                              data_driver[8],
+                                              data_driver[9])
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = '1234567'; "
+        self.test_data_access_user.cursor.execute(get_driver)
+
+        results = self.test_data_access_user.cursor.fetchone()
+
+        self.assertIsNone(results)
+# add_driver end
 
 
 class TestUsers(unittest.TestCase):
