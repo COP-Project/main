@@ -377,23 +377,36 @@ class DbInterface:
         scan_screen.configure(background=StandardValues.background)
         scan_screen.winfo_toplevel().title("Scan License Plate")
 
-        img_label = Label(scan_screen, text="Please enter an image location: ", bg="white")
-        img_label.grid(row=0, column=0, padx=StandardValues.padx)
+        img_name_label = Label(scan_screen, text="Please enter an image location: ", bg="white")
+        img_name_label.grid(row=0, column=0, padx=StandardValues.padx)
 
-        img_tb = Entry(scan_screen)
-        img_tb.grid(row=0, column=1, padx=StandardValues.padx)
+        img_name_tb = Entry(scan_screen)
+        img_name_tb.grid(row=1, column=0, padx=StandardValues.padx)
+
+        img_country_label = Label(scan_screen, text="Please enter the plate's country: ", bg="white")
+        img_country_label.grid(row=2, column=0, padx=StandardValues.padx)
+
+        img_country_tb = Entry(scan_screen)
+        img_country_tb.grid(row=3, column=0, padx=StandardValues.padx)
+
+        img_region_label = Label(scan_screen, text="Please enter the plate's region: ", bg="white")
+        img_region_label.grid(row=4, column=0, padx=StandardValues.padx)
+
+        img_region_tb = Entry(scan_screen)
+        img_region_tb.grid(row=5, column=0, padx=StandardValues.padx)
 
         # delete button
         img_submit_btn = Button(scan_screen,
                                 bg=StandardValues.btn_bk_clr,
                                 fg=StandardValues.btn_text_clr,
                                 text="Submit",
-                                command=lambda: self.scan_license_plate(img_tb.get()))
+                                command=lambda: self.scan_license_plate(img_name_tb.get(), img_country_tb.get(),
+                                                                        img_region_tb.get()))
 
-        img_submit_btn.grid(row=0, column=2)
+        img_submit_btn.grid(row=6, column=0)
 
-    def scan_license_plate(self, img):
-        self.data_access.scan_license_plate(img)
+    def scan_license_plate(self, img, country, region):
+        self.data_access.scan_license_plate(img, country, region)
 
     def get_user(self):
         return self.data_access.get_user()

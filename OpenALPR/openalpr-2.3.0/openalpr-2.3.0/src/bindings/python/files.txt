@@ -1,0 +1,5 @@
+C:\Users\JJ\AppData\Local\Programs\Python\Python37\Lib\site-packages\openalpr\openalpr.py
+C:\Users\JJ\AppData\Local\Programs\Python\Python37\Lib\site-packages\openalpr\__init__.py
+C:\Users\JJ\AppData\Local\Programs\Python\Python37\Lib\site-packages\openalpr\__pycache__\openalpr.cpython-37.pyc
+C:\Users\JJ\AppData\Local\Programs\Python\Python37\Lib\site-packages\openalpr\__pycache__\__init__.cpython-37.pyc
+C:\Users\JJ\AppData\Local\Programs\Python\Python37\Lib\site-packages\openalpr-1.0-py3.7.egg-info
