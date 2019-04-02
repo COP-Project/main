@@ -7,7 +7,6 @@ import pymysql
 import app
 
 
-# edit_driver_request
 # scan_license_plate
 # is_right_password
 # get_user
@@ -1729,6 +1728,32 @@ class TestDBCommands(unittest.TestCase):
         self.assertIsNone(results)
     # edit_driver_request end
 
+    # scan_license_plate
+
+    # scan_license_plate end
+
+    # is_right_password
+    def testIsRightPasswordRight(self):
+        self.assertEqual(self.test_data_access_user.is_right_password("TESTUSER"), 1)
+
+    def testIsRightPasswordEmpty(self):
+        self.assertEqual(self.test_data_access_user.is_right_password(""), 0)
+
+    def testIsRightPasswordWrong(self):
+        self.assertEqual(self.test_data_access_user.is_right_password("TESTUSE"), 0)
+    # is_right_password end
+
+    # get_user
+
+    # get_user end
+
+    # log_out
+
+    # log_out end
+
+    # check_input
+
+    # check_input end
 
 class TestUsers(unittest.TestCase):
     def setUp(self):
