@@ -22,16 +22,14 @@ class App:
         # Request login credentials from user
         self.login_user()
 
-        # if login credentials accepted, create main application
         self.create_main()
 
     def login_user(self):
-        self.login = Login()
-        self.login.create_window()
+        self.login = Login(0)
 
         self.db_interface = DbInterface(self.login.username, self.login.password)
 
-        self.user = self.db_interface.getUser()
+        self.user = self.db_interface.get_user()
         self.passport = self.user.passport
 
     def create_main(self):
@@ -59,8 +57,8 @@ class App:
 
         # Welcome label
         welcome_lbl = Label(top_frame, bg="white",
-                            text="Welcome " + self.passport.firstName + "\nYou are logged in under " + self.passport.loginName + " as " +
-                                 self.passport.access)
+                            text="Welcome " + self.passport.firstName + "\nYou are logged in under "
+                                 + self.passport.loginName + " as " + self.passport.access)
         welcome_lbl.pack(side=BOTTOM, padx=10, pady=10)
 
         # ADD bANNER PICTURE
@@ -70,9 +68,9 @@ class App:
         panel.pack(in_=top_frame, side=TOP, expand="no")
 
         # set user type
-        userType = DISABLED
+        user_type = DISABLED
         if self.passport.access == "ADMIN":
-            userType = NORMAL
+            user_type = NORMAL
 
         # set main window properties
         self.main_window.winfo_toplevel().title("License Recognition Program")
@@ -82,38 +80,39 @@ class App:
                                 bg=StandardValues.btn_bk_clr,
                                 fg=StandardValues.btn_text_clr,
                                 text="Add New Driver",
-                                command=lambda: self.db_interface.callAddDrivers())
+                                command=lambda: self.db_interface.add_drivers_screen())
 
         search_driver_btn = Button(bottom_frame_left,
                                    bg=StandardValues.btn_bk_clr,
                                    fg=StandardValues.btn_text_clr,
                                    text="Search By Full Name",
-                                   command=lambda: self.db_interface.searchLastNameIntScreen())
+                                   command=lambda: self.db_interface.search_lname_inp_screen())
 
         search_zip_btn = Button(bottom_frame_left,
                                 bg=StandardValues.btn_bk_clr,
                                 fg=StandardValues.btn_text_clr,
                                 text="Search By Zip",
-                                command=lambda: self.db_interface.searchZipPlateInpScreen("zip"))
+                                command=lambda: self.db_interface.search_zip_plate_inp_screen("zip"))
 
         search_plate_btn = Button(bottom_frame_left,
                                   bg=StandardValues.btn_bk_clr,
                                   fg=StandardValues.btn_text_clr,
                                   text="Search By Plate Number",
-                                  command=lambda: self.db_interface.searchZipPlateInpScreen("plate"))
+                                  command=lambda: self.db_interface.search_zip_plate_inp_screen("plate"))
 
         delete_btn = Button(bottom_frame_right,
                             bg=StandardValues.btn_bk_clr,
                             fg=StandardValues.btn_text_clr,
-                            state=userType,
+                            state=user_type,
                             text="Delete Driver",
-                            command=lambda: [self.db_interface.delDriverScreen()])
+                            command=lambda: [self.db_interface.del_driver_screen()])
 
         edit_btn = Button(bottom_frame_right,
                           bg=StandardValues.btn_bk_clr,
                           fg=StandardValues.btn_text_clr,
+                          state=user_type,
                           text="Edit Driver",
-                          command=lambda: [self.db_interface.editDriverSearch()])  # implement
+                          command=lambda: [self.db_interface.edit_driver_search()])  # implement
 
         scan_plate_btn = Button(bottom_frame_right,
                                 bg=StandardValues.btn_bk_clr,
@@ -125,11 +124,7 @@ class App:
                             bg=StandardValues.btn_bk_clr,
                             fg=StandardValues.btn_text_clr,
                             text="Log Out",
-                            command=lambda: [self.db_interface.logOutScreen()])
-
-        # set padding x
-        padx = 15
-        pady = 15
+                            command=lambda: [self.db_interface.log_out_screen()])
 
         # Set driver
         add_driver_btn.pack()
@@ -139,20 +134,21 @@ class App:
         seperator.pack(fill=X, padx=50, pady=50)
 
         # set bottom part buttons
-        add_driver_btn.pack(side=TOP, padx=padx, pady=pady)
-        search_driver_btn.pack(side=TOP, padx=padx, pady=pady)
-        search_zip_btn.pack(side=TOP, padx=padx, pady=pady)
-        search_plate_btn.pack(side=TOP, padx=padx, pady=pady)
-        delete_btn.pack(side=TOP, padx=padx, pady=pady)
-        edit_btn.pack(side=TOP, padx=padx, pady=pady)
-        scan_plate_btn.pack(side=TOP, padx=padx, pady=pady)
-        logout_btn.pack(side=TOP, padx=padx, pady=pady)
+        add_driver_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
+        search_driver_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
+        search_zip_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
+        search_plate_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
+        delete_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
+        edit_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
+        scan_plate_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
+        logout_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
 
         self.main_window.mainloop()
 
 
 def main():
     app = App()
+    print("In use by " + app.login.username)
 
 
 if __name__ == '__main__':

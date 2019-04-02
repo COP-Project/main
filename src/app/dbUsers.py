@@ -9,27 +9,34 @@ class Users:
     def __init__(self, username, data_access):
         self.data_access = data_access
 
-        name = self.findUser(username)
+        name = self.find_user(username)
         self.passport = Passport(name[0][0], name[0][1], name[0][2], name[0][3])
 
     # returns the information, used by dbCommands and is called by PlateRecMain
-    def getUserInfo(self):
+    def get_user_info(self):
         return self.passport
 
-    # searches the user table in the database for the user login that has self.connected.
-    # this fucntion is used to determine user permissions ADMIN or NON-ADMIN
-    def findUser(self, login_name):
+    # searches the user table in the database for the user login that has connected.
+    # this function is used to determine user permissions ADMIN or NON-ADMIN
+    def find_user(self, login_name):
         try:
             self.data_access.cursor.execute("SELECT * FROM users WHERE (loginname = %s)", login_name)
             rows = self.data_access.cursor.fetchall()
 
             if self.data_access.cursor.rowcount <= 0:
-                raise Exception()
+                raise PermissionError()
 
             return rows
-        except:
+
+        except AttributeError as ae:
+            Error.error_window("No database connection")
+            return ae
+        except PermissionError as pe:
             Error.error_window("Invalid username")
-            sys.exit()
+            return pe
+        except OSError as os:
+            Error.error_window("Problem with access to database")
+            return os
 
 
 class Passport:

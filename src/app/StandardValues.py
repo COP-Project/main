@@ -18,10 +18,12 @@ class StandardValues:
 
     # Tkinter Values
     background = "white"
-    win_size = "700x500"
+    width = 500
+    height = 500
     btn_text_clr = "black"
     btn_bk_clr = "white"
-    padding = 20
+    padx = 15
+    pady = 15
 
     options = [
         "Please Select",
@@ -80,16 +82,13 @@ class StandardValues:
 
 class Error:
     # error window and prints it in a pop up window
+    @staticmethod
     def error_window(string_in):
-        error_window = Tk()
+        error_window = Toplevel()
         error_window.configure(background=StandardValues.background)
         error_window.winfo_toplevel().title("Error!!")
         error_label = Label(error_window, text="Error : " + str(string_in))
         error_label.pack(side=TOP)
 
-        var = IntVar()
-
-        ok_btn = Button(error_window, text="OK", command=lambda: error_window.destroy())
+        ok_btn = Button(error_window, text="OK", command=lambda: [error_window.destroy()])
         ok_btn.pack(side=BOTTOM)
-
-        error_window.wait_variable(var)
