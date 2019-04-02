@@ -1076,8 +1076,33 @@ class TestDBCommands(unittest.TestCase):
 
         self.test_data_access_user.cursor.execute(search, self.data_driver[5])
         self.assertEqual(self.test_data_access_user.cursor.rowcount, 0)
+    # delete_driver end
 
-# delete_driver end
+    # plate_check
+    def testPlateCheckRight(self):
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = %s ; "
+        self.test_data_access_user.cursor.execute(drop, self.data_driver[5])
+
+        self.test_data_access_user.add_driver(self.data_driver[0],
+                                              self.data_driver[1],
+                                              self.data_driver[2],
+                                              self.data_driver[3],
+                                              self.data_driver[4],
+                                              self.data_driver[5],
+                                              self.data_driver[6],
+                                              self.data_driver[7],
+                                              self.data_driver[8],
+                                              self.data_driver[9])
+
+        self.assertEqual(self.test_data_access_user.plate_check(self.data_driver[5]), 1)
+
+    def testPlateCheckEmpty(self):
+        self.assertEqual(self.test_data_access_user.plate_check(""), 0)
+
+    def testPlateCheckTooLong(self):
+        self.assertEqual(self.test_data_access_user.plate_check("12345678"), 0)
+    # plate_check end
 
 
 class TestUsers(unittest.TestCase):
