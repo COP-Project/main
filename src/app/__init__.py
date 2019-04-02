@@ -1,4 +1,3 @@
-import alpr_test
 import dbCommands
 import dbInterface
 import dbUsers
