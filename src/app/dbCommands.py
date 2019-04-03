@@ -42,7 +42,7 @@ class DataAccess:
             assert string == "zip" or string == "plate", "Please enter either zip or plate"
 
             if value == "":
-                return ()
+                return None
 
             # check if we are searching by zip
             if string == "zip":
@@ -53,7 +53,7 @@ class DataAccess:
                 self.cursor.execute("SELECT * FROM drivers WHERE (platenum = %s)", value)
                 rows = self.cursor.fetchall()
             else:
-                return
+                return None
 
             # return rows which is passed to displaySearch
             return rows
@@ -83,7 +83,7 @@ class DataAccess:
         error = check_input(fname, lname, address, zipcode, state, platenum, make, color, model, priority)
 
         if error == -1:
-            return
+            return -1
 
         # plate number duplication
         if self.plate_check(platenum) == 1:
@@ -91,9 +91,9 @@ class DataAccess:
             return -1
 
         # runs query against database
-        add_driver = ("INSERT INTO drivers"
-                      "(fname, lname,address,zipcod,state,platenum,carmake,color,model,priority)"
-                      "VALUES (%s, %s,%s,%s,%s, %s,%s,%s,%s,%s)")
+        add_driver = ("INSERT INTO drivers "
+                      " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
+                      " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
         # execute query
         data_driver = (fname, lname, address, zipcode, state, platenum, make, color, model, priority)
         self.cursor.execute(add_driver, data_driver)
@@ -114,20 +114,16 @@ class DataAccess:
 
     # checks for duplicate plates upon  data entry into the DB
     def plate_check(self, string_in):
-        self.cursor.execute("SELECT * FROM drivers")
-        rows = self.cursor.fetchall()
+        self.cursor.execute("SELECT * FROM drivers WHERE platenum = %s ", string_in)
 
-        for row in rows:
-
-            if string_in == row[5]:
-                return 1
+        return 1 if (self.cursor.rowcount == 1) else 0
 
     def edit_driver_request(self, platenum_old, fname, lname, address, zipcode, state, platenum_new,
                             make, color, model, priority):
         error = check_input(fname, lname, address, zipcode, state, platenum_new, make, color, model, priority)
 
         if error == -1:
-            return
+            return -1
 
         edit_driver = ("UPDATE drivers "
                        "SET fname = %s, lname = %s, address = %s, zipcod = %s, state = %s, "
@@ -170,13 +166,16 @@ def check_input(fname, lname, address, zipcode, state, platenum, make, color, mo
         assert len(fname) <= StandardValues.firstNameChars and fname != "", "First Name must be less than or equal to " + str(StandardValues.firstNameChars)
         assert len(lname) <= StandardValues.lastNameChars and lname != "", "Last Name must be less than or equal to " + str(StandardValues.lastNameChars)
         assert len(address) <= StandardValues.addressChars and address != "", "Address must be less than or equal to " + str(StandardValues.addressChars)
-        assert len(zipcode) == 5 and zipcode != "", "Zip code should be 5 numbers"
+        assert len(zipcode) == 5 and zipcode != "" and str(zipcode).isdigit(), "Zip code should be 5 numbers"
         assert len(platenum) <= StandardValues.plateNumChars and platenum != "", "Plate number must be " + str(StandardValues.plateNumChars) + " characters."
         assert len(make) <= StandardValues.carmakeChars and make != "", "Car Make must be less than or equal to " + str(StandardValues.carmakeChars)
         assert len(color) <= StandardValues.colorChars and color != "", "Color must be less than or equal to " + str(StandardValues.colorChars)
         assert len(model) <= StandardValues.modelChars and model != "",  "Model must be less than or equal to " + str(StandardValues.modelChars)
     except AssertionError as ae:
         Error.error_window(ae.__str__())
+        return -1
+    except ValueError as ve:
+        Error.error_window(ve.__str__())
         return -1
 
     return 0

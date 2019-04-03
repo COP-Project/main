@@ -9,8 +9,13 @@ class Users:
     def __init__(self, username, data_access):
         self.data_access = data_access
 
-        name = self.find_user(username)
-        self.passport = Passport(name[0][0], name[0][1], name[0][2], name[0][3])
+        try:
+            name = self.find_user(username)
+
+            self.passport = Passport(name[0][0], name[0][1], name[0][2], name[0][3])
+        except AttributeError as ae:
+            Error.error_window("Could not retrieve account information")
+            sys.exit(-1)
 
     # returns the information, used by dbCommands and is called by PlateRecMain
     def get_user_info(self):
