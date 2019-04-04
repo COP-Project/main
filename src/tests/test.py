@@ -65,6 +65,27 @@ class TestDBInterface(unittest.TestCase):
 
         self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
 
+    def testEditSearchButton(self):
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = %s ; "
+        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
+        add_driver = ("INSERT INTO drivers "
+                      " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
+                      " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
+
+        self.db_interface.data_access.cursor.execute(add_driver, self.data_driver)
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
+
+        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+
+        self.db_interface.edit_driver_search()
+        self.db_interface.invoke_edit_search_button(self.data_driver)
+
+        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
     def testEditButton(self):
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
@@ -128,6 +149,48 @@ class TestDBInterface(unittest.TestCase):
 
         self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
 
+    def testSearchZipPlateInpButton(self):
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = %s ; "
+        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
+        add_driver = ("INSERT INTO drivers "
+                      " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
+                      " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
+
+        self.db_interface.data_access.cursor.execute(add_driver, self.data_driver)
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
+
+        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+
+        self.db_interface.search_zip_plate_inp_screen("plate")
+        self.db_interface.invoke_search_zip_plate_button(self.data_driver)
+
+        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
+    def testSearchFnameLname(self):
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = %s ; "
+        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
+        add_driver = ("INSERT INTO drivers "
+                      " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
+                      " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
+
+        self.db_interface.data_access.cursor.execute(add_driver, self.data_driver)
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
+
+        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+
+        self.db_interface.search_lname_inp_screen()
+        self.db_interface.invoke_search_fname_lname(self.data_driver)
+
+        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
 
 class TestDBCommands(unittest.TestCase):
     def setUp(self):
@@ -188,7 +251,6 @@ class TestDBCommands(unittest.TestCase):
         :return:
         """
         self.assertIsInstance(app.dbCommands.DataAccess("TESTUSER", "TESTUSER"), pymysql.OperationalError)
-
     # conn end
 
     # search_zip_plate
@@ -316,7 +378,6 @@ class TestDBCommands(unittest.TestCase):
         :return:
         """
         self.assertIsInstance(AssertionError, self.test_data_access_user.search_zip_plate("nope", "1234567").__class__)
-
     # search_zip_plate end
 
     # search_driver_fname_lname
@@ -438,7 +499,6 @@ class TestDBCommands(unittest.TestCase):
 
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
         self.test_data_access_user.cursor.execute(drop, self.data_driver[5])
-
     # search_driver_fname_lname end
 
     # add_driver
@@ -1107,7 +1167,6 @@ class TestDBCommands(unittest.TestCase):
 
         self.test_data_access_user.cursor.execute(drop, self.data_driver[5])
         self.test_data_access_user.conn.commit()
-
     # add_driver end
 
     # delete_driver
@@ -1182,7 +1241,6 @@ class TestDBCommands(unittest.TestCase):
 
         self.test_data_access_user.cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
-
     # delete_driver end
 
     # plate_check
@@ -1221,7 +1279,6 @@ class TestDBCommands(unittest.TestCase):
 
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
         self.test_data_access_user.cursor.execute(drop, self.data_driver[5])
-
     # plate_check end
 
     # edit_driver_request
@@ -2153,7 +2210,6 @@ class TestDBCommands(unittest.TestCase):
 
         self.test_data_access_user.cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
-
     # edit_driver_request end
 
     # scan_license_plate

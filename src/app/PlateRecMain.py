@@ -11,6 +11,7 @@ from login import Login
 
 class App:
     def __init__(self):
+        self.root = None
         self.main_window = None
 
         self.user = None
@@ -33,8 +34,8 @@ class App:
         self.passport = self.user.passport
 
     def create_main(self):
-        root = tk.Tk()
-        root.withdraw()
+        self.root = tk.Tk()
+        self.root.withdraw()
 
         self.main_window = Toplevel()
         self.main_window.configure(background=StandardValues.background)
@@ -124,7 +125,7 @@ class App:
                             bg=StandardValues.btn_bk_clr,
                             fg=StandardValues.btn_text_clr,
                             text="Log Out",
-                            command=lambda: [self.db_interface.log_out_screen()])
+                            command=lambda: [self.db_interface.log_out_screen(self)])
 
         # Set driver
         add_driver_btn.pack()

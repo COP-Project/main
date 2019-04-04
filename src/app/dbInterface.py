@@ -15,52 +15,20 @@ class DbInterface:
         self.add_driver_window = None
         self.add_window_widgets = None
 
+        self.edit_driver_search_window = None
+        self.edit_driver_search_widgets = None
+
         self.edit_driver_window = None
         self.edit_window_widgets = None
-        
+
         self.del_driver_window = None
         self.del_driver_widgets = None
 
-    def invoke_add_btn(self, data_driver):
-        self.add_window_widgets[0].insert(END, data_driver[0])
-        self.add_window_widgets[1].insert(END, data_driver[1])
-        self.add_window_widgets[2].insert(END, data_driver[2])
-        self.add_window_widgets[3].insert(END, data_driver[3])
-        self.add_window_widgets[4].set(data_driver[4])
-        self.add_window_widgets[5].insert(END, data_driver[5])
-        self.add_window_widgets[6].insert(END, data_driver[6])
-        self.add_window_widgets[7].insert(END, data_driver[7])
-        self.add_window_widgets[8].insert(END, data_driver[8])
-        self.add_window_widgets[9].set(data_driver[9])
+        self.search_zip_plate_window = None
+        self.search_zip_plate_widgets = None
 
-        self.add_window_widgets[10].invoke()
-
-    def invoke_edit_button(self, data_driver):
-        self.edit_window_widgets[0].delete(0, END)
-        self.edit_window_widgets[1].delete(0, END)
-        self.edit_window_widgets[2].delete(0, END)
-        self.edit_window_widgets[3].delete(0, END)
-        self.edit_window_widgets[5].delete(0, END)
-        self.edit_window_widgets[6].delete(0, END)
-        self.edit_window_widgets[7].delete(0, END)
-        self.edit_window_widgets[8].delete(0, END)
-
-        self.edit_window_widgets[0].insert(END, data_driver[0])
-        self.edit_window_widgets[1].insert(END, data_driver[1])
-        self.edit_window_widgets[2].insert(END, data_driver[2])
-        self.edit_window_widgets[3].insert(END, data_driver[3])
-        self.edit_window_widgets[4].set(data_driver[4])
-        self.edit_window_widgets[5].insert(END, data_driver[5])
-        self.edit_window_widgets[6].insert(END, data_driver[6])
-        self.edit_window_widgets[7].insert(END, data_driver[7])
-        self.edit_window_widgets[8].insert(END, data_driver[8])
-        self.edit_window_widgets[9].set(data_driver[9])
-
-        self.edit_window_widgets[10].invoke()
-
-    def invoke_delete_button(self, data_driver):
-        self.del_driver_widgets[0].insert(END, data_driver[5])
-        self.del_driver_widgets[1].invoke()
+        self.search_fname_lname_window = None
+        self.search_fname_lname_widgets = None
 
     # sets up window for driver inputs calls addDrivers()
     def add_drivers_screen(self):
@@ -167,23 +135,25 @@ class DbInterface:
 
     def edit_driver_search(self):
         # creates window
-        edit_driver_sch = Toplevel()
-        edit_driver_sch.configure(background=StandardValues.background)
-        # edit_driver_sch.geometry(StandardValues.win_size)
-        edit_driver_sch.winfo_toplevel().title("Edit Driver")
+        self.edit_driver_search_window = Toplevel()
+        self.edit_driver_search_window.configure(background=StandardValues.background)
+        self.edit_driver_search_window.winfo_toplevel().title("Edit Driver")
 
         # label and text box
-        submit_label = Label(edit_driver_sch, bg="white",
+        submit_label = Label(self.edit_driver_search_window, bg="white",
                              text="Please Enter the Driver's plate number you wish to edit.")
         submit_label.grid(row=1, column=0)
-        submit_tb = Entry(edit_driver_sch)
+        submit_tb = Entry(self.edit_driver_search_window)
         submit_tb.grid(row=1, column=1, padx=20)
 
         # edit button
-        edit_submit_btn = Button(edit_driver_sch,
+        edit_submit_btn = Button(self.edit_driver_search_window,
                                  bg=StandardValues.btn_bk_clr,
                                  fg=StandardValues.btn_text_clr,
                                  text="Submit")
+
+        self.edit_driver_search_widgets = (submit_tb,
+                                           edit_submit_btn)
 
         edit_submit_btn.grid(row=1, column=3, padx=15)
 
@@ -191,7 +161,7 @@ class DbInterface:
         edit_submit_btn.config(
             command=lambda: [
                 self.edit_driver_screen(submit_tb.get(), self.data_access.search_zip_plate("plate", submit_tb.get())),
-                edit_driver_sch.destroy()
+                self.edit_driver_search_window.destroy()
             ])
 
     def edit_driver_screen(self, platenum_old, row):
@@ -293,16 +263,16 @@ class DbInterface:
         save_user_btn.grid(row=11, column=0, pady=30, padx=30)
 
         save_user_btn.config(command=lambda: [print(self.data_access.edit_driver_request(platenum_old,
-                                                                                   first_name_tb.get().upper(),
-                                                                                   last_name_tb.get().upper(),
-                                                                                   address_tb.get().upper(),
-                                                                                   zipcode_tb.get(),
-                                                                                   state_om.get(),
-                                                                                   platenum_tb.get().upper(),
-                                                                                   car_make_tb.get().upper(),
-                                                                                   model_tb.get().upper(),
-                                                                                   color_tb.get().upper(),
-                                                                                   priority_om.get())),
+                                                                                         first_name_tb.get().upper(),
+                                                                                         last_name_tb.get().upper(),
+                                                                                         address_tb.get().upper(),
+                                                                                         zipcode_tb.get(),
+                                                                                         state_om.get(),
+                                                                                         platenum_tb.get().upper(),
+                                                                                         car_make_tb.get().upper(),
+                                                                                         model_tb.get().upper(),
+                                                                                         color_tb.get().upper(),
+                                                                                         priority_om.get())),
                                               self.edit_driver_window.destroy()])
 
     # search by zip or plate or display all high priority
@@ -338,26 +308,29 @@ class DbInterface:
                                           )
                                       ])
 
+        self.search_zip_plate_widgets = (zip_plate_lbl_tb,
+                                         search_zip_plate_btn)
+
         search_zip_plate_btn.grid(row=0, column=3, padx=20)
 
     # searches by first and last name
     def search_lname_inp_screen(self):
-        search_lname_screen = Toplevel()
-        search_lname_screen.configure(background=StandardValues.background)
-        search_lname_screen.winfo_toplevel().title("Search Driver By Name")
+        self.search_fname_lname_window = Toplevel()
+        self.search_fname_lname_window.configure(background=StandardValues.background)
+        self.search_fname_lname_window.winfo_toplevel().title("Search Driver By Name")
         # search_lname_screen.geometry(StandardValues.win_size)
 
         # text boxes and buttons
         # FIRST NAME LABEL AND BOX
-        self.add_label("First Name", 0, 0, search_lname_screen)
-        search_fname_tb = Entry(search_lname_screen)
+        self.add_label("First Name", 0, 0, self.search_fname_lname_window)
+        search_fname_tb = Entry(self.search_fname_lname_window)
         search_fname_tb.grid(row=0, column=1, padx=20)
         # LAST NAME LABEL AND BOX
-        self.add_label("Last Name", 1, 0, search_lname_screen)
-        search_lname_tb = Entry(search_lname_screen)
+        self.add_label("Last Name", 1, 0, self.search_fname_lname_window)
+        search_lname_tb = Entry(self.search_fname_lname_window)
         search_lname_tb.grid(row=1, column=1, padx=20)
 
-        search_name_driver_btn = Button(search_lname_screen,
+        search_name_driver_btn = Button(self.search_fname_lname_window,
                                         bg=StandardValues.btn_bk_clr,
                                         fg=StandardValues.btn_text_clr,
                                         text="Search",
@@ -367,6 +340,10 @@ class DbInterface:
                                                                                            search_lname_tb.get())
                                             )
                                         ])
+
+        self.search_fname_lname_widgets = (search_fname_tb,
+                                           search_lname_tb,
+                                           search_name_driver_btn)
 
         search_name_driver_btn.grid(row=2, column=0, padx=20)
 
@@ -451,11 +428,14 @@ class DbInterface:
         delete_btn.grid(row=0, column=0, padx=StandardValues.padx, pady=StandardValues.pady)
         edit_btn.grid(row=0, column=1, padx=StandardValues.padx, pady=StandardValues.pady)
 
-    def log_out_screen(self):
+    def log_out_screen(self, app):
         will_logout = messagebox.askyesno("Log Out", "Are you sure you want to log out?")
 
         if will_logout:
             self.data_access.log_out()
+            app.main_window.destroy()
+            app.login_user()
+            app.create_main()
         else:
             return
 
@@ -501,3 +481,57 @@ class DbInterface:
     @staticmethod
     def conn(username, password):
         return dbC.DataAccess(username, password)
+
+    def invoke_add_btn(self, data_driver):
+        self.add_window_widgets[0].insert(END, data_driver[0])
+        self.add_window_widgets[1].insert(END, data_driver[1])
+        self.add_window_widgets[2].insert(END, data_driver[2])
+        self.add_window_widgets[3].insert(END, data_driver[3])
+        self.add_window_widgets[4].set(data_driver[4])
+        self.add_window_widgets[5].insert(END, data_driver[5])
+        self.add_window_widgets[6].insert(END, data_driver[6])
+        self.add_window_widgets[7].insert(END, data_driver[7])
+        self.add_window_widgets[8].insert(END, data_driver[8])
+        self.add_window_widgets[9].set(data_driver[9])
+
+        self.add_window_widgets[10].invoke()
+
+    def invoke_edit_search_button(self, data_driver):
+        self.edit_driver_search_widgets[0].insert(END, data_driver[5])
+        self.edit_driver_search_widgets[1].invoke()
+
+    def invoke_edit_button(self, data_driver):
+        self.edit_window_widgets[0].delete(0, END)
+        self.edit_window_widgets[1].delete(0, END)
+        self.edit_window_widgets[2].delete(0, END)
+        self.edit_window_widgets[3].delete(0, END)
+        self.edit_window_widgets[5].delete(0, END)
+        self.edit_window_widgets[6].delete(0, END)
+        self.edit_window_widgets[7].delete(0, END)
+        self.edit_window_widgets[8].delete(0, END)
+
+        self.edit_window_widgets[0].insert(END, data_driver[0])
+        self.edit_window_widgets[1].insert(END, data_driver[1])
+        self.edit_window_widgets[2].insert(END, data_driver[2])
+        self.edit_window_widgets[3].insert(END, data_driver[3])
+        self.edit_window_widgets[4].set(data_driver[4])
+        self.edit_window_widgets[5].insert(END, data_driver[5])
+        self.edit_window_widgets[6].insert(END, data_driver[6])
+        self.edit_window_widgets[7].insert(END, data_driver[7])
+        self.edit_window_widgets[8].insert(END, data_driver[8])
+        self.edit_window_widgets[9].set(data_driver[9])
+
+        self.edit_window_widgets[10].invoke()
+
+    def invoke_delete_button(self, data_driver):
+        self.del_driver_widgets[0].insert(END, data_driver[5])
+        self.del_driver_widgets[1].invoke()
+
+    def invoke_search_zip_plate_button(self, data_driver):
+        self.search_zip_plate_widgets[0].insert(END, data_driver[5])
+        self.search_zip_plate_widgets[1].invoke()
+
+    def invoke_search_fname_lname(self, data_driver):
+        self.search_fname_lname_widgets[0].insert(END, data_driver[0])
+        self.search_fname_lname_widgets[1].insert(END, data_driver[1])
+        self.search_fname_lname_widgets[2].invoke()
