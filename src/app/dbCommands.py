@@ -2,6 +2,8 @@ import pymysql.cursors
 import sys
 import dbUsers
 from StandardValues import StandardValues, Error
+from readPlate import readaPlate, create_alpr, destroy_alpr
+from openalpr import Alpr
 
 
 class DataAccess:
@@ -10,6 +12,8 @@ class DataAccess:
     # lname VARCHAR(20), address VARCHAR(20),zipcod VARCHAR(5),state VARCHAR(2),
     # platenum VARCHAR(12), carmake VARCHAR(20), color VARCHAR(20), model VARCHAR(20), priority VARCHAR(3));
     # or the AWS server
+
+    alpr = create_alpr('us')
 
     def __init__(self, username, password):
         self.cursor = None
@@ -135,8 +139,12 @@ class DataAccess:
 
         self.conn.commit()
 
-    def scan_license_plate(self, img):
-        raise NotImplementedError()
+    def scan_license_plate(self, img, country, region):
+        print(img + " " + country + " " + region)
+        if len(country) != 2 or len(region) != 2:
+            return AssertionError
+
+        # raise NotImplementedError()
 
     def is_right_password(self, password):
         check_password = ("SELECT 1 "
