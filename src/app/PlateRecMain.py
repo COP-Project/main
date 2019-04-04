@@ -10,7 +10,7 @@ from login import Login
 
 
 class App:
-    def __init__(self):
+    def __init__(self, debug):
         self.root = None
         self.main_window = None
 
@@ -21,14 +21,14 @@ class App:
         self.login = None
 
         # Request login credentials from user
-        self.login_user()
+        self.login_user(debug)
 
         self.create_main()
 
-    def login_user(self):
-        self.login = Login(0)
+    def login_user(self, debug):
+        self.login = Login(debug)
 
-        self.db_interface = DbInterface(self.login.username, self.login.password, 0)
+        self.db_interface = DbInterface(self.login.username, self.login.password, debug)
 
         self.user = self.db_interface.get_user()
         self.passport = self.user.passport
@@ -148,7 +148,7 @@ class App:
 
 
 def main():
-    app = App()
+    app = App(0)
     print("In use by " + app.login.username)
 
 

@@ -262,7 +262,7 @@ class DbInterface:
 
         save_user_btn.grid(row=11, column=0, pady=30, padx=30)
 
-        save_user_btn.config(command=lambda: [print(self.data_access.edit_driver_request(platenum_old,
+        save_user_btn.config(command=lambda: [self.data_access.edit_driver_request(platenum_old,
                                                                                          first_name_tb.get().upper(),
                                                                                          last_name_tb.get().upper(),
                                                                                          address_tb.get().upper(),
@@ -272,8 +272,37 @@ class DbInterface:
                                                                                          car_make_tb.get().upper(),
                                                                                          model_tb.get().upper(),
                                                                                          color_tb.get().upper(),
-                                                                                         priority_om.get())),
+                                                                                         priority_om.get()),
                                               self.edit_driver_window.destroy()])
+
+    # pop up screen to delete a driver
+    def del_driver_screen(self):
+        # creates window
+        self.del_driver_window = Toplevel()
+        self.del_driver_window.configure(background=StandardValues.background)
+        # self.del_driver_window.geometry(StandardValues.win_size)
+        self.del_driver_window.winfo_toplevel().title("Delete Driver")
+
+        # label and text box
+        submit_label = Label(self.del_driver_window, bg="white",
+                             text="Please Enter the Driver's plate number you wish to delete.")
+        submit_label.grid(row=1, column=0)
+        submit_tb = Entry(self.del_driver_window)
+        submit_tb.grid(row=1, column=1, padx=20)
+
+        # delete button
+        del_submit_btn = Button(self.del_driver_window,
+                                bg=StandardValues.btn_bk_clr,
+                                fg=StandardValues.btn_text_clr,
+                                text="Submit")
+        del_submit_btn.grid(row=1, column=3, padx=15)
+
+        self.del_driver_widgets = (submit_tb,
+                                   del_submit_btn)
+
+        # delete button functionality
+        del_submit_btn.config(command=lambda: [self.data_access.delete_driver(submit_tb.get()),
+                                               self.del_driver_window.destroy()])
 
     # search by zip or plate or display all high priority
     def search_zip_plate_inp_screen(self, string):
@@ -347,35 +376,6 @@ class DbInterface:
 
         search_name_driver_btn.grid(row=2, column=0, padx=20)
 
-    # pop up screen to delete a driver
-    def del_driver_screen(self):
-        # creates window
-        self.del_driver_window = Toplevel()
-        self.del_driver_window.configure(background=StandardValues.background)
-        # self.del_driver_window.geometry(StandardValues.win_size)
-        self.del_driver_window.winfo_toplevel().title("Delete Driver")
-
-        # label and text box
-        submit_label = Label(self.del_driver_window, bg="white",
-                             text="Please Enter the Driver's plate number you wish to delete.")
-        submit_label.grid(row=1, column=0)
-        submit_tb = Entry(self.del_driver_window)
-        submit_tb.grid(row=1, column=1, padx=20)
-
-        # delete button
-        del_submit_btn = Button(self.del_driver_window,
-                                bg=StandardValues.btn_bk_clr,
-                                fg=StandardValues.btn_text_clr,
-                                text="Submit")
-        del_submit_btn.grid(row=1, column=3, padx=15)
-
-        self.del_driver_widgets = (submit_tb,
-                                   del_submit_btn)
-
-        # delete button functionality
-        del_submit_btn.config(command=lambda: [self.data_access.delete_driver(submit_tb.get()),
-                                               self.del_driver_window.destroy()])
-
     # function to add a label to a window
     @staticmethod
     def add_label(string_in, row_in, col_in, window):
@@ -434,7 +434,7 @@ class DbInterface:
         if will_logout:
             self.data_access.log_out()
             app.main_window.destroy()
-            app.login_user()
+            app.login_user(0)
             app.create_main()
         else:
             return

@@ -1,4 +1,3 @@
-import tkinter
 from tkinter import ttk
 from StandardValues import *
 
@@ -65,6 +64,8 @@ class Login:
         self.submit_btn.grid(row=1, column=3, padx=15)
 
         if self.debug:
+            username_textbox.insert(END, "TESTUSER")
+            pw_textbox.insert(END, "TESTUSER")
             self.click_submit()
         else:
             self.submit_btn.wait_variable(var)  # wait

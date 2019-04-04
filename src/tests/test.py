@@ -1,6 +1,7 @@
 import socket
 import tkinter
 import unittest
+import PlateRecMain
 
 import pymysql
 
@@ -190,6 +191,14 @@ class TestDBInterface(unittest.TestCase):
         self.db_interface.invoke_search_fname_lname(self.data_driver)
 
         self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
+    @unittest.skip("")
+    def testLogOutButton(self):
+        app = PlateRecMain.App(1)
+        appLogin = app.login
+
+        self.app.db_interface.log_out_screen(app)
+        self.assertIsNot(app.login, appLogin)
 
 
 class TestDBCommands(unittest.TestCase):
@@ -2395,8 +2404,8 @@ class TestLogin(unittest.TestCase):
         """
         Test that Login() creates new Login class with empty class members username and password
         """
-        self.assertEqual(self.test_login.username, "")
-        self.assertEqual(self.test_login.password, "")
+        self.assertEqual(self.test_login.username, "TESTUSER")
+        self.assertEqual(self.test_login.password, "TESTUSER")
 
     def testLogin(self):
         """
