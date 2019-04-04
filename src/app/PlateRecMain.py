@@ -27,7 +27,7 @@ class App:
     def login_user(self):
         self.login = Login(0)
 
-        self.db_interface = DbInterface(self.login.username, self.login.password)
+        self.db_interface = DbInterface(self.login.username, self.login.password, 0)
 
         self.user = self.db_interface.get_user()
         self.passport = self.user.passport
@@ -62,7 +62,7 @@ class App:
         welcome_lbl.pack(side=BOTTOM, padx=10, pady=10)
 
         # ADD bANNER PICTURE
-        path = "img/carpic.png"
+        path = "../img/carpic.png"
         img = PIL.ImageTk.PhotoImage(PIL.Image.open(path))
         panel = tk.Label(self.main_window, image=img)
         panel.pack(in_=top_frame, side=TOP, expand="no")

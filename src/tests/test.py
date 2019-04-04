@@ -21,6 +21,114 @@ def guard(*args, **kwargs):
 init_socket = socket.socket
 
 
+class TestDBInterface(unittest.TestCase):
+    def setUp(self):
+        username = "TESTUSER"
+        password = "TESTUSER"
+        self.db_interface = app.dbInterface.DbInterface(username, password, 1)
+
+        username = "TESTADMIN"
+        password = "TESTADMIN"
+        self.db_interface_admin = app.dbInterface.DbInterface(username, password, 1)
+
+        self.data_driver = ("TEST",
+                            "TEST",
+                            "123 Car Dr",
+                            "00000",
+                            "FL",
+                            "1234567",
+                            "FORD",
+                            "BLUE",
+                            "F150",
+                            "NO")
+
+    def tearDown(self):
+        self.db_interface.data_access.log_out()
+        self.db_interface_admin.data_access.log_out()
+
+    def testGetUser(self):
+        self.assertEqual(self.db_interface.get_user(), self.db_interface.data_access.get_user())
+        self.assertEqual(self.db_interface_admin.get_user(), self.db_interface_admin.data_access.get_user())
+
+    def testAddButton(self):
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = %s ; "
+        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
+        self.db_interface.add_drivers_screen()
+        self.db_interface.invoke_add_btn(self.data_driver)
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
+
+        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+
+        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
+    def testEditButton(self):
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = %s ; "
+        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
+        add_driver = ("INSERT INTO drivers "
+                      " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
+                      " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
+
+        self.db_interface.data_access.cursor.execute(add_driver, self.data_driver)
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
+
+        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+
+        self.db_interface.edit_driver_screen(self.data_driver[5], self.db_interface.data_access.cursor.fetchall())
+
+        self.data_driver = ("TESTNEW",
+                            "TEST",
+                            "123 Car Dr",
+                            "00000",
+                            "FL",
+                            "1234567",
+                            "FORD",
+                            "BLUE",
+                            "F150",
+                            "NO")
+
+        self.db_interface.invoke_edit_button(self.data_driver)
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = %s AND fname = %s ; "
+        get_driver_data = (self.data_driver[5], self.data_driver[0])
+
+        self.db_interface.data_access.cursor.execute(get_driver, get_driver_data)
+        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+
+        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
+    def testDeleteButton(self):
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = %s ; "
+        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
+        add_driver = ("INSERT INTO drivers "
+                      " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
+                      " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
+
+        self.db_interface.data_access.cursor.execute(add_driver, self.data_driver)
+
+        get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
+
+        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+
+        self.db_interface.del_driver_screen()
+        self.db_interface.invoke_delete_button(self.data_driver)
+
+        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 0)
+
+        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+
+
 class TestDBCommands(unittest.TestCase):
     def setUp(self):
         self.test_data_access_user = app.dbCommands.DataAccess("TESTUSER", "TESTUSER")
@@ -2103,6 +2211,10 @@ class TestUsers(unittest.TestCase):
                                                  app.dbCommands.DataAccess(self.test_username_admin,
                                                                            self.test_password_admin))
 
+    def tearDown(self):
+        self.test_user_user.data_access.log_out()
+        self.test_user_admin.data_access.log_out()
+
     def testInitUserUser(self):
         """
         Test that Users() creates new user with correct permissions for USER level access
@@ -2192,11 +2304,14 @@ class TestUsers(unittest.TestCase):
         Test that validates AttributeError is raised if database access is not initialized
         :return:
         """
+        temp = self.test_user_user.data_access
         self.test_user_user.data_access = None
         self.assertIsNone(self.test_user_user.data_access)
 
         data = self.test_user_user.find_user("TESTUSER")
         self.assertIsInstance(data, AttributeError)
+
+        self.test_user_user.data_access = temp
 
     def testFindUserPermissionError(self):
         """
