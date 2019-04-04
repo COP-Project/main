@@ -5,6 +5,7 @@ from StandardValues import StandardValues, Error
 from readPlate import readaPlate, create_alpr, destroy_alpr
 from openalpr import Alpr
 
+alpr = create_alpr('us')
 
 class DataAccess:
     # data bas info, it needs to match either your local mysql server
@@ -12,8 +13,6 @@ class DataAccess:
     # lname VARCHAR(20), address VARCHAR(20),zipcod VARCHAR(5),state VARCHAR(2),
     # platenum VARCHAR(12), carmake VARCHAR(20), color VARCHAR(20), model VARCHAR(20), priority VARCHAR(3));
     # or the AWS server
-
-    alpr = create_alpr('us')
 
     def __init__(self, username, password):
         self.cursor = None
@@ -142,8 +141,8 @@ class DataAccess:
     def scan_license_plate(self, img, country, region):
         if len(country) != 2 or len(region) != 2:
             return AssertionError
-        self.alpr.set_country(country)
-        plates = readaPlate(self.alpr, region, img)
+        alpr.set_country(country)
+        plates = readaPlate(alpr, region, img)
         for eachplate in plates:
             print(eachplate)
 
@@ -169,7 +168,6 @@ class DataAccess:
         return self.user
 
     def log_out(self):
-        destroy_alpr(self.alpr)
         self.conn.close()
 
 
