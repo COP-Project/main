@@ -140,9 +140,12 @@ class DataAccess:
         self.conn.commit()
 
     def scan_license_plate(self, img, country, region):
-        print(img + " " + country + " " + region)
         if len(country) != 2 or len(region) != 2:
             return AssertionError
+        self.alpr.set_country(country)
+        plates = readaPlate(self.alpr, region, img)
+        for eachplate in plates:
+            print(eachplate)
 
         # raise NotImplementedError()
 
@@ -166,6 +169,7 @@ class DataAccess:
         return self.user
 
     def log_out(self):
+        destroy_alpr(self.alpr)
         self.conn.close()
 
 
