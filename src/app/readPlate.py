@@ -10,12 +10,13 @@ def destroy_alpr(alpr_d):
         alpr_d.unload()
 
 
-def readaPlate(alpr, region, img):
+def readaPlate(alpr, country, region, img):
     platevalue = None
     if not alpr.is_loaded():
         print("Error loading OpenALPR")
     else:
         alpr.set_top_n(7)
+        alpr.set_country(country)
         alpr.set_default_region(region)
         alpr.set_detect_region(False)
         jpeg_bytes = open(img, "rb").read()

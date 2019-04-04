@@ -141,8 +141,7 @@ class DataAccess:
     def scan_license_plate(self, img, country, region):
         if len(country) != 2 or len(region) != 2:
             return AssertionError
-        alpr.set_country(country)
-        plates = readaPlate(alpr, region, img)
+        plates = readaPlate(alpr, country, region, img)
         for eachplate in plates:
             print(eachplate)
 
