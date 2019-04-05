@@ -5,7 +5,7 @@ from StandardValues import StandardValues, Error
 from readPlate import readaPlate, create_alpr, destroy_alpr
 from openalpr import Alpr
 
-alpr = create_alpr('us')
+alpr = create_alpr()
 
 class DataAccess:
     # data bas info, it needs to match either your local mysql server
@@ -138,10 +138,8 @@ class DataAccess:
 
         self.conn.commit()
 
-    def scan_license_plate(self, img, country, region):
-        if len(country) != 2 or len(region) != 2:
-            return AssertionError
-        plates = readaPlate(alpr, country, region, img)
+    def scan_license_plate(self, img, state):
+        plates = readaPlate(alpr, state.lower(), img)
         for eachplate in plates:
             print(eachplate)
 

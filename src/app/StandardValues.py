@@ -26,7 +26,6 @@ class StandardValues:
     pady = 15
 
     options = [
-        "Please Select",
         "AL",
         "AK",
         "AZ",
