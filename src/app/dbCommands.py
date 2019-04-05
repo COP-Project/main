@@ -18,7 +18,6 @@ class DataAccess:
     # or the AWS server
 
     def __init__(self, username, password):
-        self.cursor = None
         self.conn = self.connect()
         self.user = dbUsers.Users(username, self)
 
@@ -36,56 +35,64 @@ class DataAccess:
                                        passwd=StandardValues.password,
                                        db='poopproject')
 
-            self.cursor = new_conn.cursor()
             return new_conn
-        except pymysql.OperationalError:
+        except pymysql.OperationalError as oe:
             Error.error_window("Could not connect to database")
+            print(oe)
             return pymysql.OperationalError
 
-    # Searches by Zip or Plate Depeding on paramater from search_zip_plateInpScreen()
-    def search_zip_plate(self, string, value):
-        try:
-            assert string == "zip" or string == "plate", "Please enter either zip or plate"
+    def search_driver(self, driver_data, priority_changed):
+        cursor = self.conn.cursor()
+        filter_str = ""
 
-            if value == "":
-                return None
+        # build filter AND clauses
+        if driver_data[0] != "":
+            filter_str = filter_str + " AND fname = '{}'".format(driver_data[0])
 
-            # check if we are searching by zip
-            if string == "zip":
-                self.cursor.execute("SELECT * FROM drivers WHERE (zipcod = %s)", value)
-                rows = self.cursor.fetchall()
-            # checks if we are searching by plate number
-            elif string == "plate":
-                self.cursor.execute("SELECT * FROM drivers WHERE (platenum = %s)", value)
-                rows = self.cursor.fetchall()
-            else:
-                return None
+        if driver_data[1] != "":
+            filter_str = filter_str + "AND lname = '{}'".format(driver_data[1])
 
-            # return rows which is passed to displaySearch
-            return rows
-        except AssertionError as ae:
-            Error.error_window(ae.__str__())
-            return AssertionError
+        if driver_data[2] != "":
+            filter_str = filter_str + "AND address = '{}'".format(driver_data[2])
 
-    # functionality to search and display all drivers in the data base by first and last name
-    def search_driver_fname_lname(self, fname, lname):
-        try:
-            assert (fname != "" and lname != "")
+        if driver_data[3] != "":
+            filter_str = filter_str + "AND zipcod = '{}'".format(driver_data[3])
 
-            self.cursor.execute("SELECT * FROM drivers WHERE (fname = %s and lname = %s)", (fname, lname))
-            rows = self.cursor.fetchall()
+        if driver_data[4] != "" and driver_data[4] != "PLEASE SELECT":
+            filter_str = filter_str + "AND state = '{}'".format(driver_data[4])
 
-            # displaySearch(rows)
-            return rows
-        except AssertionError:
-            Error.error_window("First name and Last name required")
-            return AssertionError
-        except Error as e:
-            print(e)
+        if driver_data[5] != "":
+            filter_str = filter_str + "AND platenum = '{}'".format(driver_data[5])
+
+        if driver_data[6] != "":
+            filter_str = filter_str + "AND carmake = '{}'".format(driver_data[6])
+
+        if driver_data[7] != "":
+            filter_str = filter_str + "AND color = '{}'".format(driver_data[7])
+
+        if driver_data[8] != "":
+            filter_str = filter_str + "AND model = '{}'".format(driver_data[8])
+
+        if driver_data[9] != "" and priority_changed:
+            value = 1 if driver_data[9] == True else 0
+            filter_str = filter_str + "AND priority = {}".format(value)
+
+        filter_driver = ("SELECT "
+                         "fname, lname, address, zipcod, state, platenum, carmake, color, model, "
+                         "(CASE WHEN priority = 0 THEN 0 ELSE 1 end) as priority "
+                         " FROM drivers "
+                         "WHERE 1 = 1 " + filter_str + " ;")
+
+        cursor.execute(filter_driver)
+
+        results = cursor.fetchall()
+        cursor.close()
+        return results
 
     # the logic to to read in all the text boxes from calladd_drivers() probably way to many paramaters
     # REFACTOR in the future to group boxes into a object and pass object
     def add_driver(self, driver_data):
+        cursor = self.conn.cursor()
         error = check_input(driver_data)
 
         if error == -1:
@@ -96,34 +103,37 @@ class DataAccess:
             Error.error_window("Duplicate License Plate Number")
             return -1
 
+        cursor = self.conn.cursor()
+
         # runs query against database
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
         # execute query
-        self.cursor.execute(add_driver, driver_data)
+        cursor.execute(add_driver, driver_data)
 
         self.conn.commit()
-        # self.cursorclose()
-
-    # reads text entry boxes
-    @staticmethod
-    def read_textbox(tbox):
-        return tbox.get()
+        cursor.close()
 
     # deletes a driver
     def delete_driver(self, plate):
+        cursor = self.conn.cursor()
         rows = "DELETE FROM drivers WHERE platenum = %s"
-        self.cursor.execute(rows, plate)
+        cursor.execute(rows, plate)
         self.conn.commit()
+        cursor.close()
 
     # checks for duplicate plates upon  data entry into the DB
     def plate_check(self, string_in):
-        self.cursor.execute("SELECT * FROM drivers WHERE platenum = %s ", string_in)
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * FROM drivers WHERE platenum = %s ", string_in)
+        rowcount = cursor.rowcount
+        cursor.close()
 
-        return 1 if (self.cursor.rowcount == 1) else 0
+        return 1 if (rowcount == 1) else 0
 
     def edit_driver_request(self, data_driver, platenum_old):
+        cursor = self.conn.cursor()
         error = check_input(data_driver)
 
         if error == -1:
@@ -146,9 +156,10 @@ class DataAccess:
                             data_driver[9],
                             platenum_old)
 
-        self.cursor.execute(edit_driver, edit_data_driver)
+        cursor.execute(edit_driver, edit_data_driver)
 
         self.conn.commit()
+        cursor.close()
 
     def scan_license_plate(self, img, state):
         check = check_file_input(img)
@@ -161,22 +172,27 @@ class DataAccess:
             self.send_alert(driver) if driver is not None else []
 
     def get_driver_by_plate(self, plate):
+        cursor = self.conn.cursor()
         if plate == "" or len(plate) > 7:
             return None
 
         get_driver = " SELECT * FROM drivers WHERE platenum = %s; "
 
-        self.cursor.execute(get_driver, plate)
-        driver = self.cursor.fetchone()
+        cursor.execute(get_driver, plate)
+        driver = cursor.fetchone()
 
-        if self.cursor.rowcount < 1:
+        if cursor.rowcount < 1:
             return None
 
+        cursor.close()
         return driver
 
     def send_alert(self, driver):
-        alert_body = ("CAR RECOGNIZED: " + driver[6] + " " + driver[8] + ", " + driver[7] +
+        alert_body = ("CAR RECOGNIZED: " + driver[6].title() + " " + driver[8].title() + ", " + driver[7] +
                       "\nPLATE NUMBER: " + driver[5])
+
+        if driver[9]:
+            alert_body = "!!!!!\n" + alert_body + "\n!!!!!\n"
 
         client = Client(StandardValues.twilio_api_key, StandardValues.twilio_auth_token)
         client.messages.create(to="+19044121129",
@@ -184,18 +200,21 @@ class DataAccess:
                                body=alert_body)
 
     def is_right_password(self, password):
+        cursor = self.conn.cursor()
         check_password = ("SELECT 1 "
                           "FROM users "
                           "WHERE passwords = AES_ENCRYPT(%s, %s) ")
 
         data_password = (password, StandardValues.aes_key)
-        self.cursor.execute(check_password, data_password)
+        cursor.execute(check_password, data_password)
 
-        rows = self.cursor.fetchall()
+        rows = cursor.fetchall()
 
-        if self.cursor.rowcount > 0 and rows[0][0] == 1:
+        if cursor.rowcount > 0 and rows[0][0] == 1:
+            cursor.close()
             return 1
 
+        cursor.close()
         return 0
 
     # returns the user info from dbUser.py object >>thisUser

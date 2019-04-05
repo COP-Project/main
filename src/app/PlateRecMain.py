@@ -3,7 +3,6 @@ from tkinter import *
 
 import PIL.Image
 import PIL.ImageTk
-from StandardValues import *
 from dbInterface import *
 
 from login import Login
@@ -86,50 +85,44 @@ class App:
         add_driver_btn = Button(bottom_frame_left,
                                 bg=StandardValues.btn_bk_clr,
                                 fg=StandardValues.btn_text_clr,
+                                width=StandardValues.button_width,
                                 text="Add New Driver",
                                 command=lambda: self.db_interface.add_drivers_screen())
 
-        search_driver_btn = Button(bottom_frame_left,
-                                   bg=StandardValues.btn_bk_clr,
-                                   fg=StandardValues.btn_text_clr,
-                                   text="Search By Full Name",
-                                   command=lambda: self.db_interface.search_lname_inp_screen())
+        edit_btn = Button(bottom_frame_left,
+                          bg=StandardValues.btn_bk_clr,
+                          fg=StandardValues.btn_text_clr,
+                          width=StandardValues.button_width,
+                          state=user_type,
+                          text="Edit Driver",
+                          command=lambda: [self.db_interface.edit_driver_search()])
 
-        search_zip_btn = Button(bottom_frame_left,
-                                bg=StandardValues.btn_bk_clr,
-                                fg=StandardValues.btn_text_clr,
-                                text="Search By Zip",
-                                command=lambda: self.db_interface.search_zip_plate_inp_screen("zip"))
-
-        search_plate_btn = Button(bottom_frame_left,
-                                  bg=StandardValues.btn_bk_clr,
-                                  fg=StandardValues.btn_text_clr,
-                                  text="Search By Plate Number",
-                                  command=lambda: self.db_interface.search_zip_plate_inp_screen("plate"))
-
-        delete_btn = Button(bottom_frame_right,
+        delete_btn = Button(bottom_frame_left,
                             bg=StandardValues.btn_bk_clr,
                             fg=StandardValues.btn_text_clr,
+                            width=StandardValues.button_width,
                             state=user_type,
                             text="Delete Driver",
                             command=lambda: [self.db_interface.del_driver_screen()])
 
-        edit_btn = Button(bottom_frame_right,
-                          bg=StandardValues.btn_bk_clr,
-                          fg=StandardValues.btn_text_clr,
-                          state=user_type,
-                          text="Edit Driver",
-                          command=lambda: [self.db_interface.edit_driver_search()])  # implement
+        search_btn = Button(bottom_frame_right,
+                            bg=StandardValues.btn_bk_clr,
+                            fg=StandardValues.btn_text_clr,
+                            width=StandardValues.button_width,
+                            text="Search Drivers",
+                            command=lambda: [self.db_interface.search_drivers()])
 
         scan_plate_btn = Button(bottom_frame_right,
                                 bg=StandardValues.btn_bk_clr,
                                 fg=StandardValues.btn_text_clr,
+                                width=StandardValues.button_width,
                                 text="Scan Plate",
-                                command=lambda: [self.db_interface.scan_license_plate_screen()])  # implement
+                                command=lambda: [self.db_interface.scan_license_plate_screen()])
 
         logout_btn = Button(bottom_frame_right,
                             bg=StandardValues.btn_bk_clr,
                             fg=StandardValues.btn_text_clr,
+                            width=StandardValues.button_width,
                             text="Log Out",
                             command=lambda: [self.db_interface.log_out_screen(self)])
 
@@ -142,11 +135,9 @@ class App:
 
         # set bottom part buttons
         add_driver_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
-        search_driver_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
-        search_zip_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
-        search_plate_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
         delete_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
         edit_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
+        search_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
         scan_plate_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
         logout_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
 

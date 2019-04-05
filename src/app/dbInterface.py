@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from tkinter import *
 from tkinter import messagebox
 
@@ -11,6 +12,8 @@ class DbInterface:
     def __init__(self, username, password, debug):
         self.data_access = self.conn(username, password)
         self.debug = debug
+
+        self.is_priority_changed = FALSE
 
         self.parent_window = None
 
@@ -26,14 +29,23 @@ class DbInterface:
         self.del_driver_window = None
         self.del_driver_widgets = None
 
+        self.search_driver = None
+        self.search_widgets = None
+
         self.search_zip_plate_window = None
         self.search_zip_plate_widgets = None
 
         self.search_fname_lname_window = None
         self.search_fname_lname_widgets = None
 
-    @staticmethod
-    def add_fields(window, row, col):
+    def add_fields(self, window, row, col):
+        # Variables for binding to fields
+        state_om = StringVar()
+        state_om.set(StandardValues.options[0])
+
+        priority_om = BooleanVar()
+
+        # labels
         first_name_lbl = Label(window, text="First Name:")
         last_name_lbl = Label(window, text="Last Name:")
         address_tb_lbl = Label(window, text="Address:")
@@ -45,14 +57,32 @@ class DbInterface:
         color_tb_lbl = Label(window, text="Car Color:")
         priority_om_lbl = Label(window, text="High Priority:")
 
+        # Create widgets
         first_name_tb = Entry(window)
         last_name_tb = Entry(window)
         address_tb = Entry(window)
         zipcode_tb = Entry(window)
+
+        state_om_field = OptionMenu(window, state_om, *StandardValues.options)
+
+        def handle_up_key(event, var=state_om.__str__()):
+            return self.up_key(event, var)
+
+        def handle_down_key(event, var=state_om.__str__()):
+            return self.down_key(event, var)
+
+        state_om_field.bind('<Up>', handle_up_key)
+        state_om_field.bind('<Down>', handle_down_key)
+        state_om_field.configure(takefocus=1)
+
         platenum_tb = Entry(window)
         car_make_tb = Entry(window)
         model_tb = Entry(window)
         color_tb = Entry(window)
+
+        priority_om_field = Checkbutton(window, variable=priority_om, command=lambda: [self.set_priority_changed(TRUE)])
+
+        priority_om_field.bind('<Return>', self.toggle)
 
         # Adding labels to grid layout
         first_name_lbl.grid(sticky="w", row=row + 0, column=col + 0)
@@ -76,17 +106,6 @@ class DbInterface:
         model_tb.grid(sticky="w", row=row + 7, column=col + 1, padx=StandardValues.padx)
         color_tb.grid(sticky="w", row=row + 8, column=col + 1, padx=StandardValues.padx)
 
-        # Creating option menus
-        state_om = StringVar()
-        priority_om = StringVar()
-        options = ("YES", "NO")
-
-        state_om.set(StandardValues.options[0])
-        priority_om.set(options[1])
-
-        state_om_field = OptionMenu(window, state_om, *StandardValues.options)
-        priority_om_field = OptionMenu(window, priority_om, *options)
-
         state_om_field.grid(sticky="ew", row=row + 4, column=col + 1, padx=StandardValues.padx)
         priority_om_field.grid(sticky="ew", row=row + 9, column=col + 1, padx=StandardValues.padx)
 
@@ -100,6 +119,30 @@ class DbInterface:
                 model_tb,
                 color_tb,
                 priority_om)
+
+    def up_key(self, event, var):
+        value = StandardValues.options.index(event.widget.getvar(var))
+
+        new_variable = StandardValues.options[value - 1] if value != 0 else (
+            StandardValues.options[int(StandardValues.options.__len__()) - 1])
+
+        event.widget.setvar(var, new_variable)
+
+    def down_key(self, event, var):
+        value = StandardValues.options.index(event.widget.getvar(var))
+
+        new_variable = StandardValues.options[value + 1] if value != 50 else (StandardValues.options[0])
+
+        event.widget.setvar(var, new_variable)
+
+    def toggle(self, event):
+        event.widget.toggle()
+
+    def invoke_btn(self, event):
+        event.widget.invoke()
+
+    def set_priority_changed(self, has_changed):
+        self.is_priority_changed = has_changed
 
     # sets up window for driver inputs calls addDrivers()
     def add_drivers_screen(self):
@@ -134,8 +177,10 @@ class DbInterface:
         # This was causing the window to close even if a blank text box was passed.
         # Passing the self.add_driver_window in addUser() instead for a fix.<<<<REFACTOR
 
-        save_user_btn.config(command=lambda: [self.data_access.add_driver(self.get_driver_data(self.add_window_widgets)),
-                                              self.add_driver_window.destroy()])
+        save_user_btn.bind('<Return>', self.invoke_btn)
+        save_user_btn.config(
+            command=lambda: [self.data_access.add_driver(self.get_driver_data(self.add_window_widgets)),
+                             self.add_driver_window.destroy()])
 
     def edit_driver_search(self):
         # creates window
@@ -162,9 +207,11 @@ class DbInterface:
         edit_submit_btn.grid(row=1, column=3, padx=15)
 
         # edit button functionality
+        edit_submit_btn.bind('<Return>', self.invoke_btn)
         edit_submit_btn.config(
             command=lambda: [
-                self.edit_driver_screen(submit_tb.get(), self.data_access.search_zip_plate("plate", submit_tb.get())),
+                self.edit_driver_screen(submit_tb.get(), self.data_access.search_driver(
+                    ("", "", "", "", "", submit_tb.get().upper(), "", "", "", ""), True)),
                 self.edit_driver_search_window.destroy()
             ])
 
@@ -198,10 +245,11 @@ class DbInterface:
                                fg=StandardValues.btn_text_clr,
                                text="Save")
 
-        self.edit_window_widgets = temp_widgets + (save_user_btn, )
+        self.edit_window_widgets = temp_widgets + (save_user_btn,)
 
         save_user_btn.grid(row=11, column=0, pady=30, padx=30)
 
+        save_user_btn.bind('<Return>', self.invoke_btn)
         save_user_btn.config(command=lambda: [self.data_access.edit_driver_request(
             self.get_driver_data(self.edit_window_widgets),
             platenum_old),
@@ -233,107 +281,35 @@ class DbInterface:
                                    del_submit_btn)
 
         # delete button functionality
+        del_submit_btn.bind('<Return>', self.invoke_btn)
         del_submit_btn.config(command=lambda: [self.data_access.delete_driver(submit_tb.get()),
                                                self.del_driver_window.destroy()])
 
-    def search_driver(self):
+    def search_drivers(self):
         # set plate zip window
-        search_driver = Toplevel()
-        search_driver.configure(background=StandardValues.background)
-        search_driver.winfo_toplevel().title("Search Driver")
+        self.search_driver = Toplevel()
+        self.search_driver.configure(background=StandardValues.background)
+        self.search_driver.winfo_toplevel().title("Search Driver")
 
         # variable text box AND LABEL
-        self.add_label(label, 0, 0, search_driver)
-        zip_plate_lbl_tb = Entry(search_driver)
-        zip_plate_lbl_tb.grid(row=0, column=1, padx=20)
+        temp_widgets = self.add_fields(self.search_driver, 0, 0)
 
         # button displaysSearch() from string returned by searchZipPlate()
-        search_zip_plate_btn = Button(search_driver,
-                                      bg=StandardValues.btn_bk_clr,
-                                      fg=StandardValues.btn_text_clr,
-                                      text="Search",
-                                      command=lambda: [
-                                          self.display_search(
-                                              self.data_access.search_zip_plate(string, zip_plate_lbl_tb.get())
-                                          )
-                                      ])
+        search_btn = Button(self.search_driver,
+                            bg=StandardValues.btn_bk_clr,
+                            fg=StandardValues.btn_text_clr,
+                            text="Search",
+                            command=lambda: [
+                                self.display_search(
+                                    self.data_access.search_driver(self.get_driver_data(self.search_widgets),
+                                                                   self.is_priority_changed)
+                                )
+                            ])
 
-        self.search_zip_plate_widgets = (zip_plate_lbl_tb,
-                                         search_zip_plate_btn)
+        self.search_widgets = temp_widgets + (search_btn,)
 
-        search_zip_plate_btn.grid(row=0, column=3, padx=20)
-
-    # search by zip or plate or display all high priority
-    def search_zip_plate_inp_screen(self, string):
-        # are we searching by zip or plate?
-        if string == "zip":
-            label = "Zip Code"
-        elif string == "plate":
-            label = "Plate Number"
-        else:
-            Error.errorWindow("Cannot search by that value")
-            return
-
-        # set plate zip window
-        search_zip_plate_screen = Toplevel()
-        search_zip_plate_screen.configure(background=StandardValues.background)
-        search_zip_plate_screen.winfo_toplevel().title("Search Driver By" + label)
-        # search_zip_plate_screen.geometry(StandardValues.win_size)
-
-        # variable text box AND LABEL
-        self.add_label(label, 0, 0, search_zip_plate_screen)
-        zip_plate_lbl_tb = Entry(search_zip_plate_screen)
-        zip_plate_lbl_tb.grid(row=0, column=1, padx=20)
-
-        # button displaysSearch() from string returned by searchZipPlate()
-        search_zip_plate_btn = Button(search_zip_plate_screen,
-                                      bg=StandardValues.btn_bk_clr,
-                                      fg=StandardValues.btn_text_clr,
-                                      text="Search",
-                                      command=lambda: [
-                                          self.display_search(
-                                              self.data_access.search_zip_plate(string, zip_plate_lbl_tb.get())
-                                          )
-                                      ])
-
-        self.search_zip_plate_widgets = (zip_plate_lbl_tb,
-                                         search_zip_plate_btn)
-
-        search_zip_plate_btn.grid(row=0, column=3, padx=20)
-
-    # searches by first and last name
-    def search_lname_inp_screen(self):
-        self.search_fname_lname_window = Toplevel()
-        self.search_fname_lname_window.configure(background=StandardValues.background)
-        self.search_fname_lname_window.winfo_toplevel().title("Search Driver By Name")
-        # search_lname_screen.geometry(StandardValues.win_size)
-
-        # text boxes and buttons
-        # FIRST NAME LABEL AND BOX
-        self.add_label("First Name", 0, 0, self.search_fname_lname_window)
-        search_fname_tb = Entry(self.search_fname_lname_window)
-        search_fname_tb.grid(row=0, column=1, padx=20)
-        # LAST NAME LABEL AND BOX
-        self.add_label("Last Name", 1, 0, self.search_fname_lname_window)
-        search_lname_tb = Entry(self.search_fname_lname_window)
-        search_lname_tb.grid(row=1, column=1, padx=20)
-
-        search_name_driver_btn = Button(self.search_fname_lname_window,
-                                        bg=StandardValues.btn_bk_clr,
-                                        fg=StandardValues.btn_text_clr,
-                                        text="Search",
-                                        command=lambda: [
-                                            self.display_search(
-                                                self.data_access.search_driver_fname_lname(search_fname_tb.get(),
-                                                                                           search_lname_tb.get())
-                                            )
-                                        ])
-
-        self.search_fname_lname_widgets = (search_fname_tb,
-                                           search_lname_tb,
-                                           search_name_driver_btn)
-
-        search_name_driver_btn.grid(row=2, column=0, padx=20)
+        search_btn.bind('<Return>', self.invoke_btn)
+        search_btn.grid(row=10, column=1, pady=15)
 
     # displays the search results in a new window
     def display_search(self, rows):
@@ -353,17 +329,45 @@ class DbInterface:
         buttons.grid(row=1, column=0)
 
         # loop to print the header to the window
-        header = (
-            "First Name", "Last Name", "Street", "Zip Code", "State", "Plate", "Make", "Color", "Model", "Priority")
+        header = ("First Name",
+                  "Last Name",
+                  "Street",
+                  "Zip Code",
+                  "State",
+                  "Plate",
+                  "Make",
+                  "Color",
+                  "Model",
+                  "High Priority")
+
         for top_id, top in enumerate(header):
             header_row = Label(results, text=header[top_id], bg="white")
             header_row.grid(row=0, column=top_id, padx=3)
 
-        # loop to print the data pulled from the database
         for row_id, row in enumerate(rows):
-            for col_id, col in enumerate(row):
-                search_row = Label(results, text=col, bg="white")
-                search_row.grid(row=row_id + 1, column=col_id, padx=3)
+            row_fname = Label(results, text=str(row[0]), bg="white", borderwidth=2)
+            row_lname = Label(results, text=str(row[1]), bg="white")
+            row_address = Label(results, text=str(row[2]), bg="white")
+            row_zipcod = Label(results, text=str(row[3]), bg="white")
+            row_state = Label(results, text=str(row[4]), bg="white")
+            row_platenum = Label(results, text=str(row[5]), bg="white")
+            row_make = Label(results, text=str(row[6]), bg="white")
+            row_color = Label(results, text=str(row[7]), bg="white")
+            row_model = Label(results, text=str(row[8]), bg="white")
+            row_priority = Checkbutton(results, state=DISABLED)
+            if row[9]:
+                row_priority.select()
+
+            row_fname.grid(sticky="w", row=row_id + 1, column=0, padx=3)
+            row_lname.grid(sticky="w", row=row_id + 1, column=1, padx=3)
+            row_address.grid(sticky="w", row=row_id + 1, column=2, padx=3)
+            row_zipcod.grid(sticky="w", row=row_id + 1, column=3, padx=3)
+            row_state.grid(sticky="w", row=row_id + 1, column=4, padx=3)
+            row_platenum.grid(sticky="w", row=row_id + 1, column=5, padx=3)
+            row_make.grid(sticky="w", row=row_id + 1, column=6, padx=3)
+            row_color.grid(sticky="w", row=row_id + 1, column=7, padx=3)
+            row_model.grid(sticky="w", row=row_id + 1, column=8, padx=3)
+            row_priority.grid(sticky="w", row=row_id + 1, column=9, padx=3)
 
         # adds the delete button to the bottom of the search window
         delete_btn = Button(buttons,
@@ -387,7 +391,7 @@ class DbInterface:
         if will_logout:
             self.data_access.log_out()
             app.main_window.destroy()
-            app.login_user(0)
+            app.login_user()
             app.create_main()
         else:
             return
@@ -437,7 +441,7 @@ class DbInterface:
                 driver[6].get().upper(),
                 driver[7].get().upper(),
                 driver[8].get().upper(),
-                driver[9].get().upper())
+                driver[9].get())
 
     @staticmethod
     def conn(username, password):

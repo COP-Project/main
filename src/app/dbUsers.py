@@ -12,6 +12,9 @@ class Users:
         try:
             name = self.find_user(username)
 
+            if isinstance(name, AttributeError):
+                raise AttributeError()
+
             self.passport = Passport(name[0][0], name[0][1], name[0][2], name[0][3])
         except AttributeError as ae:
             Error.error_window("Could not retrieve account information")
@@ -25,12 +28,15 @@ class Users:
     # this function is used to determine user permissions ADMIN or NON-ADMIN
     def find_user(self, login_name):
         try:
-            self.data_access.cursor.execute("SELECT * FROM users WHERE (loginname = %s)", login_name)
+            self.data_access.cursor = self.data_access.conn.cursor()
+            self.data_access.cursor.execute("SELECT * FROM users WHERE (loginname = %s) ; ", login_name)
             rows = self.data_access.cursor.fetchall()
 
             if self.data_access.cursor.rowcount <= 0:
+                self.data_access.cursor.close()
                 raise PermissionError()
 
+            self.data_access.cursor.close()
             return rows
 
         except AttributeError as ae:

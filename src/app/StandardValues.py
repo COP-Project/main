@@ -26,6 +26,7 @@ class StandardValues:
     btn_bk_clr = "white"
     padx = 15
     pady = 15
+    button_width = 16
 
     options = [
         "Please Select",
@@ -97,6 +98,10 @@ class StandardValues:
 
 
 class Error:
+    @staticmethod
+    def invoke(event):
+        event.widget.invoke()
+
     # error window and prints it in a pop up window
     @staticmethod
     def error_window(string_in):
@@ -106,5 +111,10 @@ class Error:
         error_label = Label(error_window, text="Error : " + str(string_in))
         error_label.pack(side=TOP)
 
-        ok_btn = Button(error_window, text="OK", command=lambda: [error_window.destroy()])
+        var = IntVar()
+
+        ok_btn = Button(error_window, text="OK", command=lambda: [var.set(1), error_window.destroy()])
+        ok_btn.bind('<Return>', Error.invoke)
+
         ok_btn.pack(side=BOTTOM)
+         # ok_btn.wait_variable(var)
