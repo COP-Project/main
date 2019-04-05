@@ -55,64 +55,65 @@ class TestDBInterface(unittest.TestCase):
         self.assertEqual(self.db_interface_admin.get_user(), self.db_interface_admin.data_access.get_user())
 
     def testAddButton(self):
-        cursor = self.test_data_access_user.conn.cursor()
-        
+        cursor = self.db_interface.data_access.conn.cursor()
+
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+        cursor.execute(drop, self.data_driver[5])
 
         self.db_interface.add_drivers_screen()
         self.db_interface.invoke_add_btn(self.data_driver)
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
-        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+        cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(cursor.rowcount, 1)
 
-        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+        cursor.execute(drop, self.data_driver[5])
+        cursor.close()
 
     def testEditSearchButton(self):
-        cursor = self.test_data_access_user.conn.cursor()
-        
+        cursor = self.db_interface.data_access.conn.cursor()
+
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
 
-        self.db_interface.data_access.cursor.execute(add_driver, self.data_driver)
+        cursor.execute(add_driver, self.data_driver)
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
-        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+        cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(cursor.rowcount, 1)
 
         self.db_interface.edit_driver_search()
         self.db_interface.invoke_edit_search_button(self.data_driver)
 
-        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+        cursor.execute(drop, self.data_driver[5])
 
     def testEditButton(self):
-        cursor = self.test_data_access_user.conn.cursor()
-        
+        cursor = self.db_interface.data_access.conn.cursor()
+
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
 
-        self.db_interface.data_access.cursor.execute(add_driver, self.data_driver)
+        cursor.execute(add_driver, self.data_driver)
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
-        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+        cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(cursor.rowcount, 1)
 
-        self.db_interface.edit_driver_screen(self.data_driver[5], self.db_interface.data_access.cursor.fetchall())
+        self.db_interface.edit_driver_screen(self.data_driver[5], cursor.fetchall())
 
         self.data_driver = ("TESTNEW",
                             "TEST",
@@ -130,89 +131,90 @@ class TestDBInterface(unittest.TestCase):
         get_driver = "SELECT * FROM drivers WHERE platenum = %s AND fname = %s ; "
         get_driver_data = (self.data_driver[5], self.data_driver[0])
 
-        self.db_interface.data_access.cursor.execute(get_driver, get_driver_data)
-        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+        cursor.execute(get_driver, get_driver_data)
+        self.assertEqual(cursor.rowcount, 1)
 
-        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+        cursor.execute(drop, self.data_driver[5])
+        cursor.close()
 
     def testDeleteButton(self):
-        cursor = self.test_data_access_user.conn.cursor()
-        
+        cursor = self.db_interface.data_access.conn.cursor()
+
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
 
-        self.db_interface.data_access.cursor.execute(add_driver, self.data_driver)
+        cursor.execute(add_driver, self.data_driver)
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
-        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+        cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(cursor.rowcount, 1)
 
         self.db_interface.del_driver_screen()
         self.db_interface.invoke_delete_button(self.data_driver)
 
-        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
-        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 0)
+        cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(cursor.rowcount, 0)
 
-        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+        cursor.execute(drop, self.data_driver[5])
 
     def testSearchZipPlateInpButton(self):
-        cursor = self.test_data_access_user.conn.cursor()
-        
+        cursor = self.db_interface.data_access.conn.cursor()
+
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
 
-        self.db_interface.data_access.cursor.execute(add_driver, self.data_driver)
+        cursor.execute(add_driver, self.data_driver)
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
-        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+        cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(cursor.rowcount, 1)
 
         self.db_interface.search_zip_plate_inp_screen("plate")
         self.db_interface.invoke_search_zip_plate_button(self.data_driver)
 
-        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+        cursor.execute(drop, self.data_driver[5])
 
     def testSearchFnameLname(self):
-        cursor = self.test_data_access_user.conn.cursor()
-        
+        cursor = self.db_interface.data_access.conn.cursor()
+
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
 
-        self.db_interface.data_access.cursor.execute(add_driver, self.data_driver)
+        cursor.execute(add_driver, self.data_driver)
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        self.db_interface.data_access.cursor.execute(get_driver, self.data_driver[5])
-        self.assertEqual(self.db_interface.data_access.cursor.rowcount, 1)
+        cursor.execute(get_driver, self.data_driver[5])
+        self.assertEqual(cursor.rowcount, 1)
 
         self.db_interface.search_lname_inp_screen()
         self.db_interface.invoke_search_fname_lname(self.data_driver)
 
-        self.db_interface.data_access.cursor.execute(drop, self.data_driver[5])
+        cursor.execute(drop, self.data_driver[5])
 
     @unittest.skip("")
     def testLogOutButton(self):
         app = PlateRecMain.App(1)
         appLogin = app.login
 
-        self.app.db_interface.log_out_screen(app)
+        self.db_interface.log_out_screen(app)
         self.assertIsNot(app.login, appLogin)
 
 
@@ -274,6 +276,7 @@ class TestDBCommands(unittest.TestCase):
         :return:
         """
         self.assertIsInstance(app.dbCommands.DataAccess("TESTUSER", "TESTUSER"), pymysql.OperationalError)
+
     # conn end
 
     # search_zip_plate
@@ -1157,12 +1160,15 @@ class TestDBCommands(unittest.TestCase):
 
         cursor.execute(drop, self.data_driver[5])
         self.test_data_access_user.conn.commit()
+
+        cursor.close()
+
     # add_driver end
 
     # delete_driver
     def testDeleteDriverRight(self):
         cursor = self.test_data_access_user.conn.cursor()
-        
+
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
         cursor.execute(drop, self.data_driver[5])
@@ -1182,9 +1188,11 @@ class TestDBCommands(unittest.TestCase):
         cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
 
+        cursor.close()
+
     def testDeleteDriverEmptyPlate(self):
         cursor = self.test_data_access_user.conn.cursor()
-        
+
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
         cursor.execute(drop, self.data_driver[5])
@@ -1204,9 +1212,11 @@ class TestDBCommands(unittest.TestCase):
         cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
 
+        cursor.close()
+
     def testDeleteDriverTooLongPlate(self):
         cursor = self.test_data_access_user.conn.cursor()
-        
+
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
         cursor.execute(drop, "12345678")
@@ -1237,12 +1247,15 @@ class TestDBCommands(unittest.TestCase):
 
         cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
+
+        cursor.close()
+
     # delete_driver end
 
     # plate_check
     def testPlateCheckRight(self):
         cursor = self.test_data_access_user.conn.cursor()
-        
+
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
         cursor.execute(drop, self.data_driver[5])
@@ -1281,6 +1294,7 @@ class TestDBCommands(unittest.TestCase):
 
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
         cursor.execute(drop, self.data_driver[5])
+
     # plate_check end
 
     # edit_driver_request
@@ -1301,7 +1315,11 @@ class TestDBCommands(unittest.TestCase):
 
         cursor.execute(add_driver, self.data_driver)
 
-        get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
+        get_driver = ("SELECT "
+                      "fname, lname, address, zipcod, state, platenum, carmake, color, model, "
+                      "(CASE WHEN priority = 0 THEN 0 ELSE 1 end) as priority "
+                      " FROM drivers "
+                      "WHERE platenum = %s ")
 
         cursor.execute(get_driver, self.data_driver_edit[10])
         self.assertEqual(cursor.rowcount, 1)
@@ -1327,6 +1345,8 @@ class TestDBCommands(unittest.TestCase):
         cursor.execute(drop, self.data_driver_edit[10])
         self.test_data_access_user.conn.commit()
 
+        cursor.close()
+
     def testEditDriverEmptyFname(self):
         """
         Test that validates edit_driver_request() doesn't add driver given empty input
@@ -1335,7 +1355,7 @@ class TestDBCommands(unittest.TestCase):
         cursor = self.test_data_access_user.conn.cursor()
 
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1345,7 +1365,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("",
@@ -1373,6 +1393,8 @@ class TestDBCommands(unittest.TestCase):
         cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
 
+        cursor.close()
+
     def testEditDriverEmptyLname(self):
         """
         Test that validates edit_driver_request() doesn't add driver given empty input
@@ -1381,7 +1403,7 @@ class TestDBCommands(unittest.TestCase):
         cursor = self.test_data_access_user.conn.cursor()
 
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1391,7 +1413,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -1419,6 +1441,8 @@ class TestDBCommands(unittest.TestCase):
         cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
 
+        cursor.close()
+
     def testEditDriverEmptyAddress(self):
         """
         Test that validates edit_driver_request() doesn't add driver given empty input
@@ -1427,7 +1451,7 @@ class TestDBCommands(unittest.TestCase):
         cursor = self.test_data_access_user.conn.cursor()
 
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1437,7 +1461,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -1464,6 +1488,8 @@ class TestDBCommands(unittest.TestCase):
         cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
 
+        cursor.close()
+
     def testEditDriverEmptyZip(self):
         """
         Test that validates edit_driver_request() doesn't add driver given empty input
@@ -1473,7 +1499,7 @@ class TestDBCommands(unittest.TestCase):
 
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1483,7 +1509,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -1511,6 +1537,8 @@ class TestDBCommands(unittest.TestCase):
         cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
 
+        cursor.close()
+
     def testEditDriverEmptyPlate(self):
         """
         Test that validates edit_driver_request() doesn't add driver given empty input
@@ -1519,7 +1547,7 @@ class TestDBCommands(unittest.TestCase):
         cursor = self.test_data_access_user.conn.cursor()
 
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1529,7 +1557,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -1556,6 +1584,8 @@ class TestDBCommands(unittest.TestCase):
         cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
 
+        cursor.close()
+
     def testEditDriverEmptyMake(self):
         """
         Test that validates edit_driver_request() doesn't add driver given empty input
@@ -1564,7 +1594,7 @@ class TestDBCommands(unittest.TestCase):
         cursor = self.test_data_access_user.conn.cursor()
 
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1574,7 +1604,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -1602,6 +1632,8 @@ class TestDBCommands(unittest.TestCase):
         cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
 
+        cursor.close()
+
     def testEditDriverEmptyColor(self):
         """
         Test that validates edit_driver_request() doesn't add driver given empty input
@@ -1610,7 +1642,7 @@ class TestDBCommands(unittest.TestCase):
         cursor = self.test_data_access_user.conn.cursor()
 
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1620,7 +1652,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -1648,6 +1680,8 @@ class TestDBCommands(unittest.TestCase):
         cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
 
+        cursor.close()
+
     def testEditDriverEmptyModel(self):
         """
         Test that validates edit_driver_request() doesn't add driver given empty input
@@ -1656,7 +1690,7 @@ class TestDBCommands(unittest.TestCase):
         cursor = self.test_data_access_user.conn.cursor()
 
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1666,7 +1700,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -1694,6 +1728,8 @@ class TestDBCommands(unittest.TestCase):
         cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
 
+        cursor.close()
+
     def testEditDriverTooLongFname(self):
         """
         Test that validates edit_driver_request() doesn't add driver given empty input
@@ -1703,7 +1739,7 @@ class TestDBCommands(unittest.TestCase):
 
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1713,7 +1749,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TESTTTTTTTTTTTTTTTTTTT",
@@ -1749,7 +1785,7 @@ class TestDBCommands(unittest.TestCase):
 
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1759,7 +1795,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -1795,7 +1831,7 @@ class TestDBCommands(unittest.TestCase):
 
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1805,7 +1841,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -1841,7 +1877,7 @@ class TestDBCommands(unittest.TestCase):
 
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1851,7 +1887,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -1887,7 +1923,7 @@ class TestDBCommands(unittest.TestCase):
 
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1897,7 +1933,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -1932,7 +1968,7 @@ class TestDBCommands(unittest.TestCase):
 
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1942,7 +1978,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -1979,7 +2015,7 @@ class TestDBCommands(unittest.TestCase):
         # drop row if platenum is already in database
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1989,7 +2025,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -2025,7 +2061,7 @@ class TestDBCommands(unittest.TestCase):
 
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -2035,7 +2071,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -2071,7 +2107,7 @@ class TestDBCommands(unittest.TestCase):
 
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -2081,7 +2117,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -2117,7 +2153,7 @@ class TestDBCommands(unittest.TestCase):
 
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        cursor.execute(drop, self.data_driver_edit[5])
+        cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -2127,7 +2163,7 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        cursor.execute(get_driver, self.data_driver_edit[5])
+        cursor.execute(get_driver, self.data_driver[5])
         self.assertEqual(cursor.rowcount, 1)
 
         self.data_driver_edit = ("TEST",
@@ -2154,6 +2190,9 @@ class TestDBCommands(unittest.TestCase):
 
         cursor.execute(drop, self.data_driver_edit[5])
         self.test_data_access_user.conn.commit()
+
+        cursor.close()
+
     # edit_driver_request end
 
     # scan_license_plate
@@ -2355,11 +2394,11 @@ class TestLogin(unittest.TestCase):
         test_user = "TESTADMIN"
         test_pass = "TESTADMIN"
 
-        username_tb = tkinter.Entry()
-        username_tb.insert(tkinter.END, test_user)
+        self.test_login.username_tb = tkinter.Entry()
+        self.test_login.username_tb.insert(tkinter.END, test_user)
 
-        password_tb = tkinter.Entry()
-        password_tb.insert(tkinter.END, test_pass)
+        self.test_login.pw_tb = tkinter.Entry()
+        self.test_login.pw_tb.insert(tkinter.END, test_pass)
 
         self.test_login.login()
 

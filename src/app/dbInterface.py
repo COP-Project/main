@@ -150,16 +150,16 @@ class DbInterface:
         self.add_driver_window = Toplevel()
         self.add_driver_window.configure(background=StandardValues.background)
         self.add_driver_window.winfo_toplevel().title("New Driver Entry")
-
-        size = self.parent_window.geometry()
-
-        width = int(size.split("x")[0]) / 2
-        x_offset = size.split("+")[1]
-
-        height = int(size.split("x")[1].split("+")[0]) / 2
-        y_offset = size.split("+")[2]
-
-        self.add_driver_window.geometry("+{}+{}".format(str(int(width / 2)), str(int(height / 2))))
+        #
+        # size = self.parent_window.geometry()
+        #
+        # width = int(size.split("x")[0]) / 2
+        # x_offset = size.split("+")[1]
+        #
+        # height = int(size.split("x")[1].split("+")[0]) / 2
+        # y_offset = size.split("+")[2]
+        #
+        # self.add_driver_window.geometry("+{}+{}".format(str(int(width / 2)), str(int(height / 2))))
 
         temp_widgets = self.add_fields(self.add_driver_window, 0, 0)
 
@@ -237,7 +237,7 @@ class DbInterface:
         temp_widgets[6].insert(END, row[0][6])
         temp_widgets[7].insert(END, row[0][7])
         temp_widgets[8].insert(END, row[0][8])
-        temp_widgets[9].set(row[0][9])
+        temp_widgets[9].set(1) if row[0][9] else temp_widgets[9].set(0)
 
         # save button
         save_user_btn = Button(self.edit_driver_window,
