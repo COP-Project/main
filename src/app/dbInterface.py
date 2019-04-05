@@ -12,6 +12,8 @@ class DbInterface:
         self.data_access = self.conn(username, password)
         self.debug = debug
 
+        self.parent_window = None
+
         self.add_driver_window = None
         self.add_window_widgets = None
 
@@ -30,72 +32,91 @@ class DbInterface:
         self.search_fname_lname_window = None
         self.search_fname_lname_widgets = None
 
+    @staticmethod
+    def get_driver_data(driver):
+        return (driver[0].get().upper(),
+                driver[1].get().upper(),
+                driver[2].get().upper(),
+                driver[3].get().upper(),
+                driver[4].get().upper(),
+                driver[5].get().upper(),
+                driver[6].get().upper(),
+                driver[7].get().upper(),
+                driver[8].get().upper(),
+                driver[9].get().upper())
+
     # sets up window for driver inputs calls addDrivers()
     def add_drivers_screen(self):
         # creates window
         self.add_driver_window = Toplevel()
         self.add_driver_window.configure(background=StandardValues.background)
-        # self.add_driver_window.geometry(StandardValues.win_size)
         self.add_driver_window.winfo_toplevel().title("New Driver Entry")
 
-        # text boxes and buttons
-        # FIRST NAME LABEL AND BOX
-        self.add_label("First Name", 0, 0, self.add_driver_window)
-        first_name_tb = Entry(self.add_driver_window)  # textvariable=v
-        first_name_tb.grid(row=0, column=1, padx=StandardValues.padx)
+        size = self.parent_window.geometry()
 
-        # LAST NAME LABEL AND BOX
-        self.add_label("Last Name", 1, 0, self.add_driver_window)
+        width = int(size.split("x")[0]) / 2
+        x_offset = size.split("+")[1]
+
+        height = int(size.split("x")[1].split("+")[0]) / 2
+        y_offset = size.split("+")[2]
+
+        self.add_driver_window.geometry("+{}+{}".format(str(int(width / 2)), str(int(height / 2))))
+
+        first_name_lbl = Label(self.add_driver_window, text="First Name:")
+        last_name_lbl = Label(self.add_driver_window, text="Last Name:")
+        address_tb_lbl = Label(self.add_driver_window, text="Address:")
+        zipcode_tb_lbl = Label(self.add_driver_window, text="Zip Code:")
+        state_om_lbl = Label(self.add_driver_window, text="State:")
+        platenum_tb_lbl = Label(self.add_driver_window, text="License Plate:")
+        car_make_tb_lbl = Label(self.add_driver_window, text="Car Make:")
+        model_tb_lbl = Label(self.add_driver_window, text="Car Model:")
+        color_tb_lbl = Label(self.add_driver_window, text="Car Color:")
+        priority_om_lbl = Label(self.add_driver_window, text="High Priority:")
+
+        first_name_tb = Entry(self.add_driver_window)
         last_name_tb = Entry(self.add_driver_window)
-        last_name_tb.grid(row=1, column=1, padx=StandardValues.padx)
-
-        # Streetname/ address
-        self.add_label("Address", 2, 0, self.add_driver_window)
         address_tb = Entry(self.add_driver_window)
-        address_tb.grid(row=2, column=1, padx=StandardValues.padx)
-
-        # Zip Code
-        self.add_label("Zip Code", 3, 0, self.add_driver_window)
         zipcode_tb = Entry(self.add_driver_window)
-        zipcode_tb.grid(row=3, column=1, padx=StandardValues.padx)
-
-        # State
-        self.add_label("State", 4, 0, self.add_driver_window)
-        state_om = StringVar()
-        state_om.set(StandardValues.options[0])
-
-        state_om_field = OptionMenu(self.add_driver_window, state_om, *StandardValues.options)
-        state_om_field.grid(row=4, column=1, padx=StandardValues.padx)
-
-        # platenumber
-        self.add_label("Plate #", 5, 0, self.add_driver_window)
-        platenum_tb = Entry(self.add_driver_window, state=NORMAL)
-        platenum_tb.grid(row=5, column=1, padx=StandardValues.padx)
-
-        # car make
-        self.add_label("Car Make", 6, 0, self.add_driver_window)
+        platenum_tb = Entry(self.add_driver_window)
         car_make_tb = Entry(self.add_driver_window)
-        car_make_tb.grid(row=6, column=1, padx=StandardValues.padx)
-
-        # model
-        self.add_label("Model", 7, 0, self.add_driver_window)
         model_tb = Entry(self.add_driver_window)
-        model_tb.grid(row=7, column=1, padx=StandardValues.padx)
-
-        # Color
-        self.add_label("Color", 8, 0, self.add_driver_window)
         color_tb = Entry(self.add_driver_window)
-        color_tb.grid(row=8, column=1, padx=StandardValues.padx)
 
-        # priority
-        self.add_label("High Priority", 9, 0, self.add_driver_window)
+        # Adding labels to grid layout
+        first_name_lbl.grid(sticky="w", row=0, column=0)
+        last_name_lbl.grid(sticky="w", row=1, column=0)
+        address_tb_lbl.grid(sticky="w", row=2, column=0)
+        zipcode_tb_lbl.grid(sticky="w", row=3, column=0)
+        state_om_lbl.grid(sticky="w", row=4, column=0)
+        platenum_tb_lbl.grid(sticky="w", row=5, column=0)
+        car_make_tb_lbl.grid(sticky="w", row=6, column=0)
+        model_tb_lbl.grid(sticky="w", row=7, column=0)
+        color_tb_lbl.grid(sticky="w", row=8, column=0)
+        priority_om_lbl.grid(sticky="w", row=9, column=0)
+
+        # Adding text boxes to grid
+        first_name_tb.grid(sticky="w", row=0, column=1, padx=StandardValues.padx)
+        last_name_tb.grid(sticky="w", row=1, column=1, padx=StandardValues.padx)
+        address_tb.grid(sticky="w", row=2, column=1, padx=StandardValues.padx)
+        zipcode_tb.grid(sticky="w", row=3, column=1, padx=StandardValues.padx)
+        platenum_tb.grid(sticky="w", row=5, column=1, padx=StandardValues.padx)
+        car_make_tb.grid(sticky="w", row=6, column=1, padx=StandardValues.padx)
+        model_tb.grid(sticky="w", row=7, column=1, padx=StandardValues.padx)
+        color_tb.grid(sticky="w", row=8, column=1, padx=StandardValues.padx)
+
+        # Creating option menus
+        state_om = StringVar()
         priority_om = StringVar()
         options = ("YES", "NO")
 
+        state_om.set(StandardValues.options[0])
         priority_om.set(options[1])
 
+        state_om_field = OptionMenu(self.add_driver_window, state_om, *StandardValues.options)
         priority_om_field = OptionMenu(self.add_driver_window, priority_om, *options)
-        priority_om_field.grid(row=9, column=1, padx=StandardValues.padx)
+
+        state_om_field.grid(sticky="ew", row=4, column=1, padx=StandardValues.padx)
+        priority_om_field.grid(sticky="ew", row=9, column=1, padx=StandardValues.padx)
 
         # save button
         save_user_btn = Button(self.add_driver_window,
@@ -115,22 +136,13 @@ class DbInterface:
                                    priority_om,
                                    save_user_btn)
 
-        save_user_btn.grid(row=11, column=0, pady=30, padx=30)
+        save_user_btn.grid(sticky="w", row=11, column=1, pady=StandardValues.pady, padx=StandardValues.padx)
         # save button action, runs addUser and then calls closeHomeWindow to close the top lvl window
         # NOTE: Removed closeWindowHome() from button.
         # This was causing the window to close even if a blank text box was passed.
         # Passing the self.add_driver_window in addUser() instead for a fix.<<<<REFACTOR
 
-        save_user_btn.config(command=lambda: [self.data_access.add_driver(first_name_tb.get().upper(),
-                                                                          last_name_tb.get().upper(),
-                                                                          address_tb.get().upper(),
-                                                                          zipcode_tb.get(),
-                                                                          state_om.get(),
-                                                                          platenum_tb.get().upper(),
-                                                                          car_make_tb.get().upper(),
-                                                                          model_tb.get().upper(),
-                                                                          color_tb.get().upper(),
-                                                                          priority_om.get()),
+        save_user_btn.config(command=lambda: [self.data_access.add_driver(self.get_driver_data(self.add_driver_window)),
                                               self.add_driver_window.destroy()])
 
     def edit_driver_search(self):
@@ -165,82 +177,82 @@ class DbInterface:
             ])
 
     def edit_driver_screen(self, platenum_old, row):
-        if row is None:
+        if row == ():
             Error.error_window("There were no records with that license plate")
             return
 
-        # creates window
+            # creates window
         self.edit_driver_window = Toplevel()
         self.edit_driver_window.configure(background="white")
-        # edit_driver_window.geometry(StandardValues.win_size)
         self.edit_driver_window.winfo_toplevel().title("Edit Driver")
 
-        # text boxes and buttons
-        # FIRST NAME LABEL AND BOX
-        self.add_label("First Name", 0, 0, self.edit_driver_window)
-        first_name_tb = Entry(self.edit_driver_window)  # textvariable=v
-        first_name_tb.insert(END, row[0][0])
-        first_name_tb.grid(row=0, column=1, padx=StandardValues.padx)
+        first_name_lbl = Label(self.edit_driver_window, text="First Name:")
+        last_name_lbl = Label(self.edit_driver_window, text="Last Name:")
+        address_tb_lbl = Label(self.edit_driver_window, text="Address:")
+        zipcode_tb_lbl = Label(self.edit_driver_window, text="Zip Code:")
+        state_om_lbl = Label(self.edit_driver_window, text="State:")
+        platenum_tb_lbl = Label(self.edit_driver_window, text="License Plate:")
+        car_make_tb_lbl = Label(self.edit_driver_window, text="Car Make:")
+        model_tb_lbl = Label(self.edit_driver_window, text="Car Model:")
+        color_tb_lbl = Label(self.edit_driver_window, text="Car Color:")
+        priority_om_lbl = Label(self.edit_driver_window, text="High Priority:")
 
-        # LAST NAME LABEL AND BOX
-        self.add_label("Last Name", 1, 0, self.edit_driver_window)
+        first_name_tb = Entry(self.edit_driver_window)
         last_name_tb = Entry(self.edit_driver_window)
-        last_name_tb.insert(END, row[0][1])
-        last_name_tb.grid(row=1, column=1, padx=StandardValues.padx)
-
-        # Streetname/ address
-        self.add_label("Address", 2, 0, self.edit_driver_window)
         address_tb = Entry(self.edit_driver_window)
-        address_tb.insert(END, row[0][2])
-        address_tb.grid(row=2, column=1, padx=StandardValues.padx)
-
-        # Zip Code
-        self.add_label("Zip Code", 3, 0, self.edit_driver_window)
         zipcode_tb = Entry(self.edit_driver_window)
-        zipcode_tb.insert(END, row[0][3])
-        zipcode_tb.grid(row=3, column=1, padx=StandardValues.padx)
-
-        # State
-        self.add_label("State", 4, 0, self.edit_driver_window)
-        state_om = StringVar()
-        state_om.set(row[0][4])
-
-        state_om_field = OptionMenu(self.edit_driver_window, state_om, *StandardValues.options)
-        state_om_field.grid(row=4, column=1, padx=StandardValues.padx)
-
-        # platenumber
-        self.add_label("Plate #", 5, 0, self.edit_driver_window)
-        platenum_tb = Entry(self.edit_driver_window, state=NORMAL)
-        platenum_tb.insert(END, row[0][5])
-        platenum_tb.grid(row=5, column=1, padx=StandardValues.padx)
-
-        # car make
-        self.add_label("Car Make", 6, 0, self.edit_driver_window)
+        platenum_tb = Entry(self.edit_driver_window)
         car_make_tb = Entry(self.edit_driver_window)
-        car_make_tb.insert(END, row[0][6])
-        car_make_tb.grid(row=6, column=1, padx=StandardValues.padx)
-
-        # model
-        self.add_label("Model", 7, 0, self.edit_driver_window)
         model_tb = Entry(self.edit_driver_window)
-        model_tb.insert(END, row[0][7])
-        model_tb.grid(row=7, column=1, padx=StandardValues.padx)
-
-        # Color
-        self.add_label("Color", 8, 0, self.edit_driver_window)
         color_tb = Entry(self.edit_driver_window)
-        color_tb.insert(END, row[0][8])
-        color_tb.grid(row=8, column=1, padx=StandardValues.padx)
 
-        # priority
-        self.add_label("High Priority", 9, 0, self.edit_driver_window)
+        # Adding labels to grid layout
+        first_name_lbl.grid(sticky="w", row=0, column=0)
+        last_name_lbl.grid(sticky="w", row=1, column=0)
+        address_tb_lbl.grid(sticky="w", row=2, column=0)
+        zipcode_tb_lbl.grid(sticky="w", row=3, column=0)
+        state_om_lbl.grid(sticky="w", row=4, column=0)
+        platenum_tb_lbl.grid(sticky="w", row=5, column=0)
+        car_make_tb_lbl.grid(sticky="w", row=6, column=0)
+        model_tb_lbl.grid(sticky="w", row=7, column=0)
+        color_tb_lbl.grid(sticky="w", row=8, column=0)
+        priority_om_lbl.grid(sticky="w", row=9, column=0)
+
+        # Adding text boxes to grid
+        first_name_tb.grid(sticky="w", row=0, column=1, padx=StandardValues.padx)
+        last_name_tb.grid(sticky="w", row=1, column=1, padx=StandardValues.padx)
+        address_tb.grid(sticky="w", row=2, column=1, padx=StandardValues.padx)
+        zipcode_tb.grid(sticky="w", row=3, column=1, padx=StandardValues.padx)
+        platenum_tb.grid(sticky="w", row=5, column=1, padx=StandardValues.padx)
+        car_make_tb.grid(sticky="w", row=6, column=1, padx=StandardValues.padx)
+        model_tb.grid(sticky="w", row=7, column=1, padx=StandardValues.padx)
+        color_tb.grid(sticky="w", row=8, column=1, padx=StandardValues.padx)
+
+        # Creating option menus
+        state_om = StringVar()
         priority_om = StringVar()
         options = ("YES", "NO")
 
+        state_om.set(StandardValues.options[0])
         priority_om.set(options[1])
 
+        state_om_field = OptionMenu(self.edit_driver_window, state_om, *StandardValues.options)
         priority_om_field = OptionMenu(self.edit_driver_window, priority_om, *options)
-        priority_om_field.grid(row=9, column=1, padx=StandardValues.padx)
+
+        state_om_field.grid(sticky="ew", row=4, column=1, padx=StandardValues.padx)
+        priority_om_field.grid(sticky="ew", row=9, column=1, padx=StandardValues.padx)
+
+        # insert current values into text boxes
+        first_name_tb.insert(END, row[0][0])
+        last_name_tb.insert(END, row[0][1])
+        address_tb.insert(END, row[0][2])
+        zipcode_tb.insert(END, row[0][3])
+        state_om.set(row[0][4])
+        platenum_tb.insert(END, row[0][5])
+        car_make_tb.insert(END, row[0][6])
+        model_tb.insert(END, row[0][7])
+        color_tb.insert(END, row[0][8])
+        priority_om.set(row[0][9])
 
         # save button
         save_user_btn = Button(self.edit_driver_window,
@@ -262,18 +274,10 @@ class DbInterface:
 
         save_user_btn.grid(row=11, column=0, pady=30, padx=30)
 
-        save_user_btn.config(command=lambda: [self.data_access.edit_driver_request(platenum_old,
-                                                                                         first_name_tb.get().upper(),
-                                                                                         last_name_tb.get().upper(),
-                                                                                         address_tb.get().upper(),
-                                                                                         zipcode_tb.get(),
-                                                                                         state_om.get(),
-                                                                                         platenum_tb.get().upper(),
-                                                                                         car_make_tb.get().upper(),
-                                                                                         model_tb.get().upper(),
-                                                                                         color_tb.get().upper(),
-                                                                                         priority_om.get()),
-                                              self.edit_driver_window.destroy()])
+        save_user_btn.config(command=lambda: [self.data_access.edit_driver_request(
+            self.get_driver_data(self.edit_window_widgets),
+            platenum_old),
+            self.edit_driver_window.destroy()])
 
     # pop up screen to delete a driver
     def del_driver_screen(self):

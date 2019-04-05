@@ -11,6 +11,8 @@ from login import Login
 
 class App:
     def __init__(self, debug):
+        self.debug = debug
+
         self.root = None
         self.main_window = None
 
@@ -21,14 +23,14 @@ class App:
         self.login = None
 
         # Request login credentials from user
-        self.login_user(debug)
+        self.login_user()
 
         self.create_main()
 
-    def login_user(self, debug):
-        self.login = Login(debug)
+    def login_user(self):
+        self.login = Login(self.debug)
 
-        self.db_interface = DbInterface(self.login.username, self.login.password, debug)
+        self.db_interface = DbInterface(self.login.username, self.login.password, self.debug)
 
         self.user = self.db_interface.get_user()
         self.passport = self.user.passport
@@ -39,6 +41,10 @@ class App:
 
         self.main_window = Toplevel()
         self.main_window.configure(background=StandardValues.background)
+
+        StandardValues.get_screen_position(self.root)
+        self.main_window.geometry("+{}+{}".format(StandardValues.scr_width, StandardValues.scr_height))
+        self.db_interface.parent_window = self.main_window
 
         # SET GUI FRAMES
         top_frame = Frame(self.main_window)
@@ -63,7 +69,7 @@ class App:
         welcome_lbl.pack(side=BOTTOM, padx=10, pady=10)
 
         # ADD bANNER PICTURE
-        path = "../img/carpic.png"
+        path = "./img/carpic.png"
         img = PIL.ImageTk.PhotoImage(PIL.Image.open(path))
         panel = tk.Label(self.main_window, image=img)
         panel.pack(in_=top_frame, side=TOP, expand="no")

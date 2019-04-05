@@ -17,6 +17,8 @@ class StandardValues:
     modelChars = 20
 
     # Tkinter Values
+    scr_width = None
+    scr_height = None
     background = "white"
     width = 500
     height = 500
@@ -26,6 +28,7 @@ class StandardValues:
     pady = 15
 
     options = [
+        "Please Select",
         "AL",
         "AK",
         "AZ",
@@ -77,6 +80,17 @@ class StandardValues:
         "WI",
         "WY"
     ]
+
+    @staticmethod
+    def get_screen_position(root):
+        # Gets the requested values of the height and widht.
+        width = root.winfo_reqwidth()
+        height = root.winfo_reqheight()
+
+        # Gets both half the screen width/height and window width/height
+        StandardValues.scr_width = int(root.winfo_screenwidth() / 3 - width / 2)
+        StandardValues.scr_height = int(root.winfo_screenheight() / 3 - height / 2)
+
 
 
 class Error:

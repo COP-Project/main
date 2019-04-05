@@ -5,7 +5,8 @@ from StandardValues import StandardValues, Error
 from readPlate import readaPlate, create_alpr, destroy_alpr
 from openalpr import Alpr
 
-alpr = create_alpr()
+# alpr = create_alpr()
+
 
 class DataAccess:
     # data bas info, it needs to match either your local mysql server
@@ -82,14 +83,14 @@ class DataAccess:
 
     # the logic to to read in all the text boxes from calladd_drivers() probably way to many paramaters
     # REFACTOR in the future to group boxes into a object and pass object
-    def add_driver(self, fname, lname, address, zipcode, state, platenum, make, color, model, priority):
-        error = check_input(fname, lname, address, zipcode, state, platenum, make, color, model, priority)
+    def add_driver(self, driver_data):
+        error = check_input(driver_data)
 
         if error == -1:
             return -1
 
         # plate number duplication
-        if self.plate_check(platenum) == 1:
+        if self.plate_check(driver_data[5]) == 1:
             Error.error_window("Duplicate License Plate Number")
             return -1
 
@@ -98,7 +99,6 @@ class DataAccess:
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
         # execute query
-        data_driver = (fname, lname, address, zipcode, state, platenum, make, color, model, priority)
         self.cursor.execute(add_driver, data_driver)
 
         self.conn.commit()
@@ -121,9 +121,8 @@ class DataAccess:
 
         return 1 if (self.cursor.rowcount == 1) else 0
 
-    def edit_driver_request(self, platenum_old, fname, lname, address, zipcode, state, platenum_new,
-                            make, color, model, priority):
-        error = check_input(fname, lname, address, zipcode, state, platenum_new, make, color, model, priority)
+    def edit_driver_request(self, data_driver, platenum_old):
+        error = check_input(data_driver)
 
         if error == -1:
             return -1
@@ -133,8 +132,19 @@ class DataAccess:
                        "platenum = %s, carmake = %s, color = %s, model = %s, priority = %s "
                        "WHERE platenum = %s ")
 
-        data_driver = (fname, lname, address, zipcode, state, platenum_new, make, color, model, priority, platenum_old)
-        self.cursor.execute(edit_driver, data_driver)
+        edit_data_driver = (data_driver[0],
+                            data_driver[1],
+                            data_driver[2],
+                            data_driver[3],
+                            data_driver[4],
+                            data_driver[5],
+                            data_driver[6],
+                            data_driver[7],
+                            data_driver[8],
+                            data_driver[9],
+                            platenum_old)
+
+        self.cursor.execute(edit_driver, edit_data_driver)
 
         self.conn.commit()
 
@@ -170,25 +180,25 @@ class DataAccess:
         self.conn.close()
 
 
-def check_file_input(img):
-    try:
-        check_opened_file = open(img, 'r')
-        check_opened_file.close()
-    except IOError:
-        Error.error_window("File not found")
-        return -1
+# def check_file_input(img):
+#     try:
+#         check_opened_file = open(img, 'r')
+#         check_opened_file.close()
+#     except IOError:
+#         Error.error_window("File not found")
+#         return -1
 
 
-def check_input(fname, lname, address, zipcode, state, platenum, make, color, model, priority):
+def check_input(data_driver):
     try:
-        assert len(fname) <= StandardValues.firstNameChars and fname != "", "First Name must be less than or equal to " + str(StandardValues.firstNameChars)
-        assert len(lname) <= StandardValues.lastNameChars and lname != "", "Last Name must be less than or equal to " + str(StandardValues.lastNameChars)
-        assert len(address) <= StandardValues.addressChars and address != "", "Address must be less than or equal to " + str(StandardValues.addressChars)
-        assert len(zipcode) == 5 and zipcode != "" and str(zipcode).isdigit(), "Zip code should be 5 numbers"
-        assert len(platenum) <= StandardValues.plateNumChars and platenum != "", "Plate number must be " + str(StandardValues.plateNumChars) + " characters."
-        assert len(make) <= StandardValues.carmakeChars and make != "", "Car Make must be less than or equal to " + str(StandardValues.carmakeChars)
-        assert len(color) <= StandardValues.colorChars and color != "", "Color must be less than or equal to " + str(StandardValues.colorChars)
-        assert len(model) <= StandardValues.modelChars and model != "",  "Model must be less than or equal to " + str(StandardValues.modelChars)
+        assert len(data_driver[0]) <= StandardValues.firstNameChars and data_driver[0] != "", "First Name must be less than or equal to " + str(StandardValues.firstNameChars)
+        assert len(data_driver[1]) <= StandardValues.lastNameChars and data_driver[1] != "", "Last Name must be less than or equal to " + str(StandardValues.lastNameChars)
+        assert len(data_driver[2]) <= StandardValues.addressChars and data_driver[2] != "", "Address must be less than or equal to " + str(StandardValues.addressChars)
+        assert len(data_driver[3]) == 5 and data_driver[3] != "" and str(data_driver[3]).isdigit(), "Zip code should be 5 numbers"
+        assert len(data_driver[5]) <= StandardValues.plateNumChars and data_driver[5] != "", "Plate number must be " + str(StandardValues.plateNumChars) + " characters."
+        assert len(data_driver[6]) <= StandardValues.carmakeChars and data_driver[6] != "", "Car Make must be less than or equal to " + str(StandardValues.carmakeChars)
+        assert len(data_driver[7]) <= StandardValues.modelChars and data_driver[7] != "",  "Model must be less than or equal to " + str(StandardValues.modelChars)
+        assert len(data_driver[8]) <= StandardValues.colorChars and data_driver[8] != "", "Color must be less than or equal to " + str(StandardValues.colorChars)
     except AssertionError as ae:
         Error.error_window(ae.__str__())
         return -1
