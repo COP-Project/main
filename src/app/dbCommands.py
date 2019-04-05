@@ -139,11 +139,13 @@ class DataAccess:
         self.conn.commit()
 
     def scan_license_plate(self, img, state):
+        check = check_file_input(img)
+        if check == -1:
+            return -1
+
         plates = readaPlate(alpr, state.lower(), img)
         for eachplate in plates:
             print(eachplate)
-
-        # raise NotImplementedError()
 
     def is_right_password(self, password):
         check_password = ("SELECT 1 "
@@ -166,6 +168,14 @@ class DataAccess:
 
     def log_out(self):
         self.conn.close()
+
+
+def check_file_input(img):
+    try:
+        check_opened_file = open(img, 'r')
+    except IOError:
+        Error.error_window("File not found")
+        return -1
 
 
 def check_input(fname, lname, address, zipcode, state, platenum, make, color, model, priority):
