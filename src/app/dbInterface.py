@@ -32,19 +32,6 @@ class DbInterface:
         self.search_fname_lname_window = None
         self.search_fname_lname_widgets = None
 
-    @staticmethod
-    def get_driver_data(driver):
-        return (driver[0].get().upper(),
-                driver[1].get().upper(),
-                driver[2].get().upper(),
-                driver[3].get().upper(),
-                driver[4].get().upper(),
-                driver[5].get().upper(),
-                driver[6].get().upper(),
-                driver[7].get().upper(),
-                driver[8].get().upper(),
-                driver[9].get().upper())
-
     # sets up window for driver inputs calls addDrivers()
     def add_drivers_screen(self):
         # creates window
@@ -380,12 +367,6 @@ class DbInterface:
 
         search_name_driver_btn.grid(row=2, column=0, padx=20)
 
-    # function to add a label to a window
-    @staticmethod
-    def add_label(string_in, row_in, col_in, window):
-        platenum_label = Label(window, bg="white", text=string_in)
-        platenum_label.grid(row=row_in, column=col_in)
-
     # displays the search results in a new window
     def display_search(self, rows):
         if rows == "":
@@ -476,6 +457,19 @@ class DbInterface:
 
     def get_user(self):
         return self.data_access.get_user()
+
+    @staticmethod
+    def get_driver_data(driver):
+        return (driver[0].get().upper(),
+                driver[1].get().upper(),
+                driver[2].get().upper(),
+                driver[3].get().upper(),
+                driver[4].get().upper(),
+                driver[5].get().upper(),
+                driver[6].get().upper(),
+                driver[7].get().upper(),
+                driver[8].get().upper(),
+                driver[9].get().upper())
 
     @staticmethod
     def conn(username, password):

@@ -1,12 +1,14 @@
 import socket
 import tkinter
 import unittest
+import timeout_decorator
 import PlateRecMain
 
 import pymysql
 
 import app
 
+GLOBAL_TIMEOUT = 1
 
 # scan_license_plate
 # is_right_password
@@ -221,12 +223,12 @@ class TestDBCommands(unittest.TestCase):
                                  "123 Car Dr",
                                  "00000",
                                  "FL",
-                                 "1234567",
+                                 "1234568",
                                  "FORD",
                                  "BLUE",
                                  "F150",
                                  "NO",
-                                 "1234568")
+                                 "1234567")
 
     def tearDown(self):
         self.test_data_access_user.log_out()
@@ -520,11 +522,7 @@ class TestDBCommands(unittest.TestCase):
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
         self.test_data_access_user.cursor.execute(drop, self.data_driver[5])
 
-        self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                              self.data_driver[2], self.data_driver[3],
-                                              self.data_driver[4], self.data_driver[5],
-                                              self.data_driver[6], self.data_driver[7],
-                                              self.data_driver[8], self.data_driver[9])
+        self.test_data_access_user.add_driver(self.data_driver)
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
@@ -567,11 +565,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -600,11 +594,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -633,11 +623,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -666,11 +652,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -699,11 +681,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -732,11 +710,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -765,11 +739,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -798,11 +768,7 @@ class TestDBCommands(unittest.TestCase):
                             "",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -831,11 +797,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -864,11 +826,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -897,11 +855,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -930,11 +884,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -963,11 +913,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -996,11 +942,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -1029,11 +971,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -1062,11 +1000,7 @@ class TestDBCommands(unittest.TestCase):
                             "TESTTTTTTTTTTTTTTTTTTT",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -1095,11 +1029,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -1128,11 +1058,7 @@ class TestDBCommands(unittest.TestCase):
                             "CAMRY",
                             "YES")
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -1161,11 +1087,7 @@ class TestDBCommands(unittest.TestCase):
 
         self.assertEqual(self.test_data_access_user.cursor.rowcount, 1)
 
-        error = self.test_data_access_user.add_driver(self.data_driver[0], self.data_driver[1],
-                                                      self.data_driver[2], self.data_driver[3],
-                                                      self.data_driver[4], self.data_driver[5],
-                                                      self.data_driver[6], self.data_driver[7],
-                                                      self.data_driver[8], self.data_driver[9])
+        error = self.test_data_access_user.add_driver(self.data_driver)
 
         self.assertEqual(error, -1)
 
@@ -1298,7 +1220,7 @@ class TestDBCommands(unittest.TestCase):
         """
         # drop row if platenum is already in database
         drop = "DELETE FROM drivers WHERE platenum = %s ; "
-        self.test_data_access_user.cursor.execute(drop, self.data_driver_edit[5])
+        self.test_data_access_user.cursor.execute(drop, self.data_driver[5])
 
         add_driver = ("INSERT INTO drivers "
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
@@ -1308,15 +1230,10 @@ class TestDBCommands(unittest.TestCase):
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s ; "
 
-        self.test_data_access_user.cursor.execute(get_driver, self.data_driver_edit[5])
+        self.test_data_access_user.cursor.execute(get_driver, self.data_driver_edit[10])
         self.assertEqual(self.test_data_access_user.cursor.rowcount, 1)
 
-        self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                       self.data_driver_edit[1], self.data_driver_edit[2],
-                                                       self.data_driver_edit[3], self.data_driver_edit[4],
-                                                       self.data_driver_edit[10], self.data_driver_edit[6],
-                                                       self.data_driver_edit[7], self.data_driver_edit[8],
-                                                       self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.test_data_access_user.cursor.execute(get_driver, self.data_driver_edit[10])
         self.assertEqual(self.test_data_access_user.cursor.rowcount, 1)
@@ -1368,12 +1285,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -1417,12 +1329,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -1466,13 +1373,10 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
+        
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
         self.assertEqual(error, -1)
 
         get_driver = "SELECT * FROM drivers WHERE platenum = %s AND address = %s"
@@ -1516,12 +1420,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -1565,12 +1464,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -1613,12 +1507,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -1662,12 +1551,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -1711,12 +1595,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -1761,12 +1640,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -1810,12 +1684,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -1859,12 +1728,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -1908,12 +1772,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -1957,12 +1816,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "12345678")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[10], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -2005,12 +1859,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -2055,12 +1904,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -2104,12 +1948,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -2153,12 +1992,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -2202,12 +2036,7 @@ class TestDBCommands(unittest.TestCase):
                                  "NO",
                                  "1234568")
 
-        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit[5], self.data_driver_edit[0],
-                                                               self.data_driver_edit[1], self.data_driver_edit[2],
-                                                               self.data_driver_edit[3], self.data_driver_edit[4],
-                                                               self.data_driver_edit[5], self.data_driver_edit[6],
-                                                               self.data_driver_edit[7], self.data_driver_edit[8],
-                                                               self.data_driver_edit[9])
+        error = self.test_data_access_user.edit_driver_request(self.data_driver_edit, self.data_driver_edit[5])
 
         self.assertEqual(error, -1)
 
@@ -2427,4 +2256,4 @@ class TestLogin(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    timeout_decorator.timeout(GLOBAL_TIMEOUT)(unittest.main)()

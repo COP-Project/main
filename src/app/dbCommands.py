@@ -4,8 +4,10 @@ import dbUsers
 from StandardValues import StandardValues, Error
 from readPlate import readaPlate, create_alpr, destroy_alpr
 from openalpr import Alpr
+from twilio.rest import Client
 
-# alpr = create_alpr()
+
+alpr = create_alpr()
 
 
 class DataAccess:
@@ -99,7 +101,7 @@ class DataAccess:
                       " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
         # execute query
-        self.cursor.execute(add_driver, data_driver)
+        self.cursor.execute(add_driver, driver_data)
 
         self.conn.commit()
         # self.cursorclose()
@@ -155,7 +157,31 @@ class DataAccess:
 
         plates = readaPlate(alpr, state.lower(), img)
         for eachplate in plates:
-            print(eachplate)
+            driver = self.get_driver_by_plate(eachplate)
+            self.send_alert(driver) if driver is not None else []
+
+    def get_driver_by_plate(self, plate):
+        if plate == "" or len(plate) > 7:
+            return None
+
+        get_driver = " SELECT * FROM drivers WHERE platenum = %s; "
+
+        self.cursor.execute(get_driver, plate)
+        driver = self.cursor.fetchone()
+
+        if self.cursor.rowcount < 1:
+            return None
+
+        return driver
+
+    def send_alert(self, driver):
+        alert_body = ("CAR RECOGNIZED: " + driver[6] + " " + driver[8] + ", " + driver[7] +
+                      "\nPLATE NUMBER: " + driver[5])
+
+        client = Client(StandardValues.twilio_api_key, StandardValues.twilio_auth_token)
+        client.messages.create(to="+19044121129",
+                               from_="+19046441867",
+                               body=alert_body)
 
     def is_right_password(self, password):
         check_password = ("SELECT 1 "
@@ -180,25 +206,33 @@ class DataAccess:
         self.conn.close()
 
 
-# def check_file_input(img):
-#     try:
-#         check_opened_file = open(img, 'r')
-#         check_opened_file.close()
-#     except IOError:
-#         Error.error_window("File not found")
-#         return -1
+def check_file_input(img):
+    try:
+        check_opened_file = open(img, 'r')
+        check_opened_file.close()
+    except IOError:
+        Error.error_window("File not found")
+        return -1
 
 
 def check_input(data_driver):
     try:
-        assert len(data_driver[0]) <= StandardValues.firstNameChars and data_driver[0] != "", "First Name must be less than or equal to " + str(StandardValues.firstNameChars)
-        assert len(data_driver[1]) <= StandardValues.lastNameChars and data_driver[1] != "", "Last Name must be less than or equal to " + str(StandardValues.lastNameChars)
-        assert len(data_driver[2]) <= StandardValues.addressChars and data_driver[2] != "", "Address must be less than or equal to " + str(StandardValues.addressChars)
-        assert len(data_driver[3]) == 5 and data_driver[3] != "" and str(data_driver[3]).isdigit(), "Zip code should be 5 numbers"
-        assert len(data_driver[5]) <= StandardValues.plateNumChars and data_driver[5] != "", "Plate number must be " + str(StandardValues.plateNumChars) + " characters."
-        assert len(data_driver[6]) <= StandardValues.carmakeChars and data_driver[6] != "", "Car Make must be less than or equal to " + str(StandardValues.carmakeChars)
-        assert len(data_driver[7]) <= StandardValues.modelChars and data_driver[7] != "",  "Model must be less than or equal to " + str(StandardValues.modelChars)
-        assert len(data_driver[8]) <= StandardValues.colorChars and data_driver[8] != "", "Color must be less than or equal to " + str(StandardValues.colorChars)
+        assert len(data_driver[0]) <= StandardValues.firstNameChars and data_driver[
+            0] != "", "First Name must be less than or equal to " + str(StandardValues.firstNameChars)
+        assert len(data_driver[1]) <= StandardValues.lastNameChars and data_driver[
+            1] != "", "Last Name must be less than or equal to " + str(StandardValues.lastNameChars)
+        assert len(data_driver[2]) <= StandardValues.addressChars and data_driver[
+            2] != "", "Address must be less than or equal to " + str(StandardValues.addressChars)
+        assert len(data_driver[3]) == 5 and data_driver[3] != "" and str(
+            data_driver[3]).isdigit(), "Zip code should be 5 numbers"
+        assert len(data_driver[5]) <= StandardValues.plateNumChars and data_driver[
+            5] != "", "Plate number must be " + str(StandardValues.plateNumChars) + " characters."
+        assert len(data_driver[6]) <= StandardValues.carmakeChars and data_driver[
+            6] != "", "Car Make must be less than or equal to " + str(StandardValues.carmakeChars)
+        assert len(data_driver[7]) <= StandardValues.modelChars and data_driver[
+            7] != "", "Model must be less than or equal to " + str(StandardValues.modelChars)
+        assert len(data_driver[8]) <= StandardValues.colorChars and data_driver[
+            8] != "", "Color must be less than or equal to " + str(StandardValues.colorChars)
     except AssertionError as ae:
         Error.error_window(ae.__str__())
         return -1

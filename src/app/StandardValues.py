@@ -81,6 +81,10 @@ class StandardValues:
         "WY"
     ]
 
+    # Twilio Values
+    twilio_auth_token = "f5bba2fb9ce1fcdf25cae7e5875c983a"
+    twilio_api_key = "AC47c16e38c162bfb3fb0f4484fcd9809f"
+
     @staticmethod
     def get_screen_position(root):
         # Gets the requested values of the height and widht.
@@ -90,7 +94,6 @@ class StandardValues:
         # Gets both half the screen width/height and window width/height
         StandardValues.scr_width = int(root.winfo_screenwidth() / 3 - width / 2)
         StandardValues.scr_height = int(root.winfo_screenheight() / 3 - height / 2)
-
 
 
 class Error:
