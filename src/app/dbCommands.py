@@ -173,6 +173,7 @@ class DataAccess:
 def check_file_input(img):
     try:
         check_opened_file = open(img, 'r')
+        check_opened_file.close()
     except IOError:
         Error.error_window("File not found")
         return -1
