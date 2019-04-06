@@ -32,12 +32,6 @@ class DbInterface:
         self.search_driver = None
         self.search_widgets = None
 
-        self.search_zip_plate_window = None
-        self.search_zip_plate_widgets = None
-
-        self.search_fname_lname_window = None
-        self.search_fname_lname_widgets = None
-
     def add_fields(self, window, row, col):
         # Variables for binding to fields
         state_om = StringVar()
@@ -491,12 +485,3 @@ class DbInterface:
     def invoke_delete_button(self, data_driver):
         self.del_driver_widgets[0].insert(END, data_driver[5])
         self.del_driver_widgets[1].invoke()
-
-    def invoke_search_zip_plate_button(self, data_driver):
-        self.search_zip_plate_widgets[0].insert(END, data_driver[5])
-        self.search_zip_plate_widgets[1].invoke()
-
-    def invoke_search_fname_lname(self, data_driver):
-        self.search_fname_lname_widgets[0].insert(END, data_driver[0])
-        self.search_fname_lname_widgets[1].insert(END, data_driver[1])
-        self.search_fname_lname_widgets[2].invoke()

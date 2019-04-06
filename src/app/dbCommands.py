@@ -7,7 +7,7 @@ from openalpr import Alpr
 from twilio.rest import Client
 
 
-alpr = create_alpr()
+# alpr = create_alpr()
 
 
 class DataAccess:
@@ -162,14 +162,14 @@ class DataAccess:
         self.conn.commit()
         cursor.close()
 
-    def scan_license_plate(self, img, state):
-        check = check_file_input(img)
-        if check == -1:
-            return -1
-
-        for eachplate in plates:
-            driver = self.get_driver_by_plate(eachplate)
-            self.send_alert(driver) if driver is not None else []
+    # def scan_license_plate(self, img, state):
+    #     check = check_file_input(img)
+    #     if check == -1:
+    #         return -1
+    #
+    #     for eachplate in plates:
+    #         driver = self.get_driver_by_plate(eachplate)
+    #         self.send_alert(driver) if driver is not None else []
 
     def get_driver_by_plate(self, plate):
         cursor = self.conn.cursor()
@@ -225,13 +225,13 @@ class DataAccess:
         self.conn.close()
 
 
-def check_file_input(img):
-    try:
-        check_opened_file = open(img, 'r')
-        check_opened_file.close()
-    except IOError:
-        Error.error_window("File not found")
-        return -1
+# def check_file_input(img):
+#     try:
+#         check_opened_file = open(img, 'r')
+#         check_opened_file.close()
+#     except IOError:
+#         Error.error_window("File not found")
+#         return -1
 
 
 def check_input(data_driver):
