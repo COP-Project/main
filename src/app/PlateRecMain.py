@@ -43,7 +43,6 @@ class App:
 
         StandardValues.get_screen_position(self.root)
         self.main_window.geometry("+{}+{}".format(StandardValues.scr_width, StandardValues.scr_height))
-        self.db_interface.parent_window = self.main_window
 
         # SET GUI FRAMES
         top_frame = Frame(self.main_window)

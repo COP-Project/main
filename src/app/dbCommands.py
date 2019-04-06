@@ -46,36 +46,36 @@ class DataAccess:
         filter_str = ""
 
         # build filter AND clauses
-        if driver_data[0] != "":
+        if driver_data[0] != "" and len(driver_data[0]) <= StandardValues.firstNameChars:
             filter_str = filter_str + " AND fname = '{}'".format(driver_data[0])
 
-        if driver_data[1] != "":
-            filter_str = filter_str + "AND lname = '{}'".format(driver_data[1])
+        if driver_data[1] != "" and len(driver_data[1]) <= StandardValues.lastNameChars:
+            filter_str = filter_str + " AND lname = '{}'".format(driver_data[1])
 
-        if driver_data[2] != "":
-            filter_str = filter_str + "AND address = '{}'".format(driver_data[2])
+        if driver_data[2] != "" and len(driver_data[2]) <= StandardValues.addressChars:
+            filter_str = filter_str + " AND address = '{}'".format(driver_data[2])
 
         if driver_data[3] != "":
-            filter_str = filter_str + "AND zipcod = '{}'".format(driver_data[3])
+            filter_str = filter_str + " AND zipcod = '{}'".format(driver_data[3])
 
         if driver_data[4] != "" and driver_data[4] != "PLEASE SELECT":
-            filter_str = filter_str + "AND state = '{}'".format(driver_data[4])
+            filter_str = filter_str + " AND state = '{}'".format(driver_data[4])
 
-        if driver_data[5] != "":
-            filter_str = filter_str + "AND platenum = '{}'".format(driver_data[5])
+        if driver_data[5] != "" and len(driver_data[5]) <= StandardValues.plateNumChars:
+            filter_str = filter_str + " AND platenum = '{}'".format(driver_data[5])
 
-        if driver_data[6] != "":
-            filter_str = filter_str + "AND carmake = '{}'".format(driver_data[6])
+        if driver_data[6] != "" and len(driver_data[6]) <= StandardValues.carmakeChars:
+            filter_str = filter_str + " AND carmake = '{}'".format(driver_data[6])
 
-        if driver_data[7] != "":
-            filter_str = filter_str + "AND color = '{}'".format(driver_data[7])
+        if driver_data[7] != "" and len(driver_data[7]) <= StandardValues.colorChars:
+            filter_str = filter_str + " AND color = '{}'".format(driver_data[7])
 
-        if driver_data[8] != "":
-            filter_str = filter_str + "AND model = '{}'".format(driver_data[8])
+        if driver_data[8] != "" and len(driver_data[8]) <= StandardValues.modelChars:
+            filter_str = filter_str + " AND model = '{}'".format(driver_data[8])
 
         if driver_data[9] != "" and priority_changed:
             value = 1 if driver_data[9] == True else 0
-            filter_str = filter_str + "AND priority = {}".format(value)
+            filter_str = filter_str + " AND priority = {}".format(value)
 
         filter_driver = ("SELECT "
                          "fname, lname, address, zipcod, state, platenum, carmake, color, model, "
@@ -86,6 +86,7 @@ class DataAccess:
         cursor.execute(filter_driver)
 
         results = cursor.fetchall()
+
         cursor.close()
         return results
 
@@ -166,7 +167,6 @@ class DataAccess:
         if check == -1:
             return -1
 
-        plates = readaPlate(alpr, state.lower(), img)
         for eachplate in plates:
             driver = self.get_driver_by_plate(eachplate)
             self.send_alert(driver) if driver is not None else []
