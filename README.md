@@ -53,3 +53,19 @@
              ; [Plate Reading Functionality Test](https://docs.google.com/document/d/1Cb24DZv_-YiFCy3ZAx7_2g_3tJZw0N5j6uxCfE3QB-8/edit?usp=sharing)
              ; [OpenALPR Test](https://docs.google.com/document/d/1sGJ7OmW0XctVO17Qo_EiuWaBraP-bcqW6z251UhmmnQ/edit)
 * Product Demonstration[GUI BD Functionality Demo](https://www.youtube.com/watch?v=df6LavuaJU8&feature=youtu.be)
+
+## Sprint 3
+
+* [Product Backlog](https://docs.google.com/spreadsheets/d/1lSt2IkeWZkcXEEomajb0V5m8mf8IrMCRReRq9BhTCic/edit#gid=402146333)
+* [Sprint Backlog](https://docs.google.com/spreadsheets/d/1lSt2IkeWZkcXEEomajb0V5m8mf8IrMCRReRq9BhTCic/edit#gid=296008547)
+* [Burndown Chart](https://docs.google.com/spreadsheets/d/1lSt2IkeWZkcXEEomajb0V5m8mf8IrMCRReRq9BhTCic/edit#gid=2069162242)
+* [Requirements](https://docs.google.com/document/d/146rgft-78nVKI0P4Wdcj7a0kT8OkKUM96-g3gY-bAlk/edit)
+* Design Documents
+* System Architecture [Architecture Diagram](https://docs.google.com/drawings/d/1XAnm92Z1MRIXftqTqmJtPI9S8-kcRq_8Xsm7Hkfhr3U/edit) - 
+* [GUI](https://docs.google.com/drawings/d/1q2VkqsfDRKpq601CHK0Ne6fn4U42gQo-iotT8xGuoLw/edit)  -  [GUI Description](https://docs.google.com/document/d/1v8ZkGkWPdy0DjDnXsMmCImc-LImmenLz9Dxw8cy_ztQ/edit)
+* [Class Diagram](https://docs.google.com/drawings/d/1OuwSf7QMN0vdC2wvWqQbCiYai3YU6PSl9W0EutPnB5E/edit) - [Class Description](https://docs.google.com/document/d/19hM4XHOuAUfJTQXVzCPlpUlnj5RoBN39K19r_ryp1Ng/edit)
+* Source Code
+* Test Cases : [GUI DB Functionality Tests](https://docs.google.com/document/d/1TgKMqyY3Vg__-QeM3nbDgczyFEK-wBO_RmyLHEpXcDQ/edit)
+; [Plate Reading Functionality Test](https://docs.google.com/document/d/1Cb24DZv_-YiFCy3ZAx7_2g_3tJZw0N5j6uxCfE3QB-8/edit?usp=sharing)
+; [OpenALPR Test](https://docs.google.com/document/d/1sGJ7OmW0XctVO17Qo_EiuWaBraP-bcqW6z251UhmmnQ/edit)
+* Product Demonstration[GUI BD Functionality Demo]()
