@@ -1924,7 +1924,232 @@ class TestDBCommands(unittest.TestCase):
     # get_user end
 
     # check_input
+    def testCheckInputRight(self):
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), 0)
 
+    def testCheckInputEmptyFname(self):
+        self.data_driver = ("",
+                            self.data_driver[1],
+                            self.data_driver[2],
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            self.data_driver[6],
+                            self.data_driver[7],
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputEmptyLname(self):
+        self.data_driver = (self.data_driver[0],
+                            "",
+                            self.data_driver[2],
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            self.data_driver[6],
+                            self.data_driver[7],
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputEmptyAddress(self):
+        self.data_driver = (self.data_driver[0],
+                            self.data_driver[1],
+                            "",
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            self.data_driver[6],
+                            self.data_driver[7],
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputEmptyZip(self):
+        self.data_driver = (self.data_driver[0],
+                            self.data_driver[1],
+                            self.data_driver[2],
+                            "",
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            self.data_driver[6],
+                            self.data_driver[7],
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputEmptyPlate(self):
+        self.data_driver = (self.data_driver[0],
+                            self.data_driver[1],
+                            self.data_driver[2],
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            "",
+                            self.data_driver[6],
+                            self.data_driver[7],
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputEmptyMake(self):
+        self.data_driver = (self.data_driver[0],
+                            self.data_driver[1],
+                            self.data_driver[2],
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            "",
+                            self.data_driver[7],
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputEmptyModel(self):
+        self.data_driver = (self.data_driver[0],
+                            self.data_driver[1],
+                            self.data_driver[2],
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            self.data_driver[6],
+                            "",
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputEmptyColor(self):
+        self.data_driver = (self.data_driver[0],
+                            self.data_driver[1],
+                            self.data_driver[2],
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            self.data_driver[6],
+                            self.data_driver[7],
+                            "",
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputTooLongFname(self):
+        self.data_driver = ("TESTTTTTTTTTTTTTTTTTTT",
+                            self.data_driver[1],
+                            self.data_driver[2],
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            self.data_driver[6],
+                            self.data_driver[7],
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputTooLongLname(self):
+        self.data_driver = (self.data_driver[0],
+                            "TESTTTTTTTTTTTTTTTTTTT",
+                            self.data_driver[2],
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            self.data_driver[6],
+                            self.data_driver[7],
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputTooLongAddress(self):
+        self.data_driver = (self.data_driver[0],
+                            self.data_driver[1],
+                            "TESTTTTTTTTTTTTTTTTTTT",
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            self.data_driver[6],
+                            self.data_driver[7],
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputTooLongZip(self):
+        self.data_driver = (self.data_driver[0],
+                            self.data_driver[1],
+                            self.data_driver[2],
+                            "000000",
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            self.data_driver[6],
+                            self.data_driver[7],
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputTooLongPlate(self):
+        self.data_driver = (self.data_driver[0],
+                            self.data_driver[1],
+                            self.data_driver[2],
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            "00000000",
+                            self.data_driver[6],
+                            self.data_driver[7],
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputTooLongMake(self):
+        self.data_driver = (self.data_driver[0],
+                            self.data_driver[1],
+                            self.data_driver[2],
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            "TESTTTTTTTTTTTTTTTTTTT",
+                            self.data_driver[7],
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputTooLongModel(self):
+        self.data_driver = (self.data_driver[0],
+                            self.data_driver[1],
+                            self.data_driver[2],
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            self.data_driver[6],
+                            "TESTTTTTTTTTTTTTTTTTTT",
+                            self.data_driver[8],
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
+
+    def testCheckInputTooLongColor(self):
+        self.data_driver = (self.data_driver[0],
+                            self.data_driver[1],
+                            self.data_driver[2],
+                            self.data_driver[3],
+                            self.data_driver[4],
+                            self.data_driver[5],
+                            self.data_driver[6],
+                            self.data_driver[7],
+                            "TESTTTTTTTTTTTTTTTTTTT",
+                            self.data_driver[9])
+
+        self.assertEqual(app.dbCommands.check_input(self.data_driver), -1)
     # check_input end
 
     # search_driver
