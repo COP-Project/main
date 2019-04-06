@@ -1886,6 +1886,51 @@ class TestDBCommands(unittest.TestCase):
 
     # scan_license_plate end
 
+    # get_driver_by_plate
+    def testGetDriverByPlateRight(self):
+        cursor = self.test_data_access_user.conn.cursor()
+
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = %s ; "
+        cursor.execute(drop, self.data_driver[5])
+
+        add_driver = ("INSERT INTO drivers "
+                      " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
+                      " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
+
+        cursor.execute(add_driver, self.data_driver)
+        self.assertEqual(cursor.rowcount, 1)
+
+        results = self.test_data_access_user.get_driver_by_plate(self.data_driver[5])
+        self.assertIsNotNone(results)
+
+        cursor.execute(drop, self.data_driver_edit[5])
+
+    def testGetDriverByPlateEmpty(self):
+        cursor = self.test_data_access_user.conn.cursor()
+
+        # drop row if platenum is already in database
+        drop = "DELETE FROM drivers WHERE platenum = %s ; "
+        cursor.execute(drop, self.data_driver[5])
+
+        add_driver = ("INSERT INTO drivers "
+                      " (fname, lname, address, zipcod, state, platenum, carmake, color, model, priority) "
+                      " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s); ")
+
+        cursor.execute(add_driver, self.data_driver)
+        self.assertEqual(cursor.rowcount, 1)
+
+        results = self.test_data_access_user.get_driver_by_plate("")
+        self.assertIsNone(results)
+
+        cursor.execute(drop, self.data_driver_edit[5])
+
+    def testGetDriverByPlateTooLong(self):
+        results = self.test_data_access_user.get_driver_by_plate("12345678")
+        self.assertIsNone(results)
+
+    # get_driver_by_plate end
+
     # is_right_password
     def testIsRightPasswordRight(self):
         cursor = self.test_data_access_user.conn.cursor()
