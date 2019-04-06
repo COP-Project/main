@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>624</x>
+      <y>104</y>
+      <w>176</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>App
+--
+db_interface (+)
+debug (+)
+login (+)
+main_window (+)
+root (+)
+user (+)
+--
+create_main()
+login_user()
+quit()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>200</x>
+      <y>104</y>
+      <w>136</w>
+      <h>336</h>
+    </coordinates>
+    <panel_attributes>StandardValues
+--
+addressChars (+)
+aes_key (+)
+background (+)
+btn_bk_clr (+)
+btn_text_clr (+)
+button_width (+)
+carmakeChars (+)
+colorChars (+)
+firstNameChars (+)
+height (+)
+lastNameChars (+)
+modelChars (+)
+options (+)
+padx (+)
+pady (+)
+password (+)
+plateNumChars (+)
+scr_height (+)
+scr_width (+)
+twilio_api_key (+)
+twilio_auth_token (+)
+username (+)
+width (+)
+--
+get_screen_position()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>344</x>
+      <y>104</y>
+      <w>96</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Error
+--
+
+--
+error_window()
+invoke()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>848</x>
+      <y>128</y>
+      <w>176</w>
+      <h>464</h>
+    </coordinates>
+    <panel_attributes>DbInterface
+--
+add_driver_window (+)
+add_window_widgets (+)
+data_access (+)
+debug (+)
+edit_driver_search_widgets (+)
+edit_driver_search_window (+)
+edit_driver_widgets (+)
+edit_driver_window (+)
+is_priority_changed (+)
+parent_window (+)
+search_driver (+)
+search_widgets (+)
+--
+add_drivers_screen()
+add_fields()
+conn()
+del_driver_screen()
+display_search()
+down_key()
+edit_driver_screen()
+edit_driver_search()
+get_driver_data()
+get_user()
+invoke_add_btn()
+invoke_btn()
+invoke_delete_button()
+invoke_edit_search_button()
+invoke_edit_button()
+log_out_screen()
+search_drivers()
+scan_license_plate()
+scan_license_plate_screen()
+set_priority_changed()
+toggle()
+up_key()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1128</x>
+      <y>128</y>
+      <w>176</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>DataAccess
+--
+conn (+)
+user (+)
+--
+add_driver()
+connect()
+check_file_input()
+delete_driver()
+edit_driver_request()
+get_driver_by_plate()
+is_right_password()
+plate_check()
+scan_license_plate()
+search_driver()
+send_alert()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1128</x>
+      <y>360</y>
+      <w>176</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Users
+--
+data_access (+)
+passport (+)
+--
+find_user()
+get_user_info()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1128</x>
+      <y>488</y>
+      <w>176</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>Passport
+--
+firstName (+)
+lastName (+)
+loginName (+)
+access (+)
+--
+__getitem__()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>624</x>
+      <y>288</y>
+      <w>176</w>
+      <h>264</h>
+    </coordinates>
+    <panel_attributes>Login
+--
+debug (+)
+login_scrn (+)
+exit_btn (+)
+password (+)
+pw_label (+)
+pw_tb (+)
+root (+)
+username (+)
+submit_btn (+)
+username_label (+)
+username_tb (+)
+--
+click_submit()
+create_buttons()
+create_submit()
+create_window()
+exit()
+login()
+submit()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1016</x>
+      <y>128</y>
+      <w>128</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>140.0;10.0;110.0;10.0;110.0;80.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>792</x>
+      <y>152</y>
+      <w>40</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;180.0;30.0;180.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1296</x>
+      <y>128</y>
+      <w>48</w>
+      <h>272</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;10.0;40.0;320.0;10.0;320.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>792</x>
+      <y>128</y>
+      <w>72</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1296</x>
+      <y>392</y>
+      <w>48</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;120.0;40.0;120.0;40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
