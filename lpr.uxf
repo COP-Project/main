@@ -5,11 +5,11 @@
     <id>UMLClass</id>
     <coordinates>
       <x>624</x>
-      <y>104</y>
+      <y>112</y>
       <w>176</w>
       <h>144</h>
     </coordinates>
-    <panel_attributes>App
+    <panel_attributes>PlateRecMain
 --
 db_interface (+)
 debug (+)
@@ -28,7 +28,7 @@ quit()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>200</x>
+      <x>304</x>
       <y>104</y>
       <w>136</w>
       <h>336</h>
@@ -67,7 +67,7 @@ get_screen_position()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>344</x>
+      <x>456</x>
       <y>104</y>
       <w>96</w>
       <h>80</h>
@@ -84,7 +84,7 @@ invoke()</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>848</x>
-      <y>128</y>
+      <y>136</y>
       <w>176</w>
       <h>464</h>
     </coordinates>
@@ -131,7 +131,7 @@ up_key()</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1128</x>
-      <y>128</y>
+      <y>136</y>
       <w>176</w>
       <h>200</h>
     </coordinates>
@@ -157,7 +157,7 @@ send_alert()</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1128</x>
-      <y>360</y>
+      <y>368</y>
       <w>176</w>
       <h>80</h>
     </coordinates>
@@ -174,7 +174,7 @@ get_user_info()</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1128</x>
-      <y>488</y>
+      <y>496</y>
       <w>176</w>
       <h>96</h>
     </coordinates>
@@ -192,7 +192,7 @@ __getitem__()</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>624</x>
-      <y>288</y>
+      <y>296</y>
       <w>176</w>
       <h>264</h>
     </coordinates>
@@ -223,7 +223,7 @@ submit()</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1016</x>
-      <y>128</y>
+      <y>136</y>
       <w>128</w>
       <h>80</h>
     </coordinates>
@@ -234,7 +234,7 @@ submit()</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>792</x>
-      <y>152</y>
+      <y>160</y>
       <w>40</w>
       <h>160</h>
     </coordinates>
@@ -245,7 +245,7 @@ submit()</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1296</x>
-      <y>128</y>
+      <y>136</y>
       <w>48</w>
       <h>272</h>
     </coordinates>
@@ -256,7 +256,7 @@ submit()</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>792</x>
-      <y>128</y>
+      <y>136</y>
       <w>72</w>
       <h>24</h>
     </coordinates>
@@ -267,7 +267,7 @@ submit()</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1296</x>
-      <y>392</y>
+      <y>400</y>
       <w>48</w>
       <h>112</h>
     </coordinates>
