@@ -66,7 +66,7 @@
 * [Class Diagram](lpr.png) - [Class Diagram UMLet](lpr.uxf) - [Class Description](https://docs.google.com/document/d/19hM4XHOuAUfJTQXVzCPlpUlnj5RoBN39K19r_ryp1Ng/edit)
 ![Class Diagram](lpr.png)
 * Source Code
-* Test Cases : [GUI DB Functionality Tests](https://docs.google.com/document/d/1TgKMqyY3Vg__-QeM3nbDgczyFEK-wBO_RmyLHEpXcDQ/edit)
+* Test Cases : [GUI DB Functionality Tests](https://youtu.be/QFEkei1Cq1A)
 ; [Plate Reading Functionality Test](https://docs.google.com/document/d/1Cb24DZv_-YiFCy3ZAx7_2g_3tJZw0N5j6uxCfE3QB-8/edit?usp=sharing)
 ; [OpenALPR Test](https://docs.google.com/document/d/1sGJ7OmW0XctVO17Qo_EiuWaBraP-bcqW6z251UhmmnQ/edit)
 * Product Demonstration[GUI BD Functionality Demo]()
