@@ -1,9 +1,11 @@
 import cv2
 import readPlate
 
+
 # runs an infinite loop until escape is pressed
 def start_stream():
     cam = cv2.VideoCapture(0)
+
     cv2.namedWindow("test")
 
     while True:
@@ -16,10 +18,10 @@ def start_stream():
             break
 
         k = cv2.waitKey(1)
-        if k%256 == 27:
+        if k!=-1:
             # ESC pressed
-            print("Escape hit, closing...")
-            end_stream(cam, alpr)
+            print("Key pressed, closing...")
+            end_stream(cam)
             break
 
 
@@ -27,9 +29,3 @@ def start_stream():
 def end_stream(cam):
     cam.release()
     cv2.destroyAllWindows()
-
-
-# def main():
-#     startStream()
-# if __name__ == "__main__":
-#     main()
