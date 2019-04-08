@@ -234,6 +234,14 @@ def check_file_input(img):
          Error.error_window("File not found")
          return -1
 
+def check_openalpr():
+    try:
+        assert readaPlate(alpr, 'mt', '../img/mt.jpg')[0] == 'BJR216'
+        assert readaPlate(alpr, 'ca', '../img/ca.jpeg')[0] == '7VDV740'
+    except AssertionError as ae:
+        Error.error_window(ae.__str__())
+        return -1
+    return 0
 
 def check_input(data_driver):
     try:

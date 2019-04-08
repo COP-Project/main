@@ -10,20 +10,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/dbCommands.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="239" column="14" selection-start-line="239" selection-start-column="8" selection-end-line="239" selection-end-column="14" />
+            <state relative-caret-position="308">
+              <caret line="236" column="14" selection-start-line="236" selection-start-column="14" selection-end-line="236" selection-end-column="14" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/testopenalpr.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="59" selection-start-column="59" selection-end-column="59" />
+            <state relative-caret-position="51">
+              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
             </state>
           </provider>
         </entry>
@@ -69,6 +69,7 @@
       <find>state_om_field.g</find>
       <find>option</find>
       <find>&quot;State&quot;</find>
+      <find>check_inp</find>
       <find>assert</find>
     </findStrings>
   </component>
@@ -94,8 +95,8 @@
         <option value="$PROJECT_DIR$/app/readPlate.py" />
         <option value="$PROJECT_DIR$/app/StandardValues.py" />
         <option value="$PROJECT_DIR$/app/dbInterface.py" />
-        <option value="$PROJECT_DIR$/app/dbCommands.py" />
         <option value="$PROJECT_DIR$/app/testopenalpr.py" />
+        <option value="$PROJECT_DIR$/app/dbCommands.py" />
       </list>
     </option>
   </component>
@@ -132,7 +133,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../C_PowShell/PYTHON/JESSETESTCSHELL.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -362,13 +363,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/dbCommands.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="239" column="14" selection-start-line="239" selection-start-column="8" selection-end-line="239" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -381,8 +375,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/testopenalpr.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="59" selection-start-column="59" selection-end-column="59" />
+        <state relative-caret-position="51">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/dbCommands.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="236" column="14" selection-start-line="236" selection-start-column="14" selection-end-line="236" selection-end-column="14" />
         </state>
       </provider>
     </entry>
