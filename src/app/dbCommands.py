@@ -2,12 +2,9 @@ import pymysql.cursors
 import sys
 import dbUsers
 from StandardValues import StandardValues, Error
-from readPlate import readaPlate, create_alpr, destroy_alpr
+from readPlate import read_a_plate
 from openalpr import Alpr
 from twilio.rest import Client
-
-
-alpr = create_alpr()
 
 
 class DataAccess:
@@ -163,7 +160,7 @@ class DataAccess:
         cursor.close()
 
     def scan_license_plate(self, img, state):
-        plates = readaPlate(alpr, state, img)
+        plates = read_a_plate(img, state)
         check = check_file_input(img)
         if check == -1:
             return -1
@@ -227,17 +224,17 @@ class DataAccess:
 
 
 def check_file_input(img):
-     try:
-         check_opened_file = open(img, 'r')
-         check_opened_file.close()
-     except IOError:
-         Error.error_window("File not found")
-         return -1
+    try:
+        check_opened_file = open(img, 'r')
+        check_opened_file.close()
+    except IOError:
+        Error.error_window("File not found")
+        return -1
 
 def check_openalpr():
     try:
-        assert readaPlate(alpr, 'mt', '../img/mt.jpg')[0] == 'BJR216'
-        assert readaPlate(alpr, 'ca', '../img/ca.jpeg')[0] == '7VDV740'
+        assert read_a_plate('mt', '../img/mt.jpg', 'mt')[0] == 'BJR216'
+        assert read_a_plate('ca', '../img/ca.jpeg', 'ca')[0] == '7VDV740'
     except AssertionError as ae:
         Error.error_window(ae.__str__())
         return -1

@@ -1,6 +1,6 @@
-from readPlate import readaPlate, create_alpr, destroy_alpr
+from readPlate import read_a_plate
 
-myalpr = create_alpr()
-
-assert readaPlate(myalpr, 'mt', '../img/mt.jpg')[0] == 'BJR216'
-assert readaPlate(myalpr, 'ca', '../img/ca.jpeg')[0] == '7VDV740'
+assert read_a_plate('../img/mt.jpg', 'mt')[0] == 'BJR216'
+print(read_a_plate('../img/mt.jpg', 'mt')[0])
+assert read_a_plate('../img/ca.jpeg', 'ca')[0] == '7VDV740'
+print(read_a_plate('../img/ca.jpeg', 'ca')[0])

@@ -1,16 +1,9 @@
 from openalpr import Alpr
 
-
-def create_alpr():
-    return Alpr('us', "openalpr.conf", "runtime_data")
+alpr = Alpr('us', "openalpr.conf", "runtime_data")
 
 
-def destroy_alpr(alpr_d):
-    if alpr_d:
-        alpr_d.unload()
-
-
-def readaPlate(alpr, region, img):
+def read_a_plate(img, region):
     platevalue = None
     if not alpr.is_loaded():
         print("Error loading OpenALPR")
@@ -27,20 +20,3 @@ def readaPlate(alpr, region, img):
             list[i] = results['results'][i]['plate']
             i += 1
     return list
-
-def readPlateFromStream(alpr, region, img):
-        platevalue = None
-        if not alpr.is_loaded():
-            print("Error loading OpenALPR")
-        else:
-            alpr.set_top_n(7)
-            alpr.set_default_region(region)
-            alpr.set_detect_region(False)
-            results = alpr.recognize_array(img)
-            i = 0
-            num_plates = len(results['results'])
-            list = [0]*num_plates            # how many plates were found
-            while i < num_plates:
-                list[i] = results['results'][i]['plate']
-                i += 1
-        return list
