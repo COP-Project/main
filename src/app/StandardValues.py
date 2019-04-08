@@ -82,9 +82,13 @@ class StandardValues:
         "WY"
     ]
 
-    # Twilio Values
-    twilio_auth_token = "f5bba2fb9ce1fcdf25cae7e5875c983a"
-    twilio_api_key = "AC47c16e38c162bfb3fb0f4484fcd9809f"
+    # Twilio Values (James)
+    #twilio_auth_token = "f5bba2fb9ce1fcdf25cae7e5875c983a"
+    #twilio_api_key = "AC47c16e38c162bfb3fb0f4484fcd9809f"
+
+    # Twilio Values (Jesse)
+    twilio_auth_token = "8b04c4542d188f4c11d6a31a5782396a"
+    twilio_api_key = "ACae965e35ce16482917c14e7fd3019914"
 
     @staticmethod
     def get_screen_position(root):

@@ -17,7 +17,6 @@ class DataAccess:
     def __init__(self, username, password):
         self.conn = self.connect()
         self.user = dbUsers.Users(username, self)
-
         if not self.is_right_password(password):
             Error.error_window("Invalid password")
 
@@ -165,7 +164,7 @@ class DataAccess:
         if test_file == -1 or test_openalpr == -1:
             return -1
 
-        plates = read_a_plate(img, state)
+        plates = read_a_plate(img, state.lower())
         for eachplate in plates:
             driver = self.get_driver_by_plate(eachplate)
             self.send_alert(driver) if driver is not None else []
@@ -194,8 +193,8 @@ class DataAccess:
             alert_body = "!!!!!\n" + alert_body + "\n!!!!!\n"
 
         client = Client(StandardValues.twilio_api_key, StandardValues.twilio_auth_token)
-        client.messages.create(to="+19044121129",
-                               from_="+19046441867",
+        client.messages.create(to="+13863375957",
+                               from_="+13212339188",
                                body=alert_body)
 
     def is_right_password(self, password):
@@ -233,6 +232,7 @@ def check_file_input(img):
         return -1
     return 0
 
+
 def check_openalpr():
     try:
         assert read_a_plate('../img/mt.jpg', 'mt')[0] == 'BJR216'
@@ -241,6 +241,7 @@ def check_openalpr():
         Error.error_window("OpenALPR failure")
         return -1
     return 0
+
 
 def check_input(data_driver):
     try:
