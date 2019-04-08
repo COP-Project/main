@@ -1,13 +1,6 @@
-from readPlate import readaPlate, create_alpr, destroy_alpr
-from openalpr import Alpr
-    
-myalpr = create_alpr()
-x = readaPlate(myalpr, 'ca', '../img/ca.jpeg')
-print(str(len(x)) + ' plate(s) found')
-for plate in x:
-    print('Plate: ' + plate)
+from readPlate import read_a_plate
 
-x = readaPlate(myalpr, 'mt', '../img/mt.jpg')
-print(str(len(x)) + ' plate(s) found')
-for plate in x:
-    print('Plate: ' + plate)
+assert read_a_plate('../img/mt.jpg', 'mt')[0] == 'BJR216'
+print(read_a_plate('../img/mt.jpg', 'mt')[0])
+assert read_a_plate('../img/ca.jpeg', 'ca')[0] == '7VDV740'
+print(read_a_plate('../img/ca.jpeg', 'ca')[0])
