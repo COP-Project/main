@@ -1,31 +1,35 @@
 import cv2
+import readPlate
 
+# runs an infinite loop until escape is pressed
 def startStream():
     cam = cv2.VideoCapture(0)
     cv2.namedWindow("test")
-    img_counter = 0
+    alpr = readPlate.create_alpr()
+
+
+
     while True:
         ret, frame = cam.read()
         cv2.imshow("test", frame)
+        # transform frame into jpg byte array so alpr can read it
+        frame = cv2.imencode('.jpg', frame)[1].tostring()
+        readPlate.readPlateFromStream(alpr, 'us', frame)
         if not ret:
             break
-        k = cv2.waitKey(1)
 
+
+        k = cv2.waitKey(1)
         if k%256 == 27:
             # ESC pressed
             print("Escape hit, closing...")
-            endStream(cam)
+            endStream(cam, alpr)
             break
-            # code for saving frames
-        # elif k%256 == 32:
-        #     # SPACE pressed
-        #     img_name = "opencv_frame_{}.png".format(img_counter)
-        #     cv2.imwrite(img_name, frame)
-        #     print("{} written!".format(img_name))
-        #     img_counter += 1
 
 
-def endStream(cam):
+
+def endStream(cam, alpr):
+    readPlate.destroy_alpr(alpr)
     cam.release()
     cv2.destroyAllWindows()
 
