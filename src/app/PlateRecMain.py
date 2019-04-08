@@ -1,6 +1,7 @@
 import PIL.Image
 import PIL.ImageTk
 from dbInterface import *
+import camera
 
 from login import Login
 
@@ -125,6 +126,13 @@ class App:
                             text="Log Out",
                             command=lambda: [self.db_interface.log_out_screen(self)])
 
+        webcam_btn = Button(bottom_frame_right,
+                            bg=StandardValues.btn_bk_clr,
+                            fg=StandardValues.btn_text_clr,
+                            width=StandardValues.button_width,
+                            text="Start Webcam",
+                            command=lambda: [camera.start_stream()])
+
         # Set driver
         add_driver_btn.pack()
 
@@ -139,6 +147,7 @@ class App:
         search_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
         scan_plate_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
         logout_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
+        webcam_btn.pack(side=TOP, padx=StandardValues.padx, pady=StandardValues.pady)
 
         self.main_window.mainloop()
 

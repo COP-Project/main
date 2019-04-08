@@ -19,7 +19,7 @@ def start_stream():
         if k%256 == 27:
             # ESC pressed
             print("Escape hit, closing...")
-            endStream(cam, alpr)
+            end_stream(cam, alpr)
             break
 
 
